@@ -6,6 +6,7 @@
 #define HUAWEI_CODECRAFT_READWRITER_H
 
 #include <vector>
+#include <cstdio>
 
 #include "server.h"
 
@@ -30,6 +31,19 @@ class RequestReader{
 
 class ResultWriter{
     virtual int write()=0;
+};
+
+class FileReader: public RequestReader{
+public:
+    FILE* file=NULL;
+
+    FileReader(char* filePath);
+
+    FileReader()=delete;
+
+    int ReadServersInfo(std::vector<ServerInfo> &receiver) override;
+
+    int ReadBunchOfRequests(RequestsBunch &receiver) override;
 };
 
 #endif //HUAWEI_CODECRAFT_READWRITER_H

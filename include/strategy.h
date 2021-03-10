@@ -6,7 +6,7 @@
 #define HUAWEI_CODECRAFT_STRATEGY_H
 
 class Strategy{
-    virtual void dispatch()=0;
+    virtual int dispatch()=0;
 };
 
 #endif //HUAWEI_CODECRAFT_STRATEGY_H

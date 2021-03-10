@@ -6,6 +6,7 @@
 #define HUAWEI_CODECRAFT_SERVER_H
 
 class ServerInfo{
+public:
     char model[21];
     int cpuNum;
     int memorySize;

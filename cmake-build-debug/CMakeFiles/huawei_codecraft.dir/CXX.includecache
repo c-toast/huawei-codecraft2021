@@ -6,11 +6,25 @@
 
 #IncludeRegexTransform: 
 
-/home/ctoast/huawei-codecraft/main.cpp
-iostream
+../include/readwriter.h
+vector
 -
-utils.h
-/home/ctoast/huawei-codecraft/utils.h
+cstdio
+-
+server.h
+../include/server.h
 
-/home/ctoast/huawei-codecraft/utils.h
+../include/server.h
+
+../include/utils.h
+
+/home/ctoast/huawei-codecraft/src/filereadwriter.cpp
+readwriter.h
+/home/ctoast/huawei-codecraft/src/readwriter.h
+utils.h
+/home/ctoast/huawei-codecraft/src/utils.h
+cstdio
+-
+fstream
+-
 
