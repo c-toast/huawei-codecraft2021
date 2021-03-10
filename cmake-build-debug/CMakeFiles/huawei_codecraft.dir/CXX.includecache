@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ctoast/huawei-codecraft/main.cpp
+iostream
+-
+utils.h
+/home/ctoast/huawei-codecraft/utils.h
+
+/home/ctoast/huawei-codecraft/utils.h
+
