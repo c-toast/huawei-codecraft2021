@@ -4,9 +4,11 @@
 CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o: ../include/readwriter.h
 CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o: ../include/server.h
 CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o: ../include/utils.h
+CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o: ../include/virtual-machine.h
 CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o: ../src/filereadwriter.cpp
 
 CMakeFiles/huawei_codecraft.dir/src/main.cpp.o: ../include/readwriter.h
 CMakeFiles/huawei_codecraft.dir/src/main.cpp.o: ../include/server.h
+CMakeFiles/huawei_codecraft.dir/src/main.cpp.o: ../include/virtual-machine.h
 CMakeFiles/huawei_codecraft.dir/src/main.cpp.o: ../src/main.cpp
 

@@ -87,10 +87,16 @@
 		<Unit filename="/home/ctoast/huawei-codecraft/include/utils.h">
 			<Option target="huawei_codecraft"/>
 		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/cloud.cpp">
+			<Option target="huawei_codecraft"/>
+		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/filereadwriter.cpp">
 			<Option target="huawei_codecraft"/>
 		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/main.cpp">
+			<Option target="huawei_codecraft"/>
+		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/simplestrategy.cpp">
 			<Option target="huawei_codecraft"/>
 		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/CMakeLists.txt">

@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/huawei_codecraft.dir/src/main.cpp.o CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o  -o huawei_codecraft 
+/usr/bin/c++  -g   CMakeFiles/huawei_codecraft.dir/src/main.cpp.o CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o  -o huawei_codecraft 

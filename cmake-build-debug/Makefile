@@ -143,6 +143,33 @@ huawei_codecraft/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/build
 .PHONY : huawei_codecraft/fast
 
+src/cloud.o: src/cloud.cpp.o
+
+.PHONY : src/cloud.o
+
+# target to build an object file
+src/cloud.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o
+.PHONY : src/cloud.cpp.o
+
+src/cloud.i: src/cloud.cpp.i
+
+.PHONY : src/cloud.i
+
+# target to preprocess a source file
+src/cloud.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.i
+.PHONY : src/cloud.cpp.i
+
+src/cloud.s: src/cloud.cpp.s
+
+.PHONY : src/cloud.s
+
+# target to generate assembly for a file
+src/cloud.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.s
+.PHONY : src/cloud.cpp.s
+
 src/filereadwriter.o: src/filereadwriter.cpp.o
 
 .PHONY : src/filereadwriter.o
@@ -197,6 +224,33 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/simplestrategy.o: src/simplestrategy.cpp.o
+
+.PHONY : src/simplestrategy.o
+
+# target to build an object file
+src/simplestrategy.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o
+.PHONY : src/simplestrategy.cpp.o
+
+src/simplestrategy.i: src/simplestrategy.cpp.i
+
+.PHONY : src/simplestrategy.i
+
+# target to preprocess a source file
+src/simplestrategy.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.i
+.PHONY : src/simplestrategy.cpp.i
+
+src/simplestrategy.s: src/simplestrategy.cpp.s
+
+.PHONY : src/simplestrategy.s
+
+# target to generate assembly for a file
+src/simplestrategy.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.s
+.PHONY : src/simplestrategy.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -206,12 +260,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... huawei_codecraft"
+	@echo "... src/cloud.o"
+	@echo "... src/cloud.i"
+	@echo "... src/cloud.s"
 	@echo "... src/filereadwriter.o"
 	@echo "... src/filereadwriter.i"
 	@echo "... src/filereadwriter.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/simplestrategy.o"
+	@echo "... src/simplestrategy.i"
+	@echo "... src/simplestrategy.s"
 .PHONY : help
 
 

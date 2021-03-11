@@ -15,6 +15,7 @@ public:
 };
 
 class ServerObj{
+public:
     ServerInfo info;
     int ID;
     int remainingCPUNum;

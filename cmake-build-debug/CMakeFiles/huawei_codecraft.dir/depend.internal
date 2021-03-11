@@ -5,8 +5,10 @@ CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o
  ../include/readwriter.h
  ../include/server.h
  ../include/utils.h
+ ../include/virtual-machine.h
  /home/ctoast/huawei-codecraft/src/filereadwriter.cpp
 CMakeFiles/huawei_codecraft.dir/src/main.cpp.o
  ../include/readwriter.h
  ../include/server.h
+ ../include/virtual-machine.h
  /home/ctoast/huawei-codecraft/src/main.cpp

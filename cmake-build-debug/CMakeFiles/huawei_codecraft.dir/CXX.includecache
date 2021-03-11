@@ -13,10 +13,14 @@ cstdio
 -
 server.h
 ../include/server.h
+virtual-machine.h
+../include/virtual-machine.h
 
 ../include/server.h
 
 ../include/utils.h
+
+../include/virtual-machine.h
 
 /home/ctoast/huawei-codecraft/src/filereadwriter.cpp
 readwriter.h
@@ -25,6 +29,6 @@ utils.h
 /home/ctoast/huawei-codecraft/src/utils.h
 cstdio
 -
-fstream
+cstring
 -
 
