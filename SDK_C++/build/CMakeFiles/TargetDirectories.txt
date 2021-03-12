@@ -1,0 +1,3 @@
+/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/rebuild_cache.dir
+/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/edit_cache.dir
+/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir
