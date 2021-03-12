@@ -29,7 +29,7 @@ typedef struct{
 }RequestsBunch;
 
 typedef struct{
-    char serverName;
+    char serverName[21];
     int num;
 }Purchase;
 
@@ -49,6 +49,7 @@ typedef struct{
 }Result;
 
 class RequestReader{
+public:
     virtual int ReadServersInfo(std::vector<ServerInfo> &receiver) =0;
 
     virtual int ReadVMachineInfo(std::vector<VirtualMachineInfo> &receiver) =0;

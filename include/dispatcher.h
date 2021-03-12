@@ -9,14 +9,20 @@
 #include "readwriter.h"
 #include "strategy.h"
 
-public class Dispatcher{
-    Cloud cloud;
+class Dispatcher{
+public:
+    RequestReader* reader;
 
-    RequestReader reader;
+    //ResultWriter& writer;
 
-    ResultWriter writer;
+    Strategy* strategy;
 
-    Strategy strategy;
+    Dispatcher(RequestReader* r,Strategy* s){
+        reader=r;
+        strategy=s;
+    };
+
+    int run();
 };
 
 #endif //HUAWEI_CODECRAFT_DISPATCHER_H
