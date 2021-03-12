@@ -6,29 +6,35 @@
 
 #IncludeRegexTransform: 
 
-../include/readwriter.h
+../include/cloud.h
 vector
 -
-cstdio
+map
 -
+server.h
+../include/server.h
+virtual-machine.h
+../include/virtual-machine.h
 server.h
 ../include/server.h
 virtual-machine.h
 ../include/virtual-machine.h
 
 ../include/server.h
-
-../include/utils.h
-
+virtual-machine.h
 ../include/virtual-machine.h
 
-/home/ctoast/huawei-codecraft/src/filereadwriter.cpp
-readwriter.h
-/home/ctoast/huawei-codecraft/src/readwriter.h
+../include/utils.h
+iostream
+../include/iostream
+
+../include/virtual-machine.h
+vector
+../include/vector
+
+/home/ctoast/huawei-codecraft/src/cloud.cpp
+cloud.h
+/home/ctoast/huawei-codecraft/src/cloud.h
 utils.h
 /home/ctoast/huawei-codecraft/src/utils.h
-cstdio
--
-cstring
--
 

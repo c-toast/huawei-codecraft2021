@@ -70,9 +70,11 @@ int FileReader::ReadVMachineInfo(std::vector<VirtualMachineInfo> &receiver) {
 int FileReader::ReadBunchOfRequests(RequestsBunch &receiver) {
     int num;
     fscanf(this->file,"%d",&num);
+    receiver.dayNum=num;
     for(int i=0;i<num;i++) {
         OneDayRequest req;
         ReadOneDayRequests(req);
+        receiver.bunch.push_back(req);
     }
     return 0;
 }

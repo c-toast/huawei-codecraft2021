@@ -94,12 +94,12 @@ clean: CMakeFiles/huawei_codecraft.dir/clean
 CMakeFiles/huawei_codecraft.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target huawei_codecraft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target huawei_codecraft"
 .PHONY : CMakeFiles/huawei_codecraft.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/huawei_codecraft.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/huawei_codecraft.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/huawei_codecraft.dir/rule

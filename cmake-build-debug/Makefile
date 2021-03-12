@@ -170,6 +170,33 @@ src/cloud.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.s
 .PHONY : src/cloud.cpp.s
 
+src/dispatcher.o: src/dispatcher.cpp.o
+
+.PHONY : src/dispatcher.o
+
+# target to build an object file
+src/dispatcher.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o
+.PHONY : src/dispatcher.cpp.o
+
+src/dispatcher.i: src/dispatcher.cpp.i
+
+.PHONY : src/dispatcher.i
+
+# target to preprocess a source file
+src/dispatcher.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.i
+.PHONY : src/dispatcher.cpp.i
+
+src/dispatcher.s: src/dispatcher.cpp.s
+
+.PHONY : src/dispatcher.s
+
+# target to generate assembly for a file
+src/dispatcher.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.s
+.PHONY : src/dispatcher.cpp.s
+
 src/filereadwriter.o: src/filereadwriter.cpp.o
 
 .PHONY : src/filereadwriter.o
@@ -224,6 +251,33 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/server.o: src/server.cpp.o
+
+.PHONY : src/server.o
+
+# target to build an object file
+src/server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/server.cpp.o
+.PHONY : src/server.cpp.o
+
+src/server.i: src/server.cpp.i
+
+.PHONY : src/server.i
+
+# target to preprocess a source file
+src/server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/server.cpp.i
+.PHONY : src/server.cpp.i
+
+src/server.s: src/server.cpp.s
+
+.PHONY : src/server.s
+
+# target to generate assembly for a file
+src/server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/server.cpp.s
+.PHONY : src/server.cpp.s
+
 src/simplestrategy.o: src/simplestrategy.cpp.o
 
 .PHONY : src/simplestrategy.o
@@ -263,12 +317,18 @@ help:
 	@echo "... src/cloud.o"
 	@echo "... src/cloud.i"
 	@echo "... src/cloud.s"
+	@echo "... src/dispatcher.o"
+	@echo "... src/dispatcher.i"
+	@echo "... src/dispatcher.s"
 	@echo "... src/filereadwriter.o"
 	@echo "... src/filereadwriter.i"
 	@echo "... src/filereadwriter.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/server.o"
+	@echo "... src/server.i"
+	@echo "... src/server.s"
 	@echo "... src/simplestrategy.o"
 	@echo "... src/simplestrategy.i"
 	@echo "... src/simplestrategy.s"

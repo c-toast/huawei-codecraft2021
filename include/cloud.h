@@ -17,7 +17,7 @@ class Cloud{
     //addServerObj return server id
     virtual int AddServerObj(ServerObj server)=0;
 
-    virtual int AddMachine(int serverId, VirtualMachineObj &machine)=0;
+    virtual int AddMachine(int serverId, int nodeIndex, VirtualMachineObj &machineObj) =0;
 
     virtual int DelMachine(int machineID)=0;
 
@@ -41,7 +41,7 @@ public:
     //addServerObj return server id
     int AddServerObj(ServerObj server) override;
 
-    int AddMachine(int serverId, VirtualMachineObj &machine) override;
+    int AddMachine(int serverId, int nodeIndex, VirtualMachineObj &machineObj) override;
 
     int DelMachine(int machineID) override;
 

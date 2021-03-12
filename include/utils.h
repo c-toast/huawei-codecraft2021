@@ -4,6 +4,7 @@
 
 #ifndef HUAWEI_CODECRAFT_UTILS_H
 #define HUAWEI_CODECRAFT_UTILS_H
+#include "iostream"
 
 #define LOGD(args...) fprintf(stdout,"D:");fprintf(stdout, ##args); putchar('\n')
 #define LOGI(args...) fprintf(stdout,"I:");fprintf(stdout, ##args); putchar('\n')

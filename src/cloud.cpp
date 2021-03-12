@@ -15,21 +15,22 @@ int SimpleCloud::AddServerObj(ServerObj server) {
     return id;
 }
 
-int SimpleCloud::AddMachine(int serverId, VirtualMachineObj &machine) {
+int SimpleCloud::AddMachine(int serverId, int nodeIndex, VirtualMachineObj &machineObj) {
     if(serverId<0||serverId>serverObjList.size()-1){
         LOGE("server id is wrong");
         exit(-1);
     }
     ServerObj& server=serverObjList[serverId];
-    VirtualMachineInfo info=machine.info;
-    server.remainingCPUNum-=info.cpuNum;
-    server.remainingMemorySize-=info.memorySize;
-    if(server.remainingMemorySize<0||server.remainingCPUNum<0){
-        LOGE("server remaining resource less than zero");
-        exit(-1);
+    VirtualMachineInfo info=machineObj.info;
+
+    if(info.doubleNode){
+        server.deployVMachine(0, machineObj);
+        server.deployVMachine(1, machineObj);
+    }else{
+        server.deployVMachine(nodeIndex,machineObj);
     }
-    machine.deployedServerID=serverId;
-    vMachineObjMap.insert({machine.ID,machine});
+
+    vMachineObjMap.insert({machineObj.ID, machineObj});
     return 0;
 }
 
@@ -40,17 +41,18 @@ int SimpleCloud::DelMachine(int machineID) {
         exit(-1);
     }
     auto machine=machineIterator->second;
-    auto machineInfo=machine.info;
     int serverID=machine.deployedServerID;
+
     if(serverID<0||serverID>serverObjList.size()-1){
         LOGE("machine deployed id is wrong");
         exit(-1);
     }
-    auto server=serverObjList[serverID];
+    auto& server=serverObjList[serverID];
 
     vMachineObjMap.erase(machineIterator);
-    server.remainingCPUNum+=machineInfo.cpuNum;
-    server.remainingMemorySize+=machineInfo.memorySize;
+    for(auto nodeIndex:machine.deployedNodes){
+        server.delVMachine(nodeIndex,machine);
+    }
 
     return 0;
 }
