@@ -105,6 +105,9 @@
 		<Unit filename="/home/ctoast/huawei-codecraft/src/simplestrategy.cpp">
 			<Option target="huawei_codecraft"/>
 		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/stdreadwriter.cpp">
+			<Option target="huawei_codecraft"/>
+		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

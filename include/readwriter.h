@@ -34,7 +34,9 @@ typedef struct{
 }Purchase;
 
 typedef struct{
-    int tmp;
+	int serverID;
+	int virtualID;
+	char node;
 }Migration;
 
 typedef struct{
@@ -48,6 +50,8 @@ typedef struct{
     std::vector<Deploy> deployList;
 }Result;
 
+typedef std::vector<Result> ResultList;
+
 class RequestReader{
 public:
     virtual int ReadServersInfo(std::vector<ServerInfo> &receiver) =0;
@@ -58,7 +62,13 @@ public:
 };
 
 class ResultWriter{
-    virtual int write(Result& res)=0;
+public:
+    virtual int write(ResultList& resultList)=0;
+};
+
+class StdWriter : public ResultWriter {
+public:
+	int write(ResultList& resultList) override;
 };
 
 class FileReader: public RequestReader{
@@ -68,6 +78,19 @@ public:
     FileReader(char* filePath);
 
     FileReader()=delete;
+
+    int ReadServersInfo(std::vector<ServerInfo> &receiver) override;
+
+    int ReadVMachineInfo(std::vector<VirtualMachineInfo> &receiver) override ;
+
+    int ReadBunchOfRequests(RequestsBunch &receiver) override;
+
+    int ReadOneDayRequests(OneDayRequest &receiver);
+};
+
+class StdReader: public RequestReader{
+public:
+    StdReader()=default;
 
     int ReadServersInfo(std::vector<ServerInfo> &receiver) override;
 

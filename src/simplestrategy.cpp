@@ -28,7 +28,7 @@ int SimpleStrategy::dispatch(RequestsBunch &requestsBunch, std::vector<Result> &
 
         for(auto it:purchaseMap){
             Purchase p;
-            memcpy(p.serverName,it.first.c_str(),it.first.size());
+            memcpy(p.serverName,it.first.c_str(),it.first.size()+1);
             p.num=it.second;
             oneDayRes.purchaseList.push_back(p);
         }
@@ -149,7 +149,11 @@ bool SimpleStrategy::CanServerDeployable(ServerInfo &info, VirtualMachineInfo &m
     if(machineInfo.doubleNode==1){
         return info.memorySize>machineInfo.memorySize&&info.cpuNum>machineInfo.cpuNum;
     }else{
-        return info.memorySize/2>machineInfo.memorySize&&info.cpuNum/2>machineInfo.cpuNum;
+        if(info.memorySize/2>machineInfo.memorySize&&info.cpuNum/2>machineInfo.cpuNum){
+            deployableNode=0;
+            return true;
+        }
+        return false;
     }
 
 }

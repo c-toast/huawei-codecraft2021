@@ -5,6 +5,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/huawei_codecraft.dir/src/main.cpp.o"
   "CMakeFiles/huawei_codecraft.dir/src/server.cpp.o"
   "CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o"
+  "CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o"
   "huawei_codecraft"
   "huawei_codecraft.pdb"
 )

@@ -20,9 +20,27 @@ server.h
 virtual-machine.h
 ../include/virtual-machine.h
 
+../include/readwriter.h
+vector
+-
+cstdio
+-
+server.h
 ../include/server.h
 virtual-machine.h
 ../include/virtual-machine.h
+
+../include/server.h
+virtual-machine.h
+../include/virtual-machine.h
+
+../include/strategy.h
+map
+-
+string
+-
+readwriter.h
+../include/readwriter.h
 
 ../include/utils.h
 iostream
@@ -32,9 +50,13 @@ iostream
 vector
 ../include/vector
 
-/home/ctoast/huawei-codecraft/src/cloud.cpp
+/home/ctoast/huawei-codecraft/src/simplestrategy.cpp
+strategy.h
+/home/ctoast/huawei-codecraft/src/strategy.h
 cloud.h
 /home/ctoast/huawei-codecraft/src/cloud.h
 utils.h
 /home/ctoast/huawei-codecraft/src/utils.h
+cstring
+/home/ctoast/huawei-codecraft/src/cstring
 

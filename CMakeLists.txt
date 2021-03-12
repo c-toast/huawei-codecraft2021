@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD 11)
 #        ${CMAKE_CURRENT_SOURCE_DIR}/googletest
 #)
 
-add_executable(huawei_codecraft src/main.cpp src/filereadwriter.cpp include/utils.h src/cloud.cpp src/simplestrategy.cpp src/server.cpp src/dispatcher.cpp)
+add_executable(huawei_codecraft src/main.cpp src/filereadwriter.cpp include/utils.h src/cloud.cpp src/simplestrategy.cpp src/server.cpp src/dispatcher.cpp src/stdreadwriter.cpp)
 
 target_include_directories(
         huawei_codecraft PRIVATE ${PROJECT_SOURCE_DIR}/include

@@ -305,6 +305,33 @@ src/simplestrategy.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.s
 .PHONY : src/simplestrategy.cpp.s
 
+src/stdreadwriter.o: src/stdreadwriter.cpp.o
+
+.PHONY : src/stdreadwriter.o
+
+# target to build an object file
+src/stdreadwriter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o
+.PHONY : src/stdreadwriter.cpp.o
+
+src/stdreadwriter.i: src/stdreadwriter.cpp.i
+
+.PHONY : src/stdreadwriter.i
+
+# target to preprocess a source file
+src/stdreadwriter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.i
+.PHONY : src/stdreadwriter.cpp.i
+
+src/stdreadwriter.s: src/stdreadwriter.cpp.s
+
+.PHONY : src/stdreadwriter.s
+
+# target to generate assembly for a file
+src/stdreadwriter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.s
+.PHONY : src/stdreadwriter.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -332,6 +359,9 @@ help:
 	@echo "... src/simplestrategy.o"
 	@echo "... src/simplestrategy.i"
 	@echo "... src/simplestrategy.s"
+	@echo "... src/stdreadwriter.o"
+	@echo "... src/stdreadwriter.i"
+	@echo "... src/stdreadwriter.s"
 .PHONY : help
 
 

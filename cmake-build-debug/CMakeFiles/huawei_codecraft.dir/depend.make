@@ -42,3 +42,8 @@ CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o: ../include/utils.h
 CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o: ../include/virtual-machine.h
 CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o: ../src/simplestrategy.cpp
 
+CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o: ../include/readwriter.h
+CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o: ../include/server.h
+CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o: ../include/virtual-machine.h
+CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o: ../src/stdreadwriter.cpp
+

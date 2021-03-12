@@ -13,13 +13,14 @@ class Dispatcher{
 public:
     RequestReader* reader;
 
-    //ResultWriter& writer;
+    ResultWriter* writer;
 
     Strategy* strategy;
 
-    Dispatcher(RequestReader* r,Strategy* s){
+    Dispatcher(RequestReader* r,ResultWriter* w,Strategy* s){
         reader=r;
         strategy=s;
+        writer=w;
     };
 
     int run();

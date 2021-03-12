@@ -6,6 +6,7 @@
 #include "utils.h"
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 
 
 FileReader::FileReader(char* filePath){
@@ -70,11 +71,11 @@ int FileReader::ReadVMachineInfo(std::vector<VirtualMachineInfo> &receiver) {
 int FileReader::ReadBunchOfRequests(RequestsBunch &receiver) {
     int num;
     fscanf(this->file,"%d",&num);
-    receiver.dayNum=num;
+	receiver.dayNum = num;
     for(int i=0;i<num;i++) {
         OneDayRequest req;
         ReadOneDayRequests(req);
-        receiver.bunch.push_back(req);
+		receiver.bunch.push_back(req);
     }
     return 0;
 }
@@ -121,10 +122,28 @@ int FileReader::ReadOneDayRequests(OneDayRequest &receiver) {
     return 0;
 }
 
-
-
-
-
-
+int StdWriter::write(ResultList& resultList) {
+	int days = resultList.size();
+	for (int i = 0; i < days; i++) {
+		std::cout <<"(Purchase, "<< resultList[i].purchaseList.size() <<")"<< std::endl;
+		for (int j = 0; j < resultList[i].purchaseList.size(); j++) {
+			std::cout << "(" << std::string(resultList[i].purchaseList[j].serverName) << ", " << resultList[i].purchaseList[j].num << ")"<<std::endl;
+		}
+		std::cout << "(Migration, " << resultList[i].migrationList.size() << ")" << std::endl;
+		for (int j = 0; j < resultList[i].migrationList.size(); j++) {
+			if (resultList[i].migrationList[j].node)
+				std::cout << "("<<resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID << ", " << resultList[i].migrationList[j].node << ")" << std::endl;
+			else
+				std::cout << "(" << resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID  << ")" << std::endl;
+		}
+		for (int j = 0; j < resultList[i].deployList.size(); j++) {
+			if (resultList[i].deployList[j].node!=-1)
+				std::cout << "(" << resultList[i].deployList[j].serverID << ", " << char(resultList[i].deployList[j].node+'A') << ")" << std::endl;
+			else
+				std::cout << "(" << resultList[i].deployList[j].serverID << ")" << std::endl;
+		}
+	}
+	return 0;
+}
 
 

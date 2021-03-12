@@ -23,5 +23,7 @@ int Dispatcher::run() {
     reader->ReadBunchOfRequests(bunch);
     strategy->dispatch(bunch,res);
 
+    writer->write(res);
+
     return 0;
 }
