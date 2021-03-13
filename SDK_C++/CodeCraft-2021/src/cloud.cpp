@@ -23,7 +23,7 @@ int SimpleCloud::AddMachine(int serverId, int nodeIndex, VirtualMachineObj &mach
     ServerObj& server=serverObjList[serverId];
     VirtualMachineInfo info=machineObj.info;
 
-    if(info.doubleNode){
+    if(info.doubleNode==1){
         server.deployVMachine(0, machineObj);
         server.deployVMachine(1, machineObj);
     }else{

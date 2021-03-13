@@ -143,6 +143,7 @@ int StdWriter::write(ResultList& resultList) {
 				std::cout << "(" << resultList[i].deployList[j].serverID << ")" << std::endl;
 		}
 	}
+	std::cout<<'\n';
 	return 0;
 }
 

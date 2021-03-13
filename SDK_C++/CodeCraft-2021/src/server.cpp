@@ -9,7 +9,7 @@ int ServerObj::deployVMachine(int nodeIndex, VirtualMachineObj &obj) {
     auto info=obj.info;
     int memorySize=info.memorySize;
     int cpuNum=info.cpuNum;
-    if(info.doubleNode){
+    if(info.doubleNode==1){
         memorySize/=2;
         cpuNum/=2;
     }
@@ -32,7 +32,7 @@ int ServerObj::delVMachine(int nodeIndex, VirtualMachineObj &obj) {
     auto info=obj.info;
     int memorySize=info.memorySize;
     int cpuNum=info.cpuNum;
-    if(info.doubleNode){
+    if(info.doubleNode==1){
         memorySize/=2;
         cpuNum/=2;
     }

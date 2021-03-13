@@ -11,7 +11,6 @@
 
 FileReader::FileReader(char* filePath){
     file=fopen(filePath,"r");
-
 }
 
 int FileReader::ReadServersInfo(std::vector<ServerInfo> &receiver) {
