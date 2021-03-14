@@ -3,10 +3,14 @@
 #include "dispatcher.h"
 
 int main() {
-    FileReader reader("./simple-test.txt");
+    StdReader reader;
+    StdWriter writer;
+    //freopen("./simple-test.txt","r",stdin);
+    //freopen("./simple-result.txt","w",stdout);
     SimpleStrategy strategy;
-    Dispatcher dispatcher(&reader,&strategy);
+    Dispatcher dispatcher(&reader,&writer,&strategy);
     dispatcher.run();
+    fflush(stdout);
 
     return 0;
 }

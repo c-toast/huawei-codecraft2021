@@ -7,16 +7,17 @@
 
 #include <vector>
 #include <cstdio>
+#include <map>
 
 #include "server.h"
-#include "virtual-machine.h"
+#include "vm.h"
 
 #define ADD 1
 #define DEL 0
 
 typedef struct{
     int op;
-    char vMachineModel[21];
+    std::string vMachineModel;
     int vMachineID;
 }Request;
 
@@ -34,44 +35,51 @@ typedef struct{
 }Purchase;
 
 typedef struct{
-    int tmp;
+	int serverID;
+	int virtualID;
+	int node;
 }Migration;
 
 typedef struct{
     int serverID;
-    char node;
+    int node;
 }Deploy;
 
 typedef struct{
-    std::vector<Purchase> purchaseList;
+    std::map<std::string,int> purchaseMap;
     std::vector<Migration> migrationList;
     std::vector<Deploy> deployList;
-}Result;
+}OneDayResult;
+
+typedef std::vector<OneDayResult> ResultList;
 
 class RequestReader{
 public:
     virtual int ReadServersInfo(std::vector<ServerInfo> &receiver) =0;
 
-    virtual int ReadVMachineInfo(std::vector<VirtualMachineInfo> &receiver) =0;
+    virtual int ReadVMachineInfo(std::vector<VMInfo> &receiver) =0;
 
     virtual int ReadBunchOfRequests(RequestsBunch &receiver) =0;
 };
 
 class ResultWriter{
-    virtual int write(Result& res)=0;
+public:
+    virtual int write(ResultList& resultList)=0;
 };
 
-class FileReader: public RequestReader{
+class StdWriter : public ResultWriter {
 public:
-    FILE* file=NULL;
+	int write(ResultList& resultList) override;
+};
 
-    FileReader(char* filePath);
 
-    FileReader()=delete;
+class StdReader: public RequestReader{
+public:
+    StdReader()=default;
 
     int ReadServersInfo(std::vector<ServerInfo> &receiver) override;
 
-    int ReadVMachineInfo(std::vector<VirtualMachineInfo> &receiver) override ;
+    int ReadVMachineInfo(std::vector<VMInfo> &receiver) override ;
 
     int ReadBunchOfRequests(RequestsBunch &receiver) override;
 

@@ -8,20 +8,24 @@ extern SimpleCloud* globalCloud;
 
 int Dispatcher::run() {
     std::vector<ServerInfo> serversInfos;
-    std::vector<VirtualMachineInfo> vmachineInfos;
+    std::vector<VMInfo> vmachineInfos;
     reader->ReadServersInfo(serversInfos);
     reader->ReadVMachineInfo(vmachineInfos);
 
     globalCloud->serverInfoList=serversInfos;
-    std::map<std::string,VirtualMachineInfo>& vmInfoMap=globalCloud->vMachineInfoMap;
+    std::map<std::string,VMInfo>& vmInfoMap=globalCloud->vmInfoMap;
     for(auto it:vmachineInfos){
-        vmInfoMap[std::string(it.model)]=it;
+        std::string model;
+        it.getModel(model);
+        vmInfoMap[model]=it;
     }
 
     RequestsBunch bunch;
-    std::vector<Result> res;
+    std::vector<OneDayResult> res;
     reader->ReadBunchOfRequests(bunch);
     strategy->dispatch(bunch,res);
+
+    writer->write(res);
 
     return 0;
 }

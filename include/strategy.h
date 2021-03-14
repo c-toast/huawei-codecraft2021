@@ -11,21 +11,21 @@
 
 class Strategy{
 public:
-    virtual int dispatch(RequestsBunch &requestsBunch, std::vector<Result> &receiver) =0;
+    virtual int dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) =0;
 };
 
 class SimpleStrategy: public Strategy{
     std::map<std::string,int> purchaseMap;
 
-    int dispatch(RequestsBunch &requestsBunch, std::vector<Result> &receiver) override;
+    int dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) override;
 
-    int HandleAdd(Request &req, Result &receiver);
+    int HandleAdd(Request &req, OneDayResult &receiver);
 
-    int HandleDel(Request &del, Result &receiver);
+    int HandleDel(Request &del, OneDayResult &receiver);
 
-    bool CanServerObjDeployable(ServerObj &obj, VirtualMachineInfo &machineInfo, int &deployableNode);
+    bool CanServerObjDeployable(ServerObj &obj, VMInfo &machineInfo, int &deployableNode);
 
-    bool CanServerDeployable(ServerInfo &info, VirtualMachineInfo &machineInfo, int &deployableNode);
+    bool CanServerDeployable(ServerInfo &info, VMInfo &machineInfo, int &deployableNode);
 };
 
 
