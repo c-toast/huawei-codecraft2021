@@ -9,18 +9,32 @@
 #include <map>
 
 #include "server.h"
-#include "virtual-machine.h"
+#include "vm.h"
 #include "server.h"
-#include "virtual-machine.h"
+#include "vm.h"
 
 class Cloud{
-    //addServerObj return server id
-    virtual int AddServerObj(ServerObj server)=0;
+public:
+    std::map<std::string,VMInfo> vmInfoMap; //[model]info
 
-    virtual int AddMachine(int serverId, int nodeIndex, VirtualMachineObj &machineObj) =0;
+    std::vector<ServerObj> serverObjList; //obj is in their id order in this list
 
-    virtual int DelMachine(int machineID)=0;
+    std::map<int,VMObj> vmObjMap;//[id]obj.
 
+    virtual int addServerObj(ServerInfo &serverInfo) =0;
+
+    //addVMObj is supposed to automatically handle with the double node situation and single node situation
+    //in the former case, nodeIndex is useless
+    virtual int addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) =0;
+
+    virtual int delVMObj(int machineID)=0;
+
+    //the following three method only get the copy, but not the real obj storing in the cloud
+    int getServerObjById(int id, ServerObj& receiver);
+
+    int getVMObjById(int id, VMObj& receiver);
+
+    int getVMInfoByModel(std::string model, VMInfo& receiver);
 
     //virtual int MovMachine(int from,int to,VirtualMachine& machine)=0;
 
@@ -33,18 +47,11 @@ public:
 
     std::vector<ServerInfo> serverInfoList;
 
-    std::map<std::string,VirtualMachineInfo> vMachineInfoMap; //[model]info
+    int addServerObj(ServerInfo &serverInfo) override;
 
-    std::vector<ServerObj> serverObjList;
+    int addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) override;
 
-    std::map<int,VirtualMachineObj> vMachineObjMap;//[id]obj
-    //addServerObj return server id
-    int AddServerObj(ServerObj server) override;
-
-    int AddMachine(int serverId, int nodeIndex, VirtualMachineObj &machineObj) override;
-
-    int DelMachine(int machineID) override;
-
+    int delVMObj(int machineID) override;
 };
 
 #endif //HUAWEI_CODECRAFT_CLOUD_H

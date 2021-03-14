@@ -5,39 +5,104 @@
 #include "server.h"
 #include "utils.h"
 
-int ServerObj::deployVMachine(int nodeIndex, VirtualMachineObj &obj) {
-    auto info=obj.info;
-    int memorySize=info.memorySize;
-    int cpuNum=info.cpuNum;
-    if(info.doubleNode==1){
-        memorySize/=2;
-        cpuNum/=2;
-    }
-    nodes[nodeIndex].remainingMemorySize-=memorySize;
-    nodes[nodeIndex].remainingCPUNum-=cpuNum;
+int ServerInfo::getCpuNum(int& receiver){receiver=cpuNum;return 0;}
 
-    //temporary place here;
-    obj.deployedNodes.push_back(nodeIndex);
-    obj.deployedServerID=ID;
+int ServerInfo::getMemorySize(int& receiver){receiver=memorySize;return 0;}
 
-    if(nodes[nodeIndex].remainingMemorySize<0||nodes[nodeIndex].remainingCPUNum<0){
-        LOGE("server remaining resource less than zero");
-        exit(-1);
+int ServerInfo::getModel(std::string &receiver) {receiver=model;return 0;}
+
+int ServerInfo::getHardwareCost(int &receiver) {receiver=hardwareCost;return 0;}
+
+int ServerInfo::getEnergyCost(int &receiver) {receiver=energyCost;return 0;}
+
+bool ServerInfo::canDeployOnSingleNode(VMInfo &vmInfo) {
+    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    if(doubleNode == DOUBLEDEPLOY){
+        return false;
     }
+
+    Resource requiredRes;
+    vmInfo.getRequiredResourceForOneNode(requiredRes);
+    Resource ownRes(cpuNum/2,memorySize/2);
+    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+        return false;
+    }
+    return true;
+}
+
+bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
+    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    if(doubleNode == SINGLEDEPLOY){
+        return false;
+    }
+
+    Resource requiredRes;
+    vmInfo.getRequiredResourceForOneNode(requiredRes);
+    Resource ownRes(cpuNum/2,memorySize/2);
+    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+        return false;
+    }
+    return true;
+}
+
+
+int ServerObj::deployVM(int nodeIndex, VMObj &receiver) {
+    VMInfo vmInfo;
+    receiver.getInfo(vmInfo);
+    Resource requiredRes;
+    vmInfo.getRequiredResourceForOneNode(requiredRes);
+    nodes[nodeIndex].remainingResource.allocResource(requiredRes);
+    receiver.deploy(ID,nodeIndex);//record the deploy message in VMOBJ
 
     return 0;
 }
 
-int ServerObj::delVMachine(int nodeIndex, VirtualMachineObj &obj) {
-    auto info=obj.info;
-    int memorySize=info.memorySize;
-    int cpuNum=info.cpuNum;
-    if(info.doubleNode==1){
-        memorySize/=2;
-        cpuNum/=2;
-    }
-    nodes[nodeIndex].remainingMemorySize+=memorySize;
-    nodes[nodeIndex].remainingCPUNum+=cpuNum;
+int ServerObj::delVM(int nodeIndex, VMInfo &vmInfo) {
+    Resource requiredRes;
+    vmInfo.getRequiredResourceForOneNode(requiredRes);
+    nodes[nodeIndex].remainingResource.freeResource(requiredRes);
 
     return 0;
 }
+
+int ServerObj::getNodeRemainingResource(int nodeIndex, Resource &receiver) {
+    receiver = nodes[nodeIndex].remainingResource;
+    return 0;
+}
+
+bool ServerObj::canDeployOnSingleNode(int nodeIndex, VMInfo &vmInfo) {
+    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    if(doubleNode == DOUBLEDEPLOY){
+        return false;
+    }
+
+    Resource requiredRes;
+    vmInfo.getRequiredResourceForOneNode(requiredRes);
+    Resource ownRes=nodes[nodeIndex].remainingResource;
+    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+        return false;
+    }
+    return true;
+}
+
+bool ServerObj::canDeployOnDoubleNode(VMInfo &vmInfo) {
+    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    if(doubleNode == SINGLEDEPLOY){
+        return false;
+    }
+
+    Resource requiredRes;
+    vmInfo.getRequiredResourceForOneNode(requiredRes);
+    Resource ownRes=nodes[0].remainingResource;
+    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+        return false;
+    }
+    ownRes=nodes[1].remainingResource;
+    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+        return false;
+    }
+    return true;
+}
+
+
+

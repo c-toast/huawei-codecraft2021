@@ -6,11 +6,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ctoast/huawei-codecraft/src/cloud.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o"
   "/home/ctoast/huawei-codecraft/src/dispatcher.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o"
-  "/home/ctoast/huawei-codecraft/src/filereadwriter.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o"
   "/home/ctoast/huawei-codecraft/src/main.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/main.cpp.o"
   "/home/ctoast/huawei-codecraft/src/server.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/server.cpp.o"
   "/home/ctoast/huawei-codecraft/src/simplestrategy.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o"
   "/home/ctoast/huawei-codecraft/src/stdreadwriter.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o"
+  "/home/ctoast/huawei-codecraft/src/vm.cpp" "/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

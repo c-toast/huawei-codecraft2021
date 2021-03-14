@@ -4,50 +4,58 @@
 
 #include "readwriter.h"
 #include "cstring"
+#include <iostream>
 
 int StdReader::ReadServersInfo(std::vector<ServerInfo> &receiver) {
 
     int num;
     scanf("%d",&num);
-    ServerInfo info;
+    char model[21];
+    int cpuNum,memorySize,hardwareCost,energyCost;
 
     getchar();
     for(int i=0;i<num;i++) {
         getchar();
         for (int j = 0;; j++) {
-            scanf("%c", &info.model[j]);
-            if (info.model[j] == ',') {
-                info.model[j] = '\0';
+            scanf("%c", &model[j]);
+            if (model[j] == ',') {
+                model[j] = '\0';
                 break;
             }
         }
-        scanf("%d, %d, %d, %d)", &info.cpuNum, &info.memorySize, &info.hardwareCost, &info.energyCost);
+        scanf("%d, %d, %d, %d)", &cpuNum, &memorySize, &hardwareCost, &energyCost);
         getchar();
 
+        ServerInfo info(model,cpuNum,memorySize,hardwareCost,energyCost);
         receiver.push_back(info);
     }
 
     return 0;
 }
 
-int StdReader::ReadVMachineInfo(std::vector<VirtualMachineInfo> &receiver) {
+int StdReader::ReadVMachineInfo(std::vector<VMInfo> &receiver) {
 
     int num;
     scanf("%d",&num);
-    VirtualMachineInfo info;
+    VMInfo info;
+
+    char model[21];
+    int cpuNum,memorySize,doubleNode;
 
     getchar();
     for(int i=0;i<num;i++) {
         getchar();
         for (int j = 0;; j++) {
-            scanf("%c", &info.model[j]);
-            if (info.model[j] == ',') {
-                info.model[j] = '\0';
+            scanf("%c", &model[j]);
+            if (model[j] == ',') {
+                model[j] = '\0';
                 break;
             }
         }
-        scanf("%d, %d, %d)", &info.cpuNum, &info.memorySize, &info.doubleNode);
+        scanf("%d, %d, %d)", &cpuNum, &memorySize, &doubleNode);
         getchar();
+
+        VMInfo info(model,cpuNum,memorySize,doubleNode);
         receiver.push_back(info);
 
     }
@@ -87,13 +95,15 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
         if(strcmp(opStr,"add")==0){
             req.op=ADD;
             getchar();
+            char vMachineModel[21];
             for (int j = 0;; j++) {
-                scanf("%c", &req.vMachineModel[j]);
-                if (req.vMachineModel[j] == ',') {
-                    req.vMachineModel[j] = '\0';
+                scanf("%c", &vMachineModel[j]);
+                if (vMachineModel[j] == ',') {
+                    vMachineModel[j] = '\0';
                     break;
                 }
             }
+            req.vMachineModel=std::string(vMachineModel);
             scanf("%d)", &req.vMachineID);
         }
         else{
@@ -107,3 +117,26 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
     return 0;
 }
 
+int StdWriter::write(ResultList& resultList) {
+    int days = resultList.size();
+    for (int i = 0; i < days; i++) {
+        std::cout << "(purchase, " << resultList[i].purchaseMap.size() << ")" << std::endl;
+        for (auto it:resultList[i].purchaseMap) {
+            std::cout << "(" << it.first << ", " << it.second << ")" << std::endl;
+        }
+        std::cout << "(migration, " << resultList[i].migrationList.size() << ")" << std::endl;
+        for (int j = 0; j < resultList[i].migrationList.size(); j++) {
+            if (resultList[i].migrationList[j].node)
+                std::cout << "("<<resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID << ", " << resultList[i].migrationList[j].node << ")" << std::endl;
+            else
+                std::cout << "(" << resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID  << ")" << std::endl;
+        }
+        for (int j = 0; j < resultList[i].deployList.size(); j++) {
+            if (resultList[i].deployList[j].node!=-1)
+                std::cout << "(" << resultList[i].deployList[j].serverID << ", " << char(resultList[i].deployList[j].node+'A') << ")" << std::endl;
+            else
+                std::cout << "(" << resultList[i].deployList[j].serverID << ")" << std::endl;
+        }
+    }
+    return 0;
+}

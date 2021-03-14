@@ -5,7 +5,7 @@ CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o
  ../include/cloud.h
  ../include/server.h
  ../include/utils.h
- ../include/virtual-machine.h
+ ../include/vm.h
  /home/ctoast/huawei-codecraft/src/cloud.cpp
 CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o
  ../include/cloud.h
@@ -13,26 +13,22 @@ CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o
  ../include/readwriter.h
  ../include/server.h
  ../include/strategy.h
- ../include/virtual-machine.h
- /home/ctoast/huawei-codecraft/src/dispatcher.cpp
-CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o
- ../include/readwriter.h
- ../include/server.h
  ../include/utils.h
- ../include/virtual-machine.h
- /home/ctoast/huawei-codecraft/src/filereadwriter.cpp
+ ../include/vm.h
+ /home/ctoast/huawei-codecraft/src/dispatcher.cpp
 CMakeFiles/huawei_codecraft.dir/src/main.cpp.o
  ../include/cloud.h
  ../include/dispatcher.h
  ../include/readwriter.h
  ../include/server.h
  ../include/strategy.h
- ../include/virtual-machine.h
+ ../include/utils.h
+ ../include/vm.h
  /home/ctoast/huawei-codecraft/src/main.cpp
 CMakeFiles/huawei_codecraft.dir/src/server.cpp.o
  ../include/server.h
  ../include/utils.h
- ../include/virtual-machine.h
+ ../include/vm.h
  /home/ctoast/huawei-codecraft/src/server.cpp
 CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o
  ../include/cloud.h
@@ -40,10 +36,15 @@ CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o
  ../include/server.h
  ../include/strategy.h
  ../include/utils.h
- ../include/virtual-machine.h
+ ../include/vm.h
  /home/ctoast/huawei-codecraft/src/simplestrategy.cpp
 CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o
  ../include/readwriter.h
  ../include/server.h
- ../include/virtual-machine.h
+ ../include/utils.h
+ ../include/vm.h
  /home/ctoast/huawei-codecraft/src/stdreadwriter.cpp
+CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o
+ ../include/utils.h
+ ../include/vm.h
+ /home/ctoast/huawei-codecraft/src/vm.cpp

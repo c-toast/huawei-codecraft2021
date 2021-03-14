@@ -5,11 +5,34 @@
 #ifndef HUAWEI_CODECRAFT_SERVER_H
 #define HUAWEI_CODECRAFT_SERVER_H
 
-#include "virtual-machine.h"
+#include <utility>
+
+#include "vm.h"
 
 class ServerInfo{
 public:
-    char model[21];
+    ServerInfo()=delete;
+
+    ServerInfo(std::string model,int cpuNum,int memorySize,int hardwareCost,int energyCost):
+    model(std::move(model)),cpuNum(cpuNum),memorySize(memorySize),hardwareCost(hardwareCost),energyCost(energyCost){}
+
+    int getModel(std::string& receiver);
+
+    int getCpuNum(int& receiver);
+
+    int getMemorySize(int& receiver);
+
+    int getHardwareCost(int& receiver);
+
+    int getEnergyCost(int& receiver);
+
+    bool canDeployOnSingleNode(VMInfo &vmInfo);
+
+    bool canDeployOnDoubleNode(VMInfo& vmInfo);
+
+
+private:
+    std::string model;
     int cpuNum;
     int memorySize;
     int hardwareCost;
@@ -18,37 +41,39 @@ public:
 
 class ServerNode{
 public:
-    int remainingCPUNum;
-    int remainingMemorySize;
+    Resource remainingResource;
 };
 
 class ServerObj{
 public:
     ServerInfo info;
     int ID;
-    ServerNode nodes[2];
+    ServerNode nodes[2]{};
 
-    ServerObj()=delete;
+    ServerObj()=default;
 
-    ServerObj(ServerInfo i){
-        info=i;
-        nodes[0].remainingCPUNum=i.cpuNum/2;
-        nodes[1].remainingCPUNum=i.cpuNum/2;
-        nodes[0].remainingMemorySize=i.memorySize/2;
-        nodes[1].remainingMemorySize=i.memorySize/2;
+    ServerObj(ServerInfo serverInfo,int serverID): info(std::move(serverInfo)),ID(serverID){
+        int cpuNumAlloc;info.getCpuNum(cpuNumAlloc);
+        cpuNumAlloc/=2;
+        int memorySizeAlloc;info.getMemorySize(memorySizeAlloc);
+        memorySizeAlloc/=2;
+
+        Resource r(cpuNumAlloc,memorySizeAlloc);
+        nodes[0].remainingResource=r;
+        nodes[1].remainingResource=r;
     }
 
-    int getNodeRemainingCpuNum(int nodeIndex){
-        return nodes[nodeIndex].remainingCPUNum;
-    };
+    int getNodeRemainingResource(int nodeIndex,Resource& receiver);
 
-    int getNodeRemainingMemorySize(int nodeIndex){
-        return nodes[nodeIndex].remainingMemorySize;
-    };
+    bool canDeployOnSingleNode(int nodeIndex,VMInfo& vmInfo);
 
-    int deployVMachine(int nodeIndex, VirtualMachineObj& obj);
+    bool canDeployOnDoubleNode(VMInfo& vmInfo);
 
-    int delVMachine(int nodeIndex,VirtualMachineObj& obj);
+    //just deploy in one node. if the VM type is DOUBLE, you need to call deployVM twice with different nodeIndex
+    int deployVM(int nodeIndex, VMObj &receiver);
+
+    //same as deployVM
+    int delVM(int nodeIndex, VMInfo &vmInfo);
 };
 
 

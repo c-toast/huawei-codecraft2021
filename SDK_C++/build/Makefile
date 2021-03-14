@@ -177,33 +177,6 @@ src/dispatcher.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.s
 .PHONY : src/dispatcher.cpp.s
 
-src/filereadwriter.o: src/filereadwriter.cpp.o
-
-.PHONY : src/filereadwriter.o
-
-# target to build an object file
-src/filereadwriter.cpp.o:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/filereadwriter.cpp.o
-.PHONY : src/filereadwriter.cpp.o
-
-src/filereadwriter.i: src/filereadwriter.cpp.i
-
-.PHONY : src/filereadwriter.i
-
-# target to preprocess a source file
-src/filereadwriter.cpp.i:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/filereadwriter.cpp.i
-.PHONY : src/filereadwriter.cpp.i
-
-src/filereadwriter.s: src/filereadwriter.cpp.s
-
-.PHONY : src/filereadwriter.s
-
-# target to generate assembly for a file
-src/filereadwriter.cpp.s:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/filereadwriter.cpp.s
-.PHONY : src/filereadwriter.cpp.s
-
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -312,6 +285,33 @@ src/stdreadwriter.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.s
 .PHONY : src/stdreadwriter.cpp.s
 
+src/vm.o: src/vm.cpp.o
+
+.PHONY : src/vm.o
+
+# target to build an object file
+src/vm.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o
+.PHONY : src/vm.cpp.o
+
+src/vm.i: src/vm.cpp.i
+
+.PHONY : src/vm.i
+
+# target to preprocess a source file
+src/vm.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.i
+.PHONY : src/vm.cpp.i
+
+src/vm.s: src/vm.cpp.s
+
+.PHONY : src/vm.s
+
+# target to generate assembly for a file
+src/vm.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.s
+.PHONY : src/vm.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -327,9 +327,6 @@ help:
 	@echo "... src/dispatcher.o"
 	@echo "... src/dispatcher.i"
 	@echo "... src/dispatcher.s"
-	@echo "... src/filereadwriter.o"
-	@echo "... src/filereadwriter.i"
-	@echo "... src/filereadwriter.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -342,6 +339,9 @@ help:
 	@echo "... src/stdreadwriter.o"
 	@echo "... src/stdreadwriter.i"
 	@echo "... src/stdreadwriter.s"
+	@echo "... src/vm.o"
+	@echo "... src/vm.i"
+	@echo "... src/vm.s"
 .PHONY : help
 
 

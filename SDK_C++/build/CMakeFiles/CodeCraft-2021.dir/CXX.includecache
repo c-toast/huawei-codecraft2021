@@ -13,12 +13,12 @@ map
 -
 server.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
-virtual-machine.h
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/virtual-machine.h
+vm.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
 server.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
-virtual-machine.h
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/virtual-machine.h
+vm.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/dispatcher.h
 cloud.h
@@ -33,14 +33,18 @@ vector
 -
 cstdio
 -
+map
+-
 server.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
-virtual-machine.h
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/virtual-machine.h
+vm.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
-virtual-machine.h
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/virtual-machine.h
+utility
+-
+vm.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategy.h
 map
@@ -54,9 +58,15 @@ readwriter.h
 iostream
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/iostream
 
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/virtual-machine.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+string
+-
+utility
+-
 vector
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vector
+utils.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cloud.cpp
 cloud.h
@@ -67,18 +77,6 @@ utils.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.cpp
 dispatcher.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.h
-
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/filereadwriter.cpp
-readwriter.h
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/readwriter.h
-utils.h
-/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/utils.h
-cstdio
--
-cstring
--
-iostream
--
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/main.cpp
 iostream
@@ -109,4 +107,10 @@ readwriter.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/readwriter.h
 cstring
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cstring
+iostream
+-
+
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vm.cpp
+vm.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vm.h
 

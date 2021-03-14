@@ -90,22 +90,9 @@ CMakeFiles/huawei_codecraft.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/huawei_codecraft.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/src/main.cpp -o CMakeFiles/huawei_codecraft.dir/src/main.cpp.s
 
-CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o: CMakeFiles/huawei_codecraft.dir/flags.make
-CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o: ../src/filereadwriter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o -c /home/ctoast/huawei-codecraft/src/filereadwriter.cpp
-
-CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/src/filereadwriter.cpp > CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.i
-
-CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/src/filereadwriter.cpp -o CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.s
-
 CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o: CMakeFiles/huawei_codecraft.dir/flags.make
 CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o: ../src/cloud.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o -c /home/ctoast/huawei-codecraft/src/cloud.cpp
 
 CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.i: cmake_force
@@ -118,7 +105,7 @@ CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.s: cmake_force
 
 CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o: CMakeFiles/huawei_codecraft.dir/flags.make
 CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o: ../src/simplestrategy.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o -c /home/ctoast/huawei-codecraft/src/simplestrategy.cpp
 
 CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.i: cmake_force
@@ -131,7 +118,7 @@ CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.s: cmake_force
 
 CMakeFiles/huawei_codecraft.dir/src/server.cpp.o: CMakeFiles/huawei_codecraft.dir/flags.make
 CMakeFiles/huawei_codecraft.dir/src/server.cpp.o: ../src/server.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/server.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/huawei_codecraft.dir/src/server.cpp.o -c /home/ctoast/huawei-codecraft/src/server.cpp
 
 CMakeFiles/huawei_codecraft.dir/src/server.cpp.i: cmake_force
@@ -144,7 +131,7 @@ CMakeFiles/huawei_codecraft.dir/src/server.cpp.s: cmake_force
 
 CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o: CMakeFiles/huawei_codecraft.dir/flags.make
 CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o: ../src/dispatcher.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o -c /home/ctoast/huawei-codecraft/src/dispatcher.cpp
 
 CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.i: cmake_force
@@ -157,7 +144,7 @@ CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.s: cmake_force
 
 CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o: CMakeFiles/huawei_codecraft.dir/flags.make
 CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o: ../src/stdreadwriter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o -c /home/ctoast/huawei-codecraft/src/stdreadwriter.cpp
 
 CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.i: cmake_force
@@ -168,26 +155,39 @@ CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/src/stdreadwriter.cpp -o CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.s
 
+CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o: CMakeFiles/huawei_codecraft.dir/flags.make
+CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o: ../src/vm.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o -c /home/ctoast/huawei-codecraft/src/vm.cpp
+
+CMakeFiles/huawei_codecraft.dir/src/vm.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/huawei_codecraft.dir/src/vm.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/src/vm.cpp > CMakeFiles/huawei_codecraft.dir/src/vm.cpp.i
+
+CMakeFiles/huawei_codecraft.dir/src/vm.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/huawei_codecraft.dir/src/vm.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/src/vm.cpp -o CMakeFiles/huawei_codecraft.dir/src/vm.cpp.s
+
 # Object files for target huawei_codecraft
 huawei_codecraft_OBJECTS = \
 "CMakeFiles/huawei_codecraft.dir/src/main.cpp.o" \
-"CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o" \
 "CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o" \
 "CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o" \
 "CMakeFiles/huawei_codecraft.dir/src/server.cpp.o" \
 "CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o" \
-"CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o"
+"CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o" \
+"CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o"
 
 # External object files for target huawei_codecraft
 huawei_codecraft_EXTERNAL_OBJECTS =
 
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/main.cpp.o
-huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/filereadwriter.cpp.o
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/server.cpp.o
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o
+huawei_codecraft: CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/build.make
 huawei_codecraft: CMakeFiles/huawei_codecraft.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ctoast/huawei-codecraft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable huawei_codecraft"
