@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o  -o CodeCraft-2021 

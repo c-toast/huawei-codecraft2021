@@ -11,7 +11,7 @@
 
 class ServerInfo{
 public:
-    ServerInfo()=delete;
+    ServerInfo()=default;
 
     ServerInfo(std::string model,int cpuNum,int memorySize,int hardwareCost,int energyCost):
     model(std::move(model)),cpuNum(cpuNum),memorySize(memorySize),hardwareCost(hardwareCost),energyCost(energyCost){}
@@ -68,6 +68,9 @@ public:
     bool canDeployOnSingleNode(int nodeIndex,VMInfo& vmInfo);
 
     bool canDeployOnDoubleNode(VMInfo& vmInfo);
+
+    //if vm is single node, the deployNode will be the node that have more residual resource
+    bool canDeploy(VMInfo& vmInfo,int& deployNode);
 
     //just deploy in one node. if the VM type is DOUBLE, you need to call deployVM twice with different nodeIndex
     int deployVM(int nodeIndex, VMObj &receiver);

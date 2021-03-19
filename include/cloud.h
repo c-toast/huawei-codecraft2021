@@ -47,6 +47,10 @@ public:
 
     std::vector<ServerInfo> serverInfoList;
 
+    std::map<std::string,ServerInfo> serverInfoMap;
+
+    int getServerInfoByModel(std::string model, ServerInfo& receiver);
+
     int addServerObj(ServerInfo &serverInfo) override;
 
     int addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) override;

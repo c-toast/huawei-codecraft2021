@@ -131,17 +131,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named huawei_codecraft
+# Target rules for targets named CodeCraft-2021
 
 # Build rule for target.
-huawei_codecraft: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 huawei_codecraft
-.PHONY : huawei_codecraft
+CodeCraft-2021: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CodeCraft-2021
+.PHONY : CodeCraft-2021
 
 # fast build rule for target.
-huawei_codecraft/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/build
-.PHONY : huawei_codecraft/fast
+CodeCraft-2021/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/build
+.PHONY : CodeCraft-2021/fast
 
 src/cloud.o: src/cloud.cpp.o
 
@@ -149,7 +149,7 @@ src/cloud.o: src/cloud.cpp.o
 
 # target to build an object file
 src/cloud.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o
 .PHONY : src/cloud.cpp.o
 
 src/cloud.i: src/cloud.cpp.i
@@ -158,7 +158,7 @@ src/cloud.i: src/cloud.cpp.i
 
 # target to preprocess a source file
 src/cloud.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.i
 .PHONY : src/cloud.cpp.i
 
 src/cloud.s: src/cloud.cpp.s
@@ -167,7 +167,7 @@ src/cloud.s: src/cloud.cpp.s
 
 # target to generate assembly for a file
 src/cloud.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/cloud.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.s
 .PHONY : src/cloud.cpp.s
 
 src/dispatcher.o: src/dispatcher.cpp.o
@@ -176,7 +176,7 @@ src/dispatcher.o: src/dispatcher.cpp.o
 
 # target to build an object file
 src/dispatcher.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o
 .PHONY : src/dispatcher.cpp.o
 
 src/dispatcher.i: src/dispatcher.cpp.i
@@ -185,7 +185,7 @@ src/dispatcher.i: src/dispatcher.cpp.i
 
 # target to preprocess a source file
 src/dispatcher.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.i
 .PHONY : src/dispatcher.cpp.i
 
 src/dispatcher.s: src/dispatcher.cpp.s
@@ -194,7 +194,7 @@ src/dispatcher.s: src/dispatcher.cpp.s
 
 # target to generate assembly for a file
 src/dispatcher.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/dispatcher.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.s
 .PHONY : src/dispatcher.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -203,7 +203,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -212,7 +212,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -221,7 +221,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/server.o: src/server.cpp.o
@@ -230,7 +230,7 @@ src/server.o: src/server.cpp.o
 
 # target to build an object file
 src/server.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/server.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o
 .PHONY : src/server.cpp.o
 
 src/server.i: src/server.cpp.i
@@ -239,7 +239,7 @@ src/server.i: src/server.cpp.i
 
 # target to preprocess a source file
 src/server.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/server.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/server.cpp.i
 .PHONY : src/server.cpp.i
 
 src/server.s: src/server.cpp.s
@@ -248,7 +248,7 @@ src/server.s: src/server.cpp.s
 
 # target to generate assembly for a file
 src/server.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/server.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/server.cpp.s
 .PHONY : src/server.cpp.s
 
 src/simplestrategy.o: src/simplestrategy.cpp.o
@@ -257,7 +257,7 @@ src/simplestrategy.o: src/simplestrategy.cpp.o
 
 # target to build an object file
 src/simplestrategy.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o
 .PHONY : src/simplestrategy.cpp.o
 
 src/simplestrategy.i: src/simplestrategy.cpp.i
@@ -266,7 +266,7 @@ src/simplestrategy.i: src/simplestrategy.cpp.i
 
 # target to preprocess a source file
 src/simplestrategy.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.i
 .PHONY : src/simplestrategy.cpp.i
 
 src/simplestrategy.s: src/simplestrategy.cpp.s
@@ -275,7 +275,7 @@ src/simplestrategy.s: src/simplestrategy.cpp.s
 
 # target to generate assembly for a file
 src/simplestrategy.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/simplestrategy.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.s
 .PHONY : src/simplestrategy.cpp.s
 
 src/stdreadwriter.o: src/stdreadwriter.cpp.o
@@ -284,7 +284,7 @@ src/stdreadwriter.o: src/stdreadwriter.cpp.o
 
 # target to build an object file
 src/stdreadwriter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o
 .PHONY : src/stdreadwriter.cpp.o
 
 src/stdreadwriter.i: src/stdreadwriter.cpp.i
@@ -293,7 +293,7 @@ src/stdreadwriter.i: src/stdreadwriter.cpp.i
 
 # target to preprocess a source file
 src/stdreadwriter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.i
 .PHONY : src/stdreadwriter.cpp.i
 
 src/stdreadwriter.s: src/stdreadwriter.cpp.s
@@ -302,7 +302,7 @@ src/stdreadwriter.s: src/stdreadwriter.cpp.s
 
 # target to generate assembly for a file
 src/stdreadwriter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/stdreadwriter.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.s
 .PHONY : src/stdreadwriter.cpp.s
 
 src/vm.o: src/vm.cpp.o
@@ -311,7 +311,7 @@ src/vm.o: src/vm.cpp.o
 
 # target to build an object file
 src/vm.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/vm.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o
 .PHONY : src/vm.cpp.o
 
 src/vm.i: src/vm.cpp.i
@@ -320,7 +320,7 @@ src/vm.i: src/vm.cpp.i
 
 # target to preprocess a source file
 src/vm.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/vm.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.i
 .PHONY : src/vm.cpp.i
 
 src/vm.s: src/vm.cpp.s
@@ -329,7 +329,7 @@ src/vm.s: src/vm.cpp.s
 
 # target to generate assembly for a file
 src/vm.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/huawei_codecraft.dir/build.make CMakeFiles/huawei_codecraft.dir/src/vm.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.s
 .PHONY : src/vm.cpp.s
 
 # Help Target
@@ -340,7 +340,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... huawei_codecraft"
+	@echo "... CodeCraft-2021"
 	@echo "... src/cloud.o"
 	@echo "... src/cloud.i"
 	@echo "... src/cloud.s"

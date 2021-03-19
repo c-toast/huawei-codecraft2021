@@ -107,3 +107,7 @@ int SimpleStrategy::HandleDel(Request &del, OneDayResult &receiver) {
     return 0;
 }
 
+int SimpleStrategy::AnalysisRequestBunch(RequestsBunch &requestsBunch) {
+    return 0;
+}
+

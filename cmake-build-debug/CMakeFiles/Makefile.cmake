@@ -48,5 +48,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/huawei_codecraft.dir/DependInfo.cmake"
+  "CMakeFiles/CodeCraft-2021.dir/DependInfo.cmake"
   )

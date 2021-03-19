@@ -61,6 +61,11 @@ int SimpleCloud::delVMObj(int machineID) {
     return 0;
 }
 
+int SimpleCloud::getServerInfoByModel(std::string model, ServerInfo &receiver) {
+    receiver=serverInfoMap[model];
+    return 0;
+}
+
 
 int Cloud::getServerObjById(int id, ServerObj &receiver) {
     if(id<0||id>=serverObjList.size()){

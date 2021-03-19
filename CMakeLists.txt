@@ -15,10 +15,15 @@ set(CMAKE_CXX_STANDARD 11)
 #        ${CMAKE_CURRENT_SOURCE_DIR}/googletest
 #)
 
-add_executable(huawei_codecraft src/main.cpp include/utils.h src/cloud.cpp src/simplestrategy.cpp src/server.cpp src/dispatcher.cpp src/stdreadwriter.cpp src/vm.cpp)
+# 查找当前目录下的所有源文件
+# 并将名称保存到 DIR_LIB_SRCS 变量
+aux_source_directory(./src DIR_SRCS)
+
+# 指定生成目标
+add_executable(CodeCraft-2021 ${DIR_SRCS})
 
 target_include_directories(
-        huawei_codecraft PRIVATE ${PROJECT_SOURCE_DIR}/include
+        CodeCraft-2021 PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
 
 # 将目标文件与库文件进行链接

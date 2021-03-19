@@ -104,5 +104,34 @@ bool ServerObj::canDeployOnDoubleNode(VMInfo &vmInfo) {
     return true;
 }
 
+bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
+    if(canDeployOnDoubleNode(vmInfo)){
+        deployNode=NODEAB;
+        return true;
+    }
+    bool canDeployA=canDeployOnSingleNode(NODEA,vmInfo);
+    bool canDeployB=canDeployOnSingleNode(NODEB,vmInfo);
+    if(canDeployA&&canDeployB){
+        Resource resA,resB;
+        getNodeRemainingResource(NODEA,resA);
+        getNodeRemainingResource(NODEA,resB);
+        //may have problem here
+        if(resA.memorySize>resB.memorySize&&resA.cpuNum>resB.cpuNum){
+            deployNode=NODEA;
+        }else{
+            deployNode=NODEB;
+        }
+        return true;
+    }else if(canDeployA){
+        deployNode=NODEA;
+        return true;
+    }else if(canDeployB){
+        deployNode=NODEB;
+        return true;
+    }
+
+    return false;
+}
+
 
 

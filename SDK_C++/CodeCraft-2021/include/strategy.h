@@ -19,6 +19,8 @@ class SimpleStrategy: public Strategy{
 
     int dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) override;
 
+    int AnalysisRequestBunch(RequestsBunch &requestsBunch);
+
     int HandleAdd(Request &req, OneDayResult &receiver);
 
     int HandleDel(Request &del, OneDayResult &receiver);

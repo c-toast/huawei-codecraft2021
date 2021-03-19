@@ -19,10 +19,17 @@ int Dispatcher::run() {
         it.getModel(model);
         vmInfoMap[model]=it;
     }
+    for(auto it:serversInfos){
+        std::string model;
+        it.getModel(model);
+        globalCloud->serverInfoMap[model]=it;
+    }
 
     RequestsBunch bunch;
     std::vector<OneDayResult> res;
     reader->ReadBunchOfRequests(bunch);
+
+    strategy->init();
     strategy->dispatch(bunch,res);
 
     writer->write(res);
