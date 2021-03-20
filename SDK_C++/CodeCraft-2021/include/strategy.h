@@ -9,28 +9,38 @@
 #include <string>
 #include "readwriter.h"
 
+class NewServerDeployer{
+public:
+    int learnModelInfo();
+
+    int learnPosteriorInfo(RequestsBunch &requestsBunch);
+
+    int buyAndDeploy(std::vector<VMObj*> &unhandledVMObj);
+};
+
+class OldServerDeployer{
+public:
+    int Deploy(std::vector<VMObj*> &unhandledVMObj);
+};
+
+class ResultRecorder{
+public:
+    int oldSize=0;
+
+    //int deployVMObj(int serverObjID, int nodeIndex, int vmID);
+
+    int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
+
+    int BuyServer();
+
+    int ouputOneDayRes(std::vector<Request>,OneDayResult &receiver);
+};
+
 class Strategy{
 public:
-    virtual int init(){};
+    int init();
 
-    virtual int dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) =0;
-};
-
-class MigratedCandidate{
-
-};
-
-class SimpleStrategy: public Strategy{
-    int init() override;
-
-    std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
-
-    std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
-
-    std::vector<std::string> purchaseVec;
-
-
-    int dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) override;
+    int dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver);
 
     int HandleAdd(Request &req, OneDayResult &receiver);
 

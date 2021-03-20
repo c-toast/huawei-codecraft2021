@@ -7,6 +7,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o"
+  "CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o"
 )
 

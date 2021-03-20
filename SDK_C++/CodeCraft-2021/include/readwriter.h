@@ -30,7 +30,7 @@ typedef struct{
 }RequestsBunch;
 
 typedef struct{
-    char serverName[21];
+    std::string serverName;
     int num;
 }Purchase;
 
@@ -46,7 +46,7 @@ typedef struct{
 }Deploy;
 
 typedef struct{
-    std::map<std::string,int> purchaseMap;
+    std::vector<Purchase> purchaseVec;
     std::vector<Migration> migrationList;
     std::vector<Deploy> deployList;
 }OneDayResult;

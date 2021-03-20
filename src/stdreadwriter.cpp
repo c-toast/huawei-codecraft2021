@@ -120,9 +120,9 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
 int StdWriter::write(ResultList& resultList) {
     int days = resultList.size();
     for (int i = 0; i < days; i++) {
-        std::cout << "(purchase, " << resultList[i].purchaseMap.size() << ")" << std::endl;
-        for (auto it:resultList[i].purchaseMap) {
-            std::cout << "(" << it.first << ", " << it.second << ")" << std::endl;
+        std::cout << "(purchase, " << resultList[i].purchaseVec.size() << ")" << std::endl;
+        for (auto it:resultList[i].purchaseVec) {
+            std::cout << "(" << it.serverName << ", " << it.num << ")" << std::endl;
         }
         std::cout << "(migration, " << resultList[i].migrationList.size() << ")" << std::endl;
         for (int j = 0; j < resultList[i].migrationList.size(); j++) {

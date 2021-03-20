@@ -305,6 +305,33 @@ src/stdreadwriter.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.s
 .PHONY : src/stdreadwriter.cpp.s
 
+src/utils.o: src/utils.cpp.o
+
+.PHONY : src/utils.o
+
+# target to build an object file
+src/utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o
+.PHONY : src/utils.cpp.o
+
+src/utils.i: src/utils.cpp.i
+
+.PHONY : src/utils.i
+
+# target to preprocess a source file
+src/utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.i
+.PHONY : src/utils.cpp.i
+
+src/utils.s: src/utils.cpp.s
+
+.PHONY : src/utils.s
+
+# target to generate assembly for a file
+src/utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.s
+.PHONY : src/utils.cpp.s
+
 src/vm.o: src/vm.cpp.o
 
 .PHONY : src/vm.o
@@ -359,6 +386,9 @@ help:
 	@echo "... src/stdreadwriter.o"
 	@echo "... src/stdreadwriter.i"
 	@echo "... src/stdreadwriter.s"
+	@echo "... src/utils.o"
+	@echo "... src/utils.i"
+	@echo "... src/utils.s"
 	@echo "... src/vm.o"
 	@echo "... src/vm.i"
 	@echo "... src/vm.s"

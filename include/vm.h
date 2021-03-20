@@ -17,14 +17,6 @@ public:
     VMInfo(std::string model,int cpuNum,int memorySize,int doubleNode):
     model(std::move(model)),cpuNum(cpuNum),memorySize(memorySize),doubleNode(doubleNode){;};
 
-    int getModel(std::string& receiver);
-
-    int getCpuNum(int& receiver);
-
-    int getMemorySize(int& receiver);
-
-    int getDoubleNode(int &receiver);
-
     int getRequiredResourceForOneNode(Resource& receiver) const;
 
     std::string model;
@@ -39,19 +31,11 @@ public:
 
     VMObj(VMInfo& machineInfo, int machineId): info(machineInfo), id(machineId), deployServerID(-1){}
 
-    //deploy will just record the deployInServer message
     int deployInServer(int serverNode);
 
     int deployInCloud(int serverId);
 
-    int getInfo(VMInfo& receiver);
-
-    int getID(int& receiver);
-
-    int getDeployServerID(int &receiver);
-
     std::vector<int> deployNodes;
-
     VMInfo info;
     int id;
     int deployServerID;

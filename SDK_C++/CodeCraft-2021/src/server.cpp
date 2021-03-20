@@ -5,18 +5,8 @@
 #include "server.h"
 #include "utils.h"
 
-int ServerInfo::getCpuNum(int& receiver){receiver=cpuNum;return 0;}
-
-int ServerInfo::getMemorySize(int& receiver){receiver=memorySize;return 0;}
-
-int ServerInfo::getModel(std::string &receiver) {receiver=model;return 0;}
-
-int ServerInfo::getHardwareCost(int &receiver) {receiver=hardwareCost;return 0;}
-
-int ServerInfo::getEnergyCost(int &receiver) {receiver=energyCost;return 0;}
-
 bool ServerInfo::canDeployOnSingleNode(VMInfo &vmInfo) {
-    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    int doubleNode=vmInfo.doubleNode;
     if(doubleNode == DOUBLEDEPLOY){
         return false;
     }
@@ -31,7 +21,7 @@ bool ServerInfo::canDeployOnSingleNode(VMInfo &vmInfo) {
 }
 
 bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
-    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    int doubleNode=vmInfo.doubleNode;
     if(doubleNode == SINGLEDEPLOY){
         return false;
     }
@@ -46,28 +36,32 @@ bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
 }
 
 
-int ServerObj::deployVM(int nodeIndex, VMObj &receiver) {
-    VMInfo vmInfo=receiver.info;
+int ServerObj::deployVM(int nodeIndex, VMObj* vmObj) {
+    VMInfo vmInfo=vmObj->info;
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
-    nodes[nodeIndex].remainingResource.allocResource(requiredRes);
 
-    receiver.deployInCloud(ID);
-    receiver.deployInServer(nodeIndex);
-
-    if(vmObjMap.find(receiver.id)!=vmObjMap.end()){
-        vmObjMap.erase(receiver.id);
+    vmObj->deployServerID=id;
+    if(nodeIndex==NODEAB){
+        nodes[NODEA].remainingResource.allocResource(requiredRes);
+        nodes[NODEB].remainingResource.allocResource(requiredRes);
+        vmObj->deployNodes.push_back(NODEA);
+        vmObj->deployNodes.push_back(NODEB);
+    }else {
+        nodes[nodeIndex].remainingResource.allocResource(requiredRes);
+        vmObj->deployNodes.push_back(nodeIndex);
     }
-    vmObjMap.insert({receiver.id,receiver});
+
+    vmObjMap.insert({vmObj->id, vmObj});
 
     return 0;
 }
 
 int ServerObj::delVM(int vmID) {
     Resource requiredRes;
-    VMObj vmObj=vmObjMap[vmID];
-    for(auto nodeIndex:vmObj.deployNodes){
-        vmObj.info.getRequiredResourceForOneNode(requiredRes);
+    VMObj* vmObj=vmObjMap[vmID];
+    for(auto nodeIndex:vmObj->deployNodes){
+        vmObj->info.getRequiredResourceForOneNode(requiredRes);
         nodes[nodeIndex].remainingResource.freeResource(requiredRes);
         vmObjMap.erase(vmID);
     }
@@ -80,7 +74,7 @@ int ServerObj::getNodeRemainingResource(int nodeIndex, Resource &receiver) {
 }
 
 bool ServerObj::canDeployOnSingleNode(int nodeIndex, VMInfo &vmInfo) {
-    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    int doubleNode=vmInfo.doubleNode;
     if(doubleNode == DOUBLEDEPLOY){
         return false;
     }
@@ -95,7 +89,7 @@ bool ServerObj::canDeployOnSingleNode(int nodeIndex, VMInfo &vmInfo) {
 }
 
 bool ServerObj::canDeployOnDoubleNode(VMInfo &vmInfo) {
-    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    int doubleNode=vmInfo.doubleNode;
     if(doubleNode == SINGLEDEPLOY){
         return false;
     }
@@ -143,12 +137,10 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
 }
 
 int ServerObj::deployItselfInCloud(int serverID) {
-    ID=serverID;
+    id=serverID;
     for(auto& it:vmObjMap){
-        it.second.deployServerID=ID;
+        it.second->deployServerID=id;
     }
     return 0;
 }
-
-
 

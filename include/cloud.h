@@ -15,19 +15,11 @@
 
 class Cloud{
 public:
-    std::map<std::string,VMInfo> vmInfoMap; //[model]info
-
-    std::vector<ServerObj> serverObjList; //obj is in their id order in this list
-
-    std::map<int,VMObj> vmObjMap;//[id]obj.
-
-    virtual int createAndDeployServerObj(ServerInfo &serverInfo) =0;
-
-    //addVMObj is supposed to automatically handle with the double node situation and single node situation
+    //deployVMObj is supposed to automatically handle with the double node situation and single node situation
     //in the former case, nodeIndex is useless
-    virtual int addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) =0;
+    virtual int deployVMObj(int serverObjID, int nodeIndex, int vmID) =0;
 
-    virtual int delVMObj(int machineID)=0;
+    virtual int delVMObj(int vmID)=0;
 
     //the following three method only get the copy, but not the real obj storing in the cloud
     int getServerObjById(int id, ServerObj& receiver);
@@ -43,22 +35,28 @@ public:
 
 class SimpleCloud: public Cloud{
 public:
+    std::map<std::string,VMInfo> vmInfoMap; //[model]info
+
+    std::map<std::string,ServerInfo> serverInfoMap; //[model]info
+
+    std::vector<ServerObj*> serverObjList; //[id]obj
+
+    std::map<int,VMObj*> vmObjMap;//[id]obj.
+
     SimpleCloud()=default;
 
-    std::vector<ServerInfo> serverInfoList;
+    int createServerObj(ServerInfo &serverInfo);
 
-    std::map<std::string,ServerInfo> serverInfoMap;
+    VMObj * createVMObj(int vmID, std::string model);
 
-    int getServerInfoByModel(std::string model, ServerInfo& receiver);
+    //nodeIndex can be NODEA NODEB or NODEAB
+    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
 
-    int createAndDeployServerObj(ServerInfo &serverInfo) override;
+    int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
 
-    //deploy the serverobj and the its vm
-    int addServerObj(ServerObj &serverObj);
+    int delVMObj(int vmID) override;
 
-    int addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) override;
-
-    int delVMObj(int machineID) override;
+    int renewServerID(int start);
 };
 
 #endif //HUAWEI_CODECRAFT_CLOUD_H

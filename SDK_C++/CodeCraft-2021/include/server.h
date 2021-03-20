@@ -17,16 +17,6 @@ public:
     ServerInfo(std::string model,int cpuNum,int memorySize,int hardwareCost,int energyCost):
     model(std::move(model)),cpuNum(cpuNum),memorySize(memorySize),hardwareCost(hardwareCost),energyCost(energyCost){}
 
-    int getModel(std::string& receiver);
-
-    int getCpuNum(int& receiver);
-
-    int getMemorySize(int& receiver);
-
-    int getHardwareCost(int& receiver);
-
-    int getEnergyCost(int& receiver);
-
     bool canDeployOnSingleNode(VMInfo &vmInfo);
 
     bool canDeployOnDoubleNode(VMInfo& vmInfo);
@@ -46,19 +36,18 @@ public:
 class ServerObj{
 public:
     ServerInfo info;
-    int ID=-1;
+    int id=-1;
     ServerNode nodes[2]{};
 
-    std::map<int,VMObj> vmObjMap;
+    std::map<int,VMObj*> vmObjMap; //[id]vmobj
 
     ServerObj()=default;
 
     ServerObj(ServerInfo serverInfo) : info(std::move(serverInfo)){
-        int cpuNumAlloc;info.getCpuNum(cpuNumAlloc);
+        int cpuNumAlloc=info.cpuNum;
+        int memorySizeAlloc=info.memorySize;
         cpuNumAlloc/=2;
-        int memorySizeAlloc;info.getMemorySize(memorySizeAlloc);
         memorySizeAlloc/=2;
-
         Resource r(cpuNumAlloc,memorySizeAlloc);
         nodes[0].remainingResource=r;
         nodes[1].remainingResource=r;
@@ -73,10 +62,9 @@ public:
     //if vm is single node, the deployNode will be the node that have more residual resource
     bool canDeploy(VMInfo& vmInfo,int& deployNode);
 
-    //just deployInServer in one node. if the VM type is DOUBLE, you need to call deployVM twice with different nodeIndex
-    int deployVM(int nodeIndex, VMObj &receiver);
+    //nodeIndex can be NODEA, NODEB OR NODEAB
+    int deployVM(int nodeIndex, VMObj* vmObj);
 
-    //same as deployVM
     int delVM(int vmID);
 
     int deployItselfInCloud(int serverID);

@@ -40,4 +40,5 @@ struct Resource{
     int memorySize;
 };
 
+
 #endif //HUAWEI_CODECRAFT_UTILS_H

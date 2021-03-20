@@ -12,17 +12,16 @@ int Dispatcher::run() {
     reader->ReadServersInfo(serversInfos);
     reader->ReadVMachineInfo(vmachineInfos);
 
-    globalCloud->serverInfoList=serversInfos;
+    auto& serverInfoMap=globalCloud->serverInfoMap;
+    for(auto it:serversInfos){
+        std::string model=it.model;
+        serverInfoMap[model]=it;
+    }
+
     std::map<std::string,VMInfo>& vmInfoMap=globalCloud->vmInfoMap;
     for(auto it:vmachineInfos){
-        std::string model;
-        it.getModel(model);
+        std::string model=it.model;
         vmInfoMap[model]=it;
-    }
-    for(auto it:serversInfos){
-        std::string model;
-        it.getModel(model);
-        globalCloud->serverInfoMap[model]=it;
     }
 
     RequestsBunch bunch;

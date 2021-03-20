@@ -5,9 +5,9 @@
 int main() {
     StdReader reader;
     StdWriter writer;
-    //freopen("./training-1.txt","r",stdin);
+    //freopen("./simple-test2.txt","r",stdin);
     //freopen("./simple-result.txt","w",stdout);
-    SimpleStrategy strategy;
+    Strategy strategy;
     Dispatcher dispatcher(&reader,&writer,&strategy);
     dispatcher.run();
     fflush(stdout);

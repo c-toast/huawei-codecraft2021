@@ -8,101 +8,74 @@
 //the type should be Cloud*
 SimpleCloud* globalCloud=new SimpleCloud();
 
-//return id
-int SimpleCloud::createAndDeployServerObj(ServerInfo &serverInfo) {
-    ServerObj obj(serverInfo);
-    int id=serverObjList.size();
-    obj.deployItselfInCloud(id);
-    serverObjList.push_back(obj);
-    return id;
-}
-
-//return id
-int SimpleCloud::addServerObj(ServerObj &serverObj) {
-    int id=serverObjList.size();
-    serverObj.deployItselfInCloud(id);
-    serverObjList.push_back(serverObj);
-    for(auto it:serverObj.vmObjMap){
-        vmObjMap.insert({it.first,it.second});
-    }
-
-    return id;
-}
-
-int SimpleCloud::addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) {
+int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, int vmID) {
     if(serverObjID < 0 || serverObjID > serverObjList.size() - 1){
         LOGE("serverObj id is wrong");
         exit(-1);
     }
-    ServerObj& serverObj=serverObjList[serverObjID];
-    VMInfo& vmInfo=vmInfoMap[vmModel];
-    VMObj vmObj(vmInfo,vmID);
+    ServerObj* serverObj=serverObjList[serverObjID];
+    VMObj* vmObj=vmObjMap[vmID];
 
-    int doubleNode;vmInfo.getDoubleNode(doubleNode);
+    int doubleNode=vmObj->info.doubleNode;
 
     if(doubleNode==1){
-        serverObj.deployVM(0, vmObj);
-        serverObj.deployVM(1, vmObj);
+        serverObj->deployVM(NODEAB, vmObj);
     }else{
-        serverObj.deployVM(nodeIndex,vmObj);
+        serverObj->deployVM(nodeIndex,vmObj);
     }
 
-    vmObjMap.insert({vmID, vmObj});
     return 0;
 }
 
-int SimpleCloud::delVMObj(int machineID) {
-    auto machineIterator=vmObjMap.find(machineID);
-    if(machineIterator == vmObjMap.end()){
-        LOGE("can not find the vmObj in vmObj map");
+int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj) {
+    if(serverObjID < 0 || serverObjID > serverObjList.size() - 1){
+        LOGE("serverObj id is wrong");
         exit(-1);
     }
-    auto vmObj=machineIterator->second;
-    int serverID;vmObj.getDeployServerID(serverID);
+    ServerObj* serverObj=serverObjList[serverObjID];
+    int doubleNode=vmObj->info.doubleNode;
 
-    if(serverID<0||serverID>serverObjList.size()-1){
-        LOGE("vmObj deployed id is wrong");
-        exit(-1);
+    if(doubleNode==1){
+        serverObj->deployVM(NODEAB, vmObj);
+    }else{
+        serverObj->deployVM(nodeIndex,vmObj);
     }
-    auto& server=serverObjList[serverID];
-
-    vmObjMap.erase(machineIterator);
-    server.delVM(machineID);
 
     return 0;
 }
 
-int SimpleCloud::getServerInfoByModel(std::string model, ServerInfo &receiver) {
-    receiver=serverInfoMap[model];
+int SimpleCloud::delVMObj(int vmID) {
+    auto vmObj=vmObjMap[vmID];
+    int serverID=vmObj->deployServerID;
+    auto server=serverObjList[serverID];
+    server->delVM(vmID);
+    delete vmObj;
+    vmObjMap.erase(vmID);
     return 0;
 }
 
+int SimpleCloud::createServerObj(ServerInfo &serverInfo) {
+    auto* serverObj=new ServerObj(serverInfo);
+    int id=serverObjList.size();
+    serverObj->deployItselfInCloud(id);
+    serverObjList.push_back(serverObj);
+    return id;
+}
 
-int Cloud::getServerObjById(int id, ServerObj &receiver) {
-    if(id<0||id>=serverObjList.size()){
-        LOGE("getServerObjById: server id is invalid");
-        exit(-1);
+VMObj * SimpleCloud::createVMObj(int vmID, std::string model) {
+    VMInfo info=vmInfoMap[model];
+    auto vmObj=new VMObj(info,vmID);
+    vmObjMap.insert({vmID,vmObj});
+    return vmObj;
+}
+
+int SimpleCloud::renewServerID(int start) {
+    for(int i=start;i<serverObjList.size();i++){
+        serverObjList[i]->id=i;
+        for(auto& it:serverObjList[i]->vmObjMap){
+            it.second->deployServerID=i;
+        }
     }
-    receiver= serverObjList[id];
     return 0;
 }
 
-int Cloud::getVMObjById(int id, VMObj &receiver) {
-    auto it=vmObjMap.find(id);
-    if(it==vmObjMap.end()){
-        LOGE("getVMObjById: obj id is invalid");
-        exit(-1);
-    }
-    receiver=it->second;
-    return 0;
-}
-
-int Cloud::getVMInfoByModel(std::string model, VMInfo &receiver) {
-    auto it=vmInfoMap.find(model);
-    if(it==vmInfoMap.end()){
-        LOGE("getVMInfoByModel: vm model is invalid");
-        exit(-1);
-    }
-    receiver=it->second;
-    return 0;
-}

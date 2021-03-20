@@ -102,6 +102,9 @@
 		<Unit filename="/home/ctoast/huawei-codecraft/src/stdreadwriter.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/utils.cpp">
+			<Option target="CodeCraft-2021"/>
+		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/vm.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
