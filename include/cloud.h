@@ -21,7 +21,7 @@ public:
 
     std::map<int,VMObj> vmObjMap;//[id]obj.
 
-    virtual int addServerObj(ServerInfo &serverInfo) =0;
+    virtual int createAndDeployServerObj(ServerInfo &serverInfo) =0;
 
     //addVMObj is supposed to automatically handle with the double node situation and single node situation
     //in the former case, nodeIndex is useless
@@ -51,7 +51,10 @@ public:
 
     int getServerInfoByModel(std::string model, ServerInfo& receiver);
 
-    int addServerObj(ServerInfo &serverInfo) override;
+    int createAndDeployServerObj(ServerInfo &serverInfo) override;
+
+    //deploy the serverobj and the its vm
+    int addServerObj(ServerObj &serverObj);
 
     int addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) override;
 

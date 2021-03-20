@@ -17,7 +17,6 @@ int SimpleStrategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayRes
     auto& bunch=requestsBunch.bunch;
 
     for(int i=0;i<dayNum;i++){
-        purchaseVec.clear();
         OneDayResult oneDayRes;
         OneDayRequest& oneDayReq=bunch[i];
 
@@ -31,10 +30,23 @@ int SimpleStrategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayRes
                 unhandledDelReqSet.push_back(it);
             }
         }
+        auto addReqBackup=unhandledAddReqSet;
         AddVMInOldServer(unhandledAddReqSet,oneDayRes);
         AddVMInNewServer(unhandledAddReqSet,oneDayRes);
         for(auto it:unhandledDelReqSet){
             HandleDel(it,oneDayRes);
+        }
+        for(auto it:addReqBackup){
+            Deploy dep;
+            VMObj obj;
+            globalCloud->getVMObjById(it.vMachineID,obj);
+            dep.serverID=obj.deployServerID;
+            if(obj.info.doubleNode==1){
+                dep.node=NODEAB;
+            }else{
+                dep.node=obj.deployNodes[0];
+            }
+            oneDayRes.deployList.push_back(dep);
         }
 
         receiver.push_back(oneDayRes);
@@ -90,7 +102,7 @@ int SimpleStrategy::HandleAdd(Request &req, OneDayResult &receiver) {
         auto serverInfo=serverInfoList[i];
         int useless;
         if(serverInfo.canDeployOnSingleNode(machineInfo)||serverInfo.canDeployOnDoubleNode(machineInfo)){
-            globalCloud->addServerObj(serverInfo);
+            globalCloud->createAndDeployServerObj(serverInfo);
             int serverId=globalCloud->serverObjList.size()-1;
             std::string serverModel;
             serverInfo.getModel(serverModel);
@@ -158,11 +170,6 @@ int SimpleStrategy::AddVMInOldServer(std::vector<Request> &unhandledAddReqSet, O
             int deployNode;
             DeployableServerObj->canDeploy(vmInfo,deployNode);
             globalCloud->addVMObj(DeployableServerObj->ID,deployNode,req.vMachineModel,req.vMachineID);
-
-            Deploy res;
-            res.serverID=DeployableServerObj->ID;
-            res.node=deployNode;
-            receiver.deployList.push_back(res);
         }
         else{
             tmpAddReqSet.push_back(req);
@@ -223,33 +230,36 @@ int SimpleStrategy::AddVMInNewServer(std::vector<Request> &unhandledAddReqSet, O
     auto& serverInfoList = globalCloud->serverInfoList;
     int newObjStartIndex=globalCloud->serverObjList.size();
 
+    std::map<std::string,std::vector<ServerObj>> newObjMap;
+
     for(auto& req:unhandledAddReqSet){
         ServerObj* DeployableServerObj=NULL;
         double minFitNess=(globalCloud->serverInfoList.size())/2;
         VMInfo vmInfo;
-        for(int i=newObjStartIndex;i<globalCloud->serverObjList.size();i++){
-            globalCloud->getVMInfoByModel(req.vMachineModel,vmInfo);
-            std::string serverModel;
-            int deployNode;
-            ServerObj serverObj=globalCloud->serverObjList[i];
-            serverObj.info.getModel(serverModel);
-            if(serverObj.canDeploy(vmInfo,deployNode)){
-                double fit=fitnessMap[req.vMachineModel][serverModel];
-                if(fit<minFitNess){
-                    minFitNess=fit;
-                    DeployableServerObj=&serverObj;
+        for(auto& it:newObjMap){
+            for(int i=0;i<it.second.size();i++) {
+                globalCloud->getVMInfoByModel(req.vMachineModel, vmInfo);
+                int deployNode;
+                ServerObj &serverObj = it.second[i];
+                if (serverObj.canDeploy(vmInfo, deployNode)) {
+                    double fit = fitnessMap[req.vMachineModel][it.first];
+                    if (fit < minFitNess) {
+                        minFitNess = fit;
+                        DeployableServerObj = &serverObj;
+                    }
                 }
             }
         }
         if(DeployableServerObj!=NULL){
             int deployNode;
             DeployableServerObj->canDeploy(vmInfo,deployNode);
-            globalCloud->addVMObj(DeployableServerObj->ID,deployNode,req.vMachineModel,req.vMachineID);
-
-            Deploy res;
-            res.serverID=DeployableServerObj->ID;
-            res.node=deployNode;
-            receiver.deployList.push_back(res);
+            VMObj vmObj(vmInfo,req.vMachineID);
+            if(deployNode==NODEAB){
+                DeployableServerObj->deployVM(NODEA,vmObj);
+                DeployableServerObj->deployVM(NODEB,vmObj);
+            }else{
+                DeployableServerObj->deployVM(deployNode,vmObj);
+            }
             continue;
         }
 
@@ -262,18 +272,27 @@ int SimpleStrategy::AddVMInNewServer(std::vector<Request> &unhandledAddReqSet, O
             if(!serverInfo.canDeployOnSingleNode(vmInfo)&&!serverInfo.canDeployOnDoubleNode(vmInfo)){
                 continue;
             }
-            globalCloud->addServerObj(serverInfo);
-            purchaseVec.push_back(serverModel);
-            globalCloud->addVMObj(globalCloud->serverObjList.size()-1,NODEA,req.vMachineModel,req.vMachineID);
 
-            int doubleNode;
-            vmInfo.getDoubleNode(doubleNode);
-            Deploy res;
-            res.serverID=globalCloud->serverObjList.size()-1;
-            res.node=(doubleNode==1)?NODEAB:NODEA;
-            receiver.deployList.push_back(res);
+            ServerObj newObj(serverInfo);
+            VMObj vmObj(vmInfo,req.vMachineID);
+            int doubleNode=vmInfo.doubleNode;
+            if(doubleNode==1){
+                newObj.deployVM(0, vmObj);
+                newObj.deployVM(1, vmObj);
+            }else{
+                newObj.deployVM(NODEA,vmObj);
+            }
+            newObjMap[serverModel].push_back(newObj);
+
             break;
         }
+    }
+
+    for(auto& it:newObjMap){
+        for(int i=0;i<it.second.size();i++){
+            globalCloud->addServerObj(it.second[i]);
+        }
+        receiver.purchaseMap[it.first]=it.second.size();
     }
 
     return 0;

@@ -132,7 +132,7 @@ int StdWriter::write(ResultList& resultList) {
                 std::cout << "(" << resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID  << ")" << std::endl;
         }
         for (int j = 0; j < resultList[i].deployList.size(); j++) {
-            if (resultList[i].deployList[j].node!=-1)
+            if (resultList[i].deployList[j].node!=NODEAB)
                 std::cout << "(" << resultList[i].deployList[j].serverID << ", " << char(resultList[i].deployList[j].node+'A') << ")" << std::endl;
             else
                 std::cout << "(" << resultList[i].deployList[j].serverID << ")" << std::endl;

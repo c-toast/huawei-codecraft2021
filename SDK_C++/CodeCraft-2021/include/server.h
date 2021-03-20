@@ -8,10 +8,11 @@
 #include <utility>
 
 #include "vm.h"
+#include <map>
 
 class ServerInfo{
 public:
-    ServerInfo()=delete;
+    ServerInfo()=default;
 
     ServerInfo(std::string model,int cpuNum,int memorySize,int hardwareCost,int energyCost):
     model(std::move(model)),cpuNum(cpuNum),memorySize(memorySize),hardwareCost(hardwareCost),energyCost(energyCost){}
@@ -30,8 +31,6 @@ public:
 
     bool canDeployOnDoubleNode(VMInfo& vmInfo);
 
-
-private:
     std::string model;
     int cpuNum;
     int memorySize;
@@ -47,12 +46,14 @@ public:
 class ServerObj{
 public:
     ServerInfo info;
-    int ID;
+    int ID=-1;
     ServerNode nodes[2]{};
+
+    std::map<int,VMObj> vmObjMap;
 
     ServerObj()=default;
 
-    ServerObj(ServerInfo serverInfo,int serverID): info(std::move(serverInfo)),ID(serverID){
+    ServerObj(ServerInfo serverInfo) : info(std::move(serverInfo)){
         int cpuNumAlloc;info.getCpuNum(cpuNumAlloc);
         cpuNumAlloc/=2;
         int memorySizeAlloc;info.getMemorySize(memorySizeAlloc);
@@ -69,11 +70,17 @@ public:
 
     bool canDeployOnDoubleNode(VMInfo& vmInfo);
 
-    //just deploy in one node. if the VM type is DOUBLE, you need to call deployVM twice with different nodeIndex
+    //if vm is single node, the deployNode will be the node that have more residual resource
+    bool canDeploy(VMInfo& vmInfo,int& deployNode);
+
+    //just deployInServer in one node. if the VM type is DOUBLE, you need to call deployVM twice with different nodeIndex
     int deployVM(int nodeIndex, VMObj &receiver);
 
     //same as deployVM
-    int delVM(int nodeIndex, VMInfo &vmInfo);
+    int delVM(int vmID);
+
+    int deployItselfInCloud(int serverID);
+
 };
 
 

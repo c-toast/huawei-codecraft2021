@@ -8,10 +8,25 @@
 //the type should be Cloud*
 SimpleCloud* globalCloud=new SimpleCloud();
 
-int SimpleCloud::addServerObj(ServerInfo &serverInfo) {
-    ServerObj obj(serverInfo,serverObjList.size());
+//return id
+int SimpleCloud::createAndDeployServerObj(ServerInfo &serverInfo) {
+    ServerObj obj(serverInfo);
+    int id=serverObjList.size();
+    obj.deployItselfInCloud(id);
     serverObjList.push_back(obj);
-    return 0;
+    return id;
+}
+
+//return id
+int SimpleCloud::addServerObj(ServerObj &serverObj) {
+    int id=serverObjList.size();
+    serverObj.deployItselfInCloud(id);
+    serverObjList.push_back(serverObj);
+    for(auto it:serverObj.vmObjMap){
+        vmObjMap.insert({it.first,it.second});
+    }
+
+    return id;
 }
 
 int SimpleCloud::addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) {
@@ -52,11 +67,7 @@ int SimpleCloud::delVMObj(int machineID) {
     auto& server=serverObjList[serverID];
 
     vmObjMap.erase(machineIterator);
-
-    VMInfo vmInfo;vmObj.getInfo(vmInfo);
-    for(auto nodeIndex:vmObj.deployNodes){
-        server.delVM(nodeIndex, vmInfo);
-    }
+    server.delVM(machineID);
 
     return 0;
 }

@@ -47,21 +47,30 @@ bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
 
 
 int ServerObj::deployVM(int nodeIndex, VMObj &receiver) {
-    VMInfo vmInfo;
-    receiver.getInfo(vmInfo);
+    VMInfo vmInfo=receiver.info;
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     nodes[nodeIndex].remainingResource.allocResource(requiredRes);
-    receiver.deploy(ID,nodeIndex);//record the deploy message in VMOBJ
+
+    receiver.deployInCloud(ID);
+    receiver.deployInServer(nodeIndex);
+
+    if(vmObjMap.find(receiver.id)!=vmObjMap.end()){
+        vmObjMap.erase(receiver.id);
+    }
+    vmObjMap.insert({receiver.id,receiver});
 
     return 0;
 }
 
-int ServerObj::delVM(int nodeIndex, VMInfo &vmInfo) {
+int ServerObj::delVM(int vmID) {
     Resource requiredRes;
-    vmInfo.getRequiredResourceForOneNode(requiredRes);
-    nodes[nodeIndex].remainingResource.freeResource(requiredRes);
-
+    VMObj vmObj=vmObjMap[vmID];
+    for(auto nodeIndex:vmObj.deployNodes){
+        vmObj.info.getRequiredResourceForOneNode(requiredRes);
+        nodes[nodeIndex].remainingResource.freeResource(requiredRes);
+        vmObjMap.erase(vmID);
+    }
     return 0;
 }
 
@@ -131,6 +140,14 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
     }
 
     return false;
+}
+
+int ServerObj::deployItselfInCloud(int serverID) {
+    ID=serverID;
+    for(auto& it:vmObjMap){
+        it.second.deployServerID=ID;
+    }
+    return 0;
 }
 
 

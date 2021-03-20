@@ -45,6 +45,8 @@ utility
 -
 vm.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+map
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategy.h
 map
@@ -101,6 +103,10 @@ utils.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/utils.h
 cstring
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cstring
+cmath
+-
+algorithm
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/stdreadwriter.cpp
 readwriter.h

@@ -38,13 +38,13 @@ int VMObj::getDeployServerID(int &receiver) {
     return 0;
 }
 
-int VMObj::deploy(int serverId, int serverNode) {
-    if(deployServerID!=-1&&deployServerID!=serverId){
-        LOGE("the VMObj was deployed on different server");
-        exit(-1);
-    }
-    deployServerID=serverId;
+int VMObj::deployInServer(int serverNode) {
     deployNodes.push_back(serverNode);
+    return 0;
+}
+
+int VMObj::deployInCloud(int serverId) {
+    deployServerID=serverId;
     return 0;
 }
 

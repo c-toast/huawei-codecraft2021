@@ -5,7 +5,7 @@
 int main() {
     StdReader reader;
     StdWriter writer;
-    freopen("./training-1.txt","r",stdin);
+    //freopen("./training-1.txt","r",stdin);
     //freopen("./simple-result.txt","w",stdout);
     SimpleStrategy strategy;
     Dispatcher dispatcher(&reader,&writer,&strategy);

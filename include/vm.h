@@ -27,7 +27,6 @@ public:
 
     int getRequiredResourceForOneNode(Resource& receiver) const;
 
-private:
     std::string model;
     int cpuNum;
     int memorySize;
@@ -40,8 +39,10 @@ public:
 
     VMObj(VMInfo& machineInfo, int machineId): info(machineInfo), id(machineId), deployServerID(-1){}
 
-    //deploy will just record the deploy message
-    int deploy(int serverId, int serverNode);
+    //deploy will just record the deployInServer message
+    int deployInServer(int serverNode);
+
+    int deployInCloud(int serverId);
 
     int getInfo(VMInfo& receiver);
 
@@ -51,7 +52,6 @@ public:
 
     std::vector<int> deployNodes;
 
-private:
     VMInfo info;
     int id;
     int deployServerID;

@@ -29,6 +29,7 @@ class SimpleStrategy: public Strategy{
 
     std::vector<std::string> purchaseVec;
 
+
     int dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) override;
 
     int HandleAdd(Request &req, OneDayResult &receiver);

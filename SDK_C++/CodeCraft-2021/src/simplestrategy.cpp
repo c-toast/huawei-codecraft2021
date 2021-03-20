@@ -6,25 +6,49 @@
 #include "cloud.h"
 #include "utils.h"
 #include "cstring"
+#include <cmath>
+#include <algorithm>
 
 extern SimpleCloud* globalCloud;
+
 
 int SimpleStrategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) {
     int dayNum=requestsBunch.dayNum;
     auto& bunch=requestsBunch.bunch;
 
     for(int i=0;i<dayNum;i++){
-        purchaseMap.clear();
         OneDayResult oneDayRes;
-
         OneDayRequest& oneDayReq=bunch[i];
+
+        std::vector<Request> unhandledAddReqSet;
+        std::vector<Request> unhandledDelReqSet;
+
         for(auto it:oneDayReq){
             if(it.op==ADD){
-                HandleAdd(it,oneDayRes);
+                unhandledAddReqSet.push_back(it);
             }else{
-                HandleDel(it,oneDayRes);
+                unhandledDelReqSet.push_back(it);
             }
         }
+        auto addReqBackup=unhandledAddReqSet;
+        AddVMInOldServer(unhandledAddReqSet,oneDayRes);
+        AddVMInNewServer(unhandledAddReqSet,oneDayRes);
+        for(auto it:unhandledDelReqSet){
+            HandleDel(it,oneDayRes);
+        }
+        for(auto it:addReqBackup){
+            Deploy dep;
+            VMObj obj;
+            globalCloud->getVMObjById(it.vMachineID,obj);
+            dep.serverID=obj.deployServerID;
+            if(obj.info.doubleNode==1){
+                dep.node=NODEAB;
+            }else{
+                dep.node=obj.deployNodes[0];
+            }
+            oneDayRes.deployList.push_back(dep);
+        }
+
         receiver.push_back(oneDayRes);
     }
     return 0;
@@ -78,7 +102,7 @@ int SimpleStrategy::HandleAdd(Request &req, OneDayResult &receiver) {
         auto serverInfo=serverInfoList[i];
         int useless;
         if(serverInfo.canDeployOnSingleNode(machineInfo)||serverInfo.canDeployOnDoubleNode(machineInfo)){
-            globalCloud->addServerObj(serverInfo);
+            globalCloud->createAndDeployServerObj(serverInfo);
             int serverId=globalCloud->serverObjList.size()-1;
             std::string serverModel;
             serverInfo.getModel(serverModel);
@@ -107,7 +131,172 @@ int SimpleStrategy::HandleDel(Request &del, OneDayResult &receiver) {
     return 0;
 }
 
-int SimpleStrategy::AnalysisRequestBunch(RequestsBunch &requestsBunch) {
+int SimpleStrategy::AddVMInOldServer(std::vector<Request> &unhandledAddReqSet, OneDayResult &receiver) {
+    auto& serverObjList=globalCloud->serverObjList;
+    int infoSize=globalCloud->serverInfoList.size();
+    std::vector<Request> tmpAddReqSet;
+
+    auto reqSetCmp=[](const Request& r1,const Request& r2){
+        VMInfo i1,i2;
+        int cpu1,cpu2,mem1,mem2;
+        globalCloud->getVMInfoByModel(r1.vMachineModel,i1);
+        globalCloud->getVMInfoByModel(r2.vMachineModel,i2);
+        i1.getCpuNum(cpu1);i1.getMemorySize(mem1);
+        i2.getCpuNum(cpu2);i2.getMemorySize(mem2);
+        return cpu1+mem1>cpu2+mem2;
+    };
+    std::sort(unhandledAddReqSet.begin(),unhandledAddReqSet.end(),reqSetCmp);
+
+    for(auto& req:unhandledAddReqSet){
+        VMInfo vmInfo;
+        globalCloud->getVMInfoByModel(req.vMachineModel,vmInfo);
+        ServerObj* DeployableServerObj=NULL;
+        double minFitNess=(globalCloud->serverInfoList.size())/2;
+
+        for(auto& it:serverObjList){
+            std::string serverModel;
+            int deployNode;
+            it.info.getModel(serverModel);
+            if(it.canDeploy(vmInfo,deployNode)){
+                double fit=fitnessMap[req.vMachineModel][serverModel];
+                if(fit<minFitNess){
+                    minFitNess=fit;
+                    DeployableServerObj=&it;
+                }
+            }
+        }
+
+        if(DeployableServerObj!=NULL){
+            int deployNode;
+            DeployableServerObj->canDeploy(vmInfo,deployNode);
+            globalCloud->addVMObj(DeployableServerObj->ID,deployNode,req.vMachineModel,req.vMachineID);
+        }
+        else{
+            tmpAddReqSet.push_back(req);
+        }
+    }
+    unhandledAddReqSet=tmpAddReqSet;
     return 0;
 }
+
+int SimpleStrategy::CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo, double &fitnessReceiver) {
+    int serverCpuNum,serverMemSize,vmCpuNum,vmMemSize;
+    serverInfo.getCpuNum(serverCpuNum);
+    serverInfo.getMemorySize(serverMemSize);
+    vmInfo.getCpuNum(vmCpuNum);
+    vmInfo.getMemorySize(vmMemSize);
+
+    double cpuNumRadio=((double)vmCpuNum)/serverCpuNum;
+    double memSizeRadio=((double)vmMemSize)/serverMemSize;
+    double average=(cpuNumRadio+memSizeRadio)/2;
+    fitnessReceiver=(pow(cpuNumRadio-average,2)+pow(memSizeRadio-average,2))/2;
+    return 0;
+}
+
+int SimpleStrategy::init() {
+
+    auto serverInfoList= globalCloud->serverInfoList;
+    auto vmInfoMap=globalCloud->vmInfoMap;
+    struct FitRecord{
+        std::string serverModel;
+        double fitness;
+    };
+
+    auto reqSetCmp=[](const FitRecord& r1,const FitRecord& r2){
+        return r1.fitness<r2.fitness;
+    };
+
+    for(auto &vmInfoMapIt:vmInfoMap){
+        std::vector<FitRecord> fitVec;
+        for(auto &serverInfoListIt:serverInfoList){
+            FitRecord r;
+            serverInfoListIt.getModel(r.serverModel);
+            CalFitness(serverInfoListIt,vmInfoMapIt.second,r.fitness);
+            fitVec.push_back(r);
+        }
+        std::sort(fitVec.begin(),fitVec.end(),reqSetCmp);
+        int i=0;
+        for(auto& recordIt:fitVec){
+            fitnessRangeMap[vmInfoMapIt.first].push_back(recordIt.serverModel);
+            fitnessMap[vmInfoMapIt.first][recordIt.serverModel]=i;
+            i++;
+        }
+    }
+
+    return 0;
+}
+
+int SimpleStrategy::AddVMInNewServer(std::vector<Request> &unhandledAddReqSet, OneDayResult &receiver) {
+    auto& serverInfoList = globalCloud->serverInfoList;
+    int newObjStartIndex=globalCloud->serverObjList.size();
+
+    std::map<std::string,std::vector<ServerObj>> newObjMap;
+
+    for(auto& req:unhandledAddReqSet){
+        ServerObj* DeployableServerObj=NULL;
+        double minFitNess=(globalCloud->serverInfoList.size())/2;
+        VMInfo vmInfo;
+        for(auto& it:newObjMap){
+            for(int i=0;i<it.second.size();i++) {
+                globalCloud->getVMInfoByModel(req.vMachineModel, vmInfo);
+                int deployNode;
+                ServerObj &serverObj = it.second[i];
+                if (serverObj.canDeploy(vmInfo, deployNode)) {
+                    double fit = fitnessMap[req.vMachineModel][it.first];
+                    if (fit < minFitNess) {
+                        minFitNess = fit;
+                        DeployableServerObj = &serverObj;
+                    }
+                }
+            }
+        }
+        if(DeployableServerObj!=NULL){
+            int deployNode;
+            DeployableServerObj->canDeploy(vmInfo,deployNode);
+            VMObj vmObj(vmInfo,req.vMachineID);
+            if(deployNode==NODEAB){
+                DeployableServerObj->deployVM(NODEA,vmObj);
+                DeployableServerObj->deployVM(NODEB,vmObj);
+            }else{
+                DeployableServerObj->deployVM(deployNode,vmObj);
+            }
+            continue;
+        }
+
+        for(int i=0;;i++) {
+            std::string serverModel = fitnessRangeMap[req.vMachineModel][i];
+            ServerInfo serverInfo;
+            globalCloud->getServerInfoByModel(serverModel, serverInfo);
+            globalCloud->getVMInfoByModel(req.vMachineModel,vmInfo);
+
+            if(!serverInfo.canDeployOnSingleNode(vmInfo)&&!serverInfo.canDeployOnDoubleNode(vmInfo)){
+                continue;
+            }
+
+            ServerObj newObj(serverInfo);
+            VMObj vmObj(vmInfo,req.vMachineID);
+            int doubleNode=vmInfo.doubleNode;
+            if(doubleNode==1){
+                newObj.deployVM(0, vmObj);
+                newObj.deployVM(1, vmObj);
+            }else{
+                newObj.deployVM(NODEA,vmObj);
+            }
+            newObjMap[serverModel].push_back(newObj);
+
+            break;
+        }
+    }
+
+    for(auto& it:newObjMap){
+        for(int i=0;i<it.second.size();i++){
+            globalCloud->addServerObj(it.second[i]);
+        }
+        receiver.purchaseMap[it.first]=it.second.size();
+    }
+
+    return 0;
+}
+
+
 
