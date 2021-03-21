@@ -56,6 +56,8 @@ public:
 
     int delVMObj(int vmID) override;
 
+    int MigrateVMObj(int vmID);
+
     int renewServerID(int start);
 };
 

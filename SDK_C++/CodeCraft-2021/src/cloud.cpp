@@ -79,3 +79,13 @@ int SimpleCloud::renewServerID(int start) {
     return 0;
 }
 
+int SimpleCloud::MigrateVMObj(int vmID) {
+    auto vmObj=vmObjMap[vmID];
+    int serverID=vmObj->deployServerID;
+    auto server=serverObjList[serverID];
+    server->delVM(vmID);
+    vmObj->deployServerID=-1;
+    vmObj->deployNodes.clear();
+    return 0;
+}
+

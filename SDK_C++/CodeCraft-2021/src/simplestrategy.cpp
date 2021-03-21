@@ -16,7 +16,8 @@ NewServerDeployer nsd;
 
 std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
 std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
-int ACCEPT_RANGE=(globalCloud->serverInfoMap.size())/2;
+int ACCEPT_RANGE=30;
+int MIGRATE_RANGE=5;
 
 int Strategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) {
     int dayNum=requestsBunch.dayNum;
@@ -30,6 +31,8 @@ int Strategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &
         std::vector<Request> unhandledDelReqSet;
         std::vector<Request> unhandledAddReqSet;
 
+        osd.deployVMNum=globalCloud->vmObjMap.size();
+
         for(auto it:oneDayReq){
             if(it.op==ADD){
                 auto vmObj=globalCloud->createVMObj(it.vMachineID,it.vMachineModel);
@@ -39,7 +42,7 @@ int Strategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &
                 unhandledDelReqSet.push_back(it);
             }
         }
-        osd.Deploy(unhandledVMObj);
+        osd.migrateAndDeploy(unhandledVMObj);
         nsd.buyAndDeploy(unhandledVMObj);
         rr.ouputOneDayRes(unhandledAddReqSet,oneDayRes);
 
@@ -103,6 +106,52 @@ int Strategy::init() {
     return 0;
 }
 
+int OldServerDeployer::migrateAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
+    Deploy(unhandledVMObj);
+    migrate(unhandledVMObj);
+}
+
+int OldServerDeployer::migrate(std::vector<VMObj *> &unhandledVMObj) {
+    std::vector<VMObj *> tmpAddReqSet;
+    int time=0;
+    for(auto vmObj:unhandledVMObj){
+        VMInfo vmInfo=vmObj->info;
+        bool haveDeploy=false;
+
+        for(auto& it:globalCloud->serverObjList){
+            std::string serverModel=it->info.model;
+            int fit=fitnessMap[vmObj->info.model][serverModel];
+            if(fit <= MIGRATE_RANGE){
+                for(auto includeVMIt:it->vmObjMap){
+                    auto includeVMObj=includeVMIt.second;
+                    ServerObj tmpObj=*it;
+                    tmpObj.delVM(includeVMObj->id);
+                    int deployNode;
+                    if(!rr.haveObjDeploy[includeVMObj]
+                    &&fitnessMap[includeVMObj->info.model][serverModel]>MIGRATE_RANGE
+                    &&tmpObj.canDeploy(vmInfo,deployNode)
+                    &&time<(deployVMNum*5)/1000){
+                        rr.migrateVMObj(it,includeVMObj);
+                        rr.deployVMObj(it->id,deployNode,vmObj);
+                        haveDeploy=true;
+                        tmpAddReqSet.push_back(includeVMObj);
+                        time++;
+                        break;
+                    }
+                }
+            }
+            if(haveDeploy){
+                break;
+            }
+        }
+        if(!haveDeploy){
+            tmpAddReqSet.push_back(vmObj);
+        }
+    }
+    unhandledVMObj=tmpAddReqSet;
+    return 0;
+}
+
 int OldServerDeployer::Deploy(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<VMObj *> tmpAddReqSet;
     for(auto vmObj:unhandledVMObj){
@@ -126,7 +175,8 @@ int OldServerDeployer::Deploy(std::vector<VMObj *> &unhandledVMObj) {
         if(DeployableServerObj!=NULL){
             int deployNode;
             DeployableServerObj->canDeploy(vmInfo,deployNode);
-            globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
+            rr.deployVMObj(DeployableServerObj->id, deployNode, vmObj);
+            //globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
         }
         else{
             tmpAddReqSet.push_back(vmObj);
@@ -159,7 +209,8 @@ int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
         if(DeployableServerObj!=NULL){
             int deployNode;
             DeployableServerObj->canDeploy(vmInfo,deployNode);
-            globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
+            rr.deployVMObj(DeployableServerObj->id, deployNode, vmObj);
+            //globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
             continue;
         }
 
@@ -172,7 +223,8 @@ int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
             int newId=globalCloud->createServerObj(serverInfo);
             int deployNode;
             globalCloud->serverObjList[newId]->canDeploy(vmInfo,deployNode);
-            globalCloud->deployVMObj(newId, deployNode, vmObj);
+            rr.deployVMObj(newId, deployNode, vmObj);
+            //globalCloud->deployVMObj(newId, deployNode, vmObj);
 
             break;
         }
@@ -220,7 +272,37 @@ int ResultRecorder::ouputOneDayRes(std::vector<Request> addReqVec, OneDayResult 
         }
         receiver.deployList.push_back(d);
     }
+
+
+    for(auto& it:migrationVec){
+        Migration m;
+        m.virtualID=it->id;
+        m.serverID=it->deployServerID;
+        if(it->info.doubleNode==1){
+            m.node=NODEAB;
+        }else{
+            m.node=it->deployNodes[0];
+        }
+        receiver.migrationList.push_back(m);
+    }
+
     oldSize=serverObjList.size();
+    migrationVec.clear();
+    haveObjDeploy.clear();
 
     return 0;
 }
+
+int ResultRecorder::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
+    globalCloud->deployVMObj(serverObjID,nodeIndex,vmObj);
+    haveObjDeploy[vmObj]= true;
+    return 0;
+}
+
+int ResultRecorder::migrateVMObj(ServerObj *serverObj, VMObj *vmObj) {
+    globalCloud->MigrateVMObj(vmObj->id);
+    migrationVec.push_back(vmObj);
+    return 0;
+}
+
+

@@ -65,6 +65,7 @@ int ServerObj::delVM(int vmID) {
         nodes[nodeIndex].remainingResource.freeResource(requiredRes);
         vmObjMap.erase(vmID);
     }
+
     return 0;
 }
 
@@ -143,4 +144,6 @@ int ServerObj::deployItselfInCloud(int serverID) {
     }
     return 0;
 }
+
+
 

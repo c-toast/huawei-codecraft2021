@@ -126,8 +126,8 @@ int StdWriter::write(ResultList& resultList) {
         }
         std::cout << "(migration, " << resultList[i].migrationList.size() << ")" << std::endl;
         for (int j = 0; j < resultList[i].migrationList.size(); j++) {
-            if (resultList[i].migrationList[j].node)
-                std::cout << "("<<resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID << ", " << resultList[i].migrationList[j].node << ")" << std::endl;
+            if (resultList[i].migrationList[j].node!=NODEAB)
+                std::cout << "("<<resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID << ", " << char(resultList[i].migrationList[j].node+'A') << ")" << std::endl;
             else
                 std::cout << "(" << resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID  << ")" << std::endl;
         }
