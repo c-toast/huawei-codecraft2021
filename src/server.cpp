@@ -41,18 +41,16 @@ int ServerObj::deployVM(int nodeIndex, VMObj* vmObj) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
 
-    vmObj->deployServerID=id;
     if(nodeIndex==NODEAB){
         nodes[NODEA].remainingResource.allocResource(requiredRes);
         nodes[NODEB].remainingResource.allocResource(requiredRes);
-        vmObj->deployNodes.push_back(NODEA);
-        vmObj->deployNodes.push_back(NODEB);
+
     }else {
         nodes[nodeIndex].remainingResource.allocResource(requiredRes);
-        vmObj->deployNodes.push_back(nodeIndex);
-    }
 
+    }
     vmObjMap.insert({vmObj->id, vmObj});
+    vmObjDeployNodeMap.insert({vmObj->id,nodeIndex});
 
     return 0;
 }
@@ -64,6 +62,7 @@ int ServerObj::delVM(int vmID) {
         vmObj->info.getRequiredResourceForOneNode(requiredRes);
         nodes[nodeIndex].remainingResource.freeResource(requiredRes);
         vmObjMap.erase(vmID);
+        vmObjDeployNodeMap.erase(vmID);
     }
 
     return 0;
@@ -143,6 +142,14 @@ int ServerObj::deployItselfInCloud(int serverID) {
         it.second->deployServerID=id;
     }
     return 0;
+}
+
+bool ServerObj::canDeployOnNode(int nodeIndex, VMInfo &vmInfo) {
+    if(nodeIndex==NODEAB){
+        return canDeployOnDoubleNode(vmInfo);
+    }else{
+        return canDeployOnSingleNode(nodeIndex,vmInfo);
+    }
 }
 
 

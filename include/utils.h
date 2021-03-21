@@ -41,4 +41,6 @@ struct Resource{
 };
 
 
+
+
 #endif //HUAWEI_CODECRAFT_UTILS_H

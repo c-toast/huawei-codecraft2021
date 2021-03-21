@@ -41,17 +41,14 @@ int ServerObj::deployVM(int nodeIndex, VMObj* vmObj) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
 
-    vmObj->deployServerID=id;
     if(nodeIndex==NODEAB){
         nodes[NODEA].remainingResource.allocResource(requiredRes);
         nodes[NODEB].remainingResource.allocResource(requiredRes);
-        vmObj->deployNodes.push_back(NODEA);
-        vmObj->deployNodes.push_back(NODEB);
+
     }else {
         nodes[nodeIndex].remainingResource.allocResource(requiredRes);
-        vmObj->deployNodes.push_back(nodeIndex);
-    }
 
+    }
     vmObjMap.insert({vmObj->id, vmObj});
 
     return 0;

@@ -20,9 +20,13 @@ int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, int vmID) {
 
     if(doubleNode==1){
         serverObj->deployVM(NODEAB, vmObj);
+        vmObj->deployNodes.push_back(NODEA);
+        vmObj->deployNodes.push_back(NODEB);
     }else{
         serverObj->deployVM(nodeIndex,vmObj);
+        vmObj->deployNodes.push_back(nodeIndex);
     }
+    vmObj->deployServerID=serverObjID;
 
     return 0;
 }
@@ -37,9 +41,13 @@ int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj) {
 
     if(doubleNode==1){
         serverObj->deployVM(NODEAB, vmObj);
+        vmObj->deployNodes.push_back(NODEA);
+        vmObj->deployNodes.push_back(NODEB);
     }else{
         serverObj->deployVM(nodeIndex,vmObj);
+        vmObj->deployNodes.push_back(nodeIndex);
     }
+    vmObj->deployServerID=serverObjID;
 
     return 0;
 }

@@ -19,6 +19,8 @@ std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverMo
 int ACCEPT_RANGE=30;
 int MIGRATE_RANGE=5;
 
+#define USAGESTATERO 0.8
+
 int Strategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) {
     int dayNum=requestsBunch.dayNum;
     auto& bunch=requestsBunch.bunch;
@@ -119,27 +121,29 @@ int OldServerDeployer::migrate(std::vector<VMObj *> &unhandledVMObj) {
         bool haveDeploy=false;
 
         for(auto& it:globalCloud->serverObjList){
-            std::string serverModel=it->info.model;
-            int fit=fitnessMap[vmObj->info.model][serverModel];
-            if(fit <= MIGRATE_RANGE){
-                for(auto includeVMIt:it->vmObjMap){
-                    auto includeVMObj=includeVMIt.second;
-                    ServerObj tmpObj=*it;
+            if(!isServerInSD(it,USAGESTATERO)) {
+                for (auto includeVMIt:it->vmObjMap) {
+                    auto includeVMObj = includeVMIt.second;
+                    ServerObj tmpObj = *it;
                     tmpObj.delVM(includeVMObj->id);
                     int deployNode;
-                    if(!rr.haveObjDeploy[includeVMObj]
-                    &&fitnessMap[includeVMObj->info.model][serverModel]>MIGRATE_RANGE
-                    &&tmpObj.canDeploy(vmInfo,deployNode)
-                    &&time<(deployVMNum*5)/1000){
-                        rr.migrateVMObj(it,includeVMObj);
-                        rr.deployVMObj(it->id,deployNode,vmObj);
-                        haveDeploy=true;
+
+
+                    if (!rr.haveObjDeploy[includeVMObj]
+                        && tmpObj.canDeploy(vmInfo, deployNode)
+                        && tmpObj.deployVM(deployNode, vmObj)
+                        && isMigrateDecisionBetter(it, &tmpObj)
+                        && time < (deployVMNum * 5) / 1000) {
+                        rr.migrateVMObj(it, includeVMObj);
+                        rr.deployVMObj(it->id, deployNode, vmObj);
+                        haveDeploy = true;
                         tmpAddReqSet.push_back(includeVMObj);
                         time++;
                         break;
                     }
                 }
             }
+
             if(haveDeploy){
                 break;
             }
@@ -154,31 +158,24 @@ int OldServerDeployer::migrate(std::vector<VMObj *> &unhandledVMObj) {
 
 int OldServerDeployer::Deploy(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<VMObj *> tmpAddReqSet;
+
     for(auto vmObj:unhandledVMObj){
         VMInfo vmInfo=vmObj->info;
-        ServerObj* DeployableServerObj=NULL;
-        int minFitNessRange=ACCEPT_RANGE;
-
+        bool haveDeploy=false;
         for(auto& it:globalCloud->serverObjList){
             std::string serverModel=it->info.model;
             int deployNode;
-
             if(it->canDeploy(vmInfo,deployNode)){
-                int fit=fitnessMap[vmObj->info.model][serverModel];
-                if(fit <= minFitNessRange){
-                    minFitNessRange=fit;
-                    DeployableServerObj=it;
+                ServerObj tmpObj=*it;
+                tmpObj.deployVM(deployNode,vmObj);
+                if(isDeployDecisionBetter(it, &tmpObj)){
+                    rr.deployVMObj(it->id, deployNode, vmObj);
+                    haveDeploy=true;
+                    break;
                 }
             }
         }
-
-        if(DeployableServerObj!=NULL){
-            int deployNode;
-            DeployableServerObj->canDeploy(vmInfo,deployNode);
-            rr.deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-            //globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-        }
-        else{
+        if(!haveDeploy){
             tmpAddReqSet.push_back(vmObj);
         }
     }
@@ -306,3 +303,93 @@ int ResultRecorder::migrateVMObj(ServerObj *serverObj, VMObj *vmObj) {
 }
 
 
+MultiDimension calSingleNodeUsageState(ServerObj* obj, int NodeIndex){
+    Resource remainingResource= obj->nodes[NodeIndex].remainingResource;
+    int allMem=obj->info.memorySize;
+    int allCpu=obj->info.cpuNum;
+    MultiDimension ret;
+    ret.Dimension1= (double)(allCpu - remainingResource.cpuNum) / allCpu;
+    ret.Dimension2= (double)(allMem - remainingResource.memorySize) / allMem;
+    return ret;
+}
+
+MultiDimension calNodeBalanceState(ServerObj* obj){
+    MultiDimension USA=calSingleNodeUsageState(obj, NODEA);
+    MultiDimension USB=calSingleNodeUsageState(obj, NODEB);
+    MultiDimension ret;
+    ret.Dimension1=sqrt(pow(USA.Dimension2, 2) + pow(USA.Dimension1, 2));
+    ret.Dimension2=sqrt(pow(USB.Dimension2, 2) + pow(USB.Dimension1, 2));
+    return ret;
+}
+
+double calDeviation(MultiDimension d){
+    double ret;
+    ret=d.Dimension1-d.Dimension2;
+    if(ret<0){
+        ret=-ret;
+    }
+    ret/=distance(d.Dimension1,d.Dimension2,0,0);
+    return ret;
+}
+
+bool isInSD(MultiDimension us, double R0){
+    double x=us.Dimension1;
+    double y=us.Dimension2;
+    double dis=distance(x,y,0,0);
+    if(dis>=R0||dis<=1-R0){
+        return true;
+    }
+    dis=distance(x,y,R0,1-R0);
+    if(dis<=R0){
+        return true;
+    }
+    dis=distance(x,y,1-R0,R0);
+    if(dis<=R0){
+        return true;
+    }
+    return false;
+}
+
+bool isDeployDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj) {
+    MultiDimension newNodeAState=calSingleNodeUsageState(newServerObj,NODEA);
+    MultiDimension newNodeBState=calSingleNodeUsageState(newServerObj,NODEB);
+    MultiDimension oldNodeAState=calSingleNodeUsageState(oldServerObj,NODEA);
+    MultiDimension oldNodeBState=calSingleNodeUsageState(oldServerObj,NODEB);
+//    bool isNewAInSD=isInSD(newNodeAState,USAGESTATERO);
+//    bool isNewBInSD=isInSD(newNodeBState,USAGESTATERO);
+//    bool isOldAInSD=isInSD(oldNodeAState,USAGESTATERO);
+//    bool isOldBInSD=isInSD(oldNodeBState,USAGESTATERO);
+
+    if(isInSD(newNodeAState,USAGESTATERO)&&isInSD(newNodeBState,USAGESTATERO)){
+        return true;
+    }
+
+    return false;
+}
+
+bool isMigrateDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj) {
+    MultiDimension newNodeAState=calSingleNodeUsageState(newServerObj,NODEA);
+    MultiDimension newNodeBState=calSingleNodeUsageState(newServerObj,NODEB);
+    MultiDimension oldNodeAState=calSingleNodeUsageState(oldServerObj,NODEA);
+    MultiDimension oldNodeBState=calSingleNodeUsageState(oldServerObj,NODEB);
+//    bool isNewAInSD=isInSD(newNodeAState,USAGESTATERO);
+//    bool isNewBInSD=isInSD(newNodeBState,USAGESTATERO);
+//    bool isOldAInSD=isInSD(oldNodeAState,USAGESTATERO);
+//    bool isOldBInSD=isInSD(oldNodeBState,USAGESTATERO);
+
+    if(calDeviation(newNodeAState)<=calDeviation(oldNodeAState)&&
+            calDeviation(newNodeBState)<=calDeviation(oldNodeBState)){
+        return true;
+    }
+
+    return false;
+}
+
+bool isServerInSD(ServerObj* serverObj, double R0){
+    MultiDimension d1=calSingleNodeUsageState(serverObj,NODEA);
+    MultiDimension d2=calSingleNodeUsageState(serverObj,NODEB);
+    if(isInSD(d1,R0)&&isInSD(d2,R0)){
+        return true;
+    }
+    return false;
+}

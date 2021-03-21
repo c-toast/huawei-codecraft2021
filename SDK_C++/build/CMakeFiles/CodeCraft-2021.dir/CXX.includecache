@@ -55,6 +55,8 @@ string
 -
 readwriter.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
+cmath
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
 iostream

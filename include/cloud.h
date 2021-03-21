@@ -47,6 +47,8 @@ public:
 
     int createServerObj(ServerInfo &serverInfo);
 
+    int deployServerObj(ServerObj C);
+
     VMObj * createVMObj(int vmID, std::string model);
 
     //nodeIndex can be NODEA NODEB or NODEAB

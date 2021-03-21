@@ -19,9 +19,13 @@ std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverMo
 int ACCEPT_RANGE=30;
 int MIGRATE_RANGE=5;
 
+#define USAGESTATERO 0.8
+
 int Strategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &receiver) {
     int dayNum=requestsBunch.dayNum;
     auto& bunch=requestsBunch.bunch;
+
+    nsd.learnModelInfo();
 
     for(int i=0;i<dayNum;i++){
         OneDayResult oneDayRes;
@@ -119,27 +123,29 @@ int OldServerDeployer::migrate(std::vector<VMObj *> &unhandledVMObj) {
         bool haveDeploy=false;
 
         for(auto& it:globalCloud->serverObjList){
-            std::string serverModel=it->info.model;
-            int fit=fitnessMap[vmObj->info.model][serverModel];
-            if(fit <= MIGRATE_RANGE){
-                for(auto includeVMIt:it->vmObjMap){
-                    auto includeVMObj=includeVMIt.second;
-                    ServerObj tmpObj=*it;
+            if(!isServerInSD(it,USAGESTATERO)) {
+                for (auto includeVMIt:it->vmObjMap) {
+                    auto includeVMObj = includeVMIt.second;
+                    ServerObj tmpObj = *it;
                     tmpObj.delVM(includeVMObj->id);
                     int deployNode;
-                    if(!rr.haveObjDeploy[includeVMObj]
-                    &&fitnessMap[includeVMObj->info.model][serverModel]>MIGRATE_RANGE
-                    &&tmpObj.canDeploy(vmInfo,deployNode)
-                    &&time<(deployVMNum*5)/1000){
-                        rr.migrateVMObj(it,includeVMObj);
-                        rr.deployVMObj(it->id,deployNode,vmObj);
-                        haveDeploy=true;
+
+
+                    if (!rr.haveObjDeploy[includeVMObj]
+                        && tmpObj.canDeploy(vmInfo, deployNode)
+                        && tmpObj.deployVM(deployNode, vmObj)
+                        && isMigrateDecisionBetter(it, &tmpObj)
+                        && time < (deployVMNum * 5) / 1000) {
+                        rr.migrateVMObj(it, includeVMObj);
+                        rr.deployVMObj(it->id, deployNode, vmObj);
+                        haveDeploy = true;
                         tmpAddReqSet.push_back(includeVMObj);
                         time++;
                         break;
                     }
                 }
             }
+
             if(haveDeploy){
                 break;
             }
@@ -154,31 +160,24 @@ int OldServerDeployer::migrate(std::vector<VMObj *> &unhandledVMObj) {
 
 int OldServerDeployer::Deploy(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<VMObj *> tmpAddReqSet;
+
     for(auto vmObj:unhandledVMObj){
         VMInfo vmInfo=vmObj->info;
-        ServerObj* DeployableServerObj=NULL;
-        int minFitNessRange=ACCEPT_RANGE;
-
+        bool haveDeploy=false;
         for(auto& it:globalCloud->serverObjList){
             std::string serverModel=it->info.model;
             int deployNode;
-
             if(it->canDeploy(vmInfo,deployNode)){
-                int fit=fitnessMap[vmObj->info.model][serverModel];
-                if(fit <= minFitNessRange){
-                    minFitNessRange=fit;
-                    DeployableServerObj=it;
+                ServerObj tmpObj=*it;
+                tmpObj.deployVM(deployNode,vmObj);
+                if(isDeployDecisionBetter(it, &tmpObj)){
+                    rr.deployVMObj(it->id, deployNode, vmObj);
+                    haveDeploy=true;
+                    break;
                 }
             }
         }
-
-        if(DeployableServerObj!=NULL){
-            int deployNode;
-            DeployableServerObj->canDeploy(vmInfo,deployNode);
-            rr.deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-            //globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-        }
-        else{
+        if(!haveDeploy){
             tmpAddReqSet.push_back(vmObj);
         }
     }
@@ -187,6 +186,60 @@ int OldServerDeployer::Deploy(std::vector<VMObj *> &unhandledVMObj) {
 }
 
 int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
+    std::vector<VMObj*> doubleNodeVMObj;
+    std::vector<VMObj*> singleNodeVMObj;
+    for(auto it:unhandledVMObj){
+        if(it->info.doubleNode==1){
+            doubleNodeVMObj.push_back(it);
+        }
+        else{
+            singleNodeVMObj.push_back(it);
+        }
+    }
+
+    std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
+    classify(doubleNodeVMObj,classifiedVMObjMap);
+    auto Cmp=[](const VMObj* s1,const VMObj* s2){
+        return s1->info.cpuNum>s2->info.cpuNum;
+    };
+    for(int i=0;i<classifiedVMObjMap.size();i++){
+        std::sort(classifiedVMObjMap[i].begin(),classifiedVMObjMap[i].end(),Cmp);
+    }
+
+    for(auto& it:Clusters){
+        std::vector<ServerInfo*>& serverCandidates = it.second;
+        std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
+        int j=0;
+        ServerObj serverObj(*serverCandidates[j]);
+        //max-min
+        for(int i=0;i<vmObjVec.size();i++){
+            if(serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)){
+                serverObj.deployVM(NODEAB,vmObjVec[i]);
+            }else{
+                double ful=CalculateFullness(&serverObj);
+                if(ful>1.5){
+                    globalCloud->deployServerObj(serverObj);
+                }
+                else{
+                    for(j=j+1;j<serverCandidates.size();j++){
+                        ServerObj newServerObj(*serverCandidates[j]);
+                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
+                            serverObj=newServerObj;
+                            break;
+                        }
+                    }
+                    if(j==serverCandidates.size()){
+                        j=0;
+                        globalCloud->deployServerObj(serverObj);
+                        ServerObj serverObj(*serverCandidates[j]);
+                    }
+                }
+                i--;
+            }
+        }
+    }
+
+
     auto& serverObjList=globalCloud->serverObjList;
     int oldSize=serverObjList.size();
     for(auto vmObj:unhandledVMObj){
@@ -230,6 +283,91 @@ int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
         }
     }
 
+    return 0;
+}
+
+int NewServerDeployer::learnModelInfo() {
+    //k-means
+    struct infoUnit{
+        int type=-1;
+        double radio=-1;
+        ServerInfo* info;
+    };
+    std::vector<infoUnit> infoVec;
+    for(auto& it:globalCloud->serverInfoMap){
+        infoUnit unit;
+        unit.info=&it.second;
+        unit.radio=(double)it.second.cpuNum/it.second.memorySize;
+        infoVec.push_back(unit);
+    }
+    std::vector<double> ClusterType={0.05,0.3,0.7,1,2,4,7};
+    int itTime=30;
+    for(int i=0;i<itTime;i++){
+        std::vector<double> NewClusterType(ClusterType.size(),0);
+        std::vector<double> MemberNum(ClusterType.size(),0);
+        for(int j=0;j<infoVec.size();j++){
+            double minDis=1000;
+            int minDisIndex=-1;
+            for(int k=0;k<ClusterType.size();k++){
+                double dis=fabs(infoVec[j].radio-ClusterType[k]);
+                if(dis<minDis){
+                    minDis=dis;
+                    minDisIndex=k;
+                }
+            }
+            //LOGI("self radio is %lf, min type is %lf",infoVec[j].radio,ClusterType[minDisIndex]);
+            NewClusterType[minDisIndex]+=infoVec[j].radio;
+            MemberNum[minDisIndex]+=1;
+            infoVec[j].type=minDisIndex;
+        }
+        for(int j=0;j<ClusterType.size();j++){
+            ClusterType[j]=NewClusterType[j]/MemberNum[j];
+        }
+    }
+
+    for(int i=0;i<infoVec.size();i++){
+        double radio=ClusterType[infoVec[i].type];
+        Clusters[radio].push_back(infoVec[i].info);
+    }
+
+    auto Cmp=[](const ServerInfo* s1,const ServerInfo* s2){
+        return s1->cpuNum<s2->cpuNum;
+    };
+    for(int i=0;i<Clusters.size();i++){
+        std::sort(Clusters[i].begin(),Clusters[i].end(),Cmp);
+    }
+
+    return 0;
+}
+
+int NewServerDeployer::classify(std::vector<VMObj *> &vmObjVec, std::map<double, std::vector<VMObj *>> &receiver) {
+    for(int i=0;i<vmObjVec.size();i++){
+        double minDis=1000;
+        double radio=(double)vmObjVec[i]->info.cpuNum/vmObjVec[i]->info.memorySize;
+        double type=-1;
+        for(auto& it:Clusters){
+            double dis=fabs(it.first-radio);
+            if(dis-minDis){
+                minDis=dis;
+                type=it.first;
+            }
+        }
+        receiver[type].push_back(vmObjVec[i]);
+    }
+    return 0;
+}
+
+//incomplete
+int NewServerDeployer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj) {
+    for(auto it:oldObj->vmObjMap){
+        VMObj* vmObj=it.second;
+        int deployNode=oldObj->vmObjDeployNodeMap[it.first];
+        if(newObj->canDeployOnNode(deployNode,vmObj->info)){
+            newObj->deployVM(deployNode,vmObj);
+        }else{
+            return -1;
+        }
+    }
     return 0;
 }
 
@@ -306,3 +444,93 @@ int ResultRecorder::migrateVMObj(ServerObj *serverObj, VMObj *vmObj) {
 }
 
 
+MultiDimension calSingleNodeUsageState(ServerObj* obj, int NodeIndex){
+    Resource remainingResource= obj->nodes[NodeIndex].remainingResource;
+    int allMem=obj->info.memorySize;
+    int allCpu=obj->info.cpuNum;
+    MultiDimension ret;
+    ret.Dimension1= (double)(allCpu - remainingResource.cpuNum) / allCpu;
+    ret.Dimension2= (double)(allMem - remainingResource.memorySize) / allMem;
+    return ret;
+}
+
+MultiDimension calNodeBalanceState(ServerObj* obj){
+    MultiDimension USA=calSingleNodeUsageState(obj, NODEA);
+    MultiDimension USB=calSingleNodeUsageState(obj, NODEB);
+    MultiDimension ret;
+    ret.Dimension1=sqrt(pow(USA.Dimension2, 2) + pow(USA.Dimension1, 2));
+    ret.Dimension2=sqrt(pow(USB.Dimension2, 2) + pow(USB.Dimension1, 2));
+    return ret;
+}
+
+double calDeviation(MultiDimension d){
+    double ret;
+    ret=d.Dimension1-d.Dimension2;
+    if(ret<0){
+        ret=-ret;
+    }
+    ret/=distance(d.Dimension1,d.Dimension2,0,0);
+    return ret;
+}
+
+bool isInSD(MultiDimension us, double R0){
+    double x=us.Dimension1;
+    double y=us.Dimension2;
+    double dis=distance(x,y,0,0);
+    if(dis>=R0||dis<=1-R0){
+        return true;
+    }
+    dis=distance(x,y,R0,1-R0);
+    if(dis<=R0){
+        return true;
+    }
+    dis=distance(x,y,1-R0,R0);
+    if(dis<=R0){
+        return true;
+    }
+    return false;
+}
+
+bool isDeployDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj) {
+    MultiDimension newNodeAState=calSingleNodeUsageState(newServerObj,NODEA);
+    MultiDimension newNodeBState=calSingleNodeUsageState(newServerObj,NODEB);
+    MultiDimension oldNodeAState=calSingleNodeUsageState(oldServerObj,NODEA);
+    MultiDimension oldNodeBState=calSingleNodeUsageState(oldServerObj,NODEB);
+//    bool isNewAInSD=isInSD(newNodeAState,USAGESTATERO);
+//    bool isNewBInSD=isInSD(newNodeBState,USAGESTATERO);
+//    bool isOldAInSD=isInSD(oldNodeAState,USAGESTATERO);
+//    bool isOldBInSD=isInSD(oldNodeBState,USAGESTATERO);
+
+    if(isInSD(newNodeAState,USAGESTATERO)&&isInSD(newNodeBState,USAGESTATERO)){
+        return true;
+    }
+
+    return false;
+}
+
+bool isMigrateDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj) {
+    MultiDimension newNodeAState=calSingleNodeUsageState(newServerObj,NODEA);
+    MultiDimension newNodeBState=calSingleNodeUsageState(newServerObj,NODEB);
+    MultiDimension oldNodeAState=calSingleNodeUsageState(oldServerObj,NODEA);
+    MultiDimension oldNodeBState=calSingleNodeUsageState(oldServerObj,NODEB);
+//    bool isNewAInSD=isInSD(newNodeAState,USAGESTATERO);
+//    bool isNewBInSD=isInSD(newNodeBState,USAGESTATERO);
+//    bool isOldAInSD=isInSD(oldNodeAState,USAGESTATERO);
+//    bool isOldBInSD=isInSD(oldNodeBState,USAGESTATERO);
+
+    if(calDeviation(newNodeAState)<=calDeviation(oldNodeAState)&&
+            calDeviation(newNodeBState)<=calDeviation(oldNodeBState)){
+        return true;
+    }
+
+    return false;
+}
+
+bool isServerInSD(ServerObj* serverObj, double R0){
+    MultiDimension d1=calSingleNodeUsageState(serverObj,NODEA);
+    MultiDimension d2=calSingleNodeUsageState(serverObj,NODEB);
+    if(isInSD(d1,R0)&&isInSD(d2,R0)){
+        return true;
+    }
+    return false;
+}
