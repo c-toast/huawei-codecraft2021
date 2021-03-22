@@ -12,11 +12,21 @@
 
 class NewServerDeployer{
 public:
+    std::map<double,std::vector<ServerInfo*>> Clusters; //[radio][servercluster]
+
     int learnModelInfo();
 
     int learnPosteriorInfo(RequestsBunch &requestsBunch);
 
     int buyAndDeploy(std::vector<VMObj*> &unhandledVMObj);
+
+    int buyAndDeployDoubleNode(std::vector<VMObj*> &unhandledVMObj);
+
+    int buyAndDeploySingleNode(std::vector<VMObj*> &singleNodeVMObj);
+
+    int classify(std::vector<VMObj *> &vmObjVec,std::map<double,std::vector<VMObj*>>& receiver);
+
+    int movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj);
 };
 
 class OldServerDeployer{
@@ -85,4 +95,5 @@ bool isDeployDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
 
 bool isMigrateDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
 
+double CalculateFullness(ServerObj* serverObj);
 #endif //HUAWEI_CODECRAFT_STRATEGY_H

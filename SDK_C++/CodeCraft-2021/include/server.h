@@ -41,6 +41,8 @@ public:
 
     std::map<int,VMObj*> vmObjMap; //[id]vmobj
 
+    std::map<int,int> vmObjDeployNodeMap; //[id]deployNode
+
     ServerObj()=default;
 
     ServerObj(ServerInfo serverInfo) : info(std::move(serverInfo)){
@@ -58,6 +60,8 @@ public:
     bool canDeployOnSingleNode(int nodeIndex,VMInfo& vmInfo);
 
     bool canDeployOnDoubleNode(VMInfo& vmInfo);
+
+    bool canDeployOnNode(int nodeIndex,VMInfo& vmInfo);
 
     //if vm is single node, the deployNode will be the node that have more residual resource
     bool canDeploy(VMInfo& vmInfo,int& deployNode);

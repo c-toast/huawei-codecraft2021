@@ -25,6 +25,8 @@ int Strategy::dispatch(RequestsBunch &requestsBunch, std::vector<OneDayResult> &
     int dayNum=requestsBunch.dayNum;
     auto& bunch=requestsBunch.bunch;
 
+    nsd.learnModelInfo();
+
     for(int i=0;i<dayNum;i++){
         OneDayResult oneDayRes;
         OneDayRequest& oneDayReq=bunch[i];
@@ -184,51 +186,216 @@ int OldServerDeployer::Deploy(std::vector<VMObj *> &unhandledVMObj) {
 }
 
 int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
-    auto& serverObjList=globalCloud->serverObjList;
-    int oldSize=serverObjList.size();
-    for(auto vmObj:unhandledVMObj){
-        VMInfo vmInfo=vmObj->info;
-        ServerObj* DeployableServerObj=NULL;
-        int minFitNessRange=ACCEPT_RANGE;
+    std::vector<VMObj*> doubleNodeVMObj;
+    std::vector<VMObj*> singleNodeVMObj;
+    for(auto it:unhandledVMObj){
+        if(it->info.doubleNode==1){
+            doubleNodeVMObj.push_back(it);
+        }
+        else{
+            singleNodeVMObj.push_back(it);
+        }
+    }
+    buyAndDeployDoubleNode(doubleNodeVMObj);
+    buyAndDeploySingleNode(singleNodeVMObj);
 
-        for(int i=oldSize;i<serverObjList.size();i++) {
-            int deployNode;
-            ServerObj* serverObj = serverObjList[i];
-            if (serverObj->canDeploy(vmInfo, deployNode)) {
-                double fit = fitnessMap[vmInfo.model][serverObj->info.model];
-                if (fit <= minFitNessRange) {
-                    minFitNessRange = fit;
-                    DeployableServerObj = serverObj;
+    return 0;
+}
+
+int NewServerDeployer::learnModelInfo() {
+    //k-means
+    struct infoUnit{
+        int type=-1;
+        double radio=-1;
+        ServerInfo* info;
+    };
+    std::vector<infoUnit> infoVec;
+    for(auto& it:globalCloud->serverInfoMap){
+        infoUnit unit;
+        unit.info=&it.second;
+        unit.radio=(double)it.second.cpuNum/it.second.memorySize;
+        infoVec.push_back(unit);
+    }
+    std::vector<double> ClusterType={0.05,0.3,0.7,1,2,4,7};
+    int itTime=30;
+    for(int i=0;i<itTime;i++){
+        std::vector<double> NewClusterType(ClusterType.size(),0);
+        std::vector<double> MemberNum(ClusterType.size(),0);
+        for(int j=0;j<infoVec.size();j++){
+            double minDis=1000;
+            int minDisIndex=-1;
+            for(int k=0;k<ClusterType.size();k++){
+                double dis=fabs(infoVec[j].radio-ClusterType[k]);
+                if(dis<minDis){
+                    minDis=dis;
+                    minDisIndex=k;
                 }
             }
+            //LOGI("self radio is %lf, min type is %lf",infoVec[j].radio,ClusterType[minDisIndex]);
+            NewClusterType[minDisIndex]+=infoVec[j].radio;
+            MemberNum[minDisIndex]+=1;
+            infoVec[j].type=minDisIndex;
         }
-
-        if(DeployableServerObj!=NULL){
-            int deployNode;
-            DeployableServerObj->canDeploy(vmInfo,deployNode);
-            rr.deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-            //globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-            continue;
+        for(int j=0;j<ClusterType.size();j++){
+            ClusterType[j]=NewClusterType[j]/MemberNum[j];
         }
+    }
 
-        for(int i=0;;i++) {
-            std::string serverModel = fitnessRangeMap[vmInfo.model][i];
-            ServerInfo serverInfo=globalCloud->serverInfoMap[serverModel];
-            if(!serverInfo.canDeployOnSingleNode(vmInfo)&&!serverInfo.canDeployOnDoubleNode(vmInfo)){
-                continue;
-            }
-            int newId=globalCloud->createServerObj(serverInfo);
-            int deployNode;
-            globalCloud->serverObjList[newId]->canDeploy(vmInfo,deployNode);
-            rr.deployVMObj(newId, deployNode, vmObj);
-            //globalCloud->deployVMObj(newId, deployNode, vmObj);
+    for(int i=0;i<infoVec.size();i++){
+        double radio=ClusterType[infoVec[i].type];
+        Clusters[radio].push_back(infoVec[i].info);
+    }
 
-            break;
-        }
+    auto Cmp=[](const ServerInfo* s1,const ServerInfo* s2){
+        return s1->cpuNum<s2->cpuNum;
+    };
+    for(int i=0;i<Clusters.size();i++){
+        std::sort(Clusters[ClusterType[i]].begin(),Clusters[ClusterType[i]].end(),Cmp);
     }
 
     return 0;
 }
+
+int NewServerDeployer::classify(std::vector<VMObj *> &vmObjVec, std::map<double, std::vector<VMObj *>> &receiver) {
+    for(int i=0;i<vmObjVec.size();i++){
+        double minDis=1000;
+        double radio=(double)vmObjVec[i]->info.cpuNum/vmObjVec[i]->info.memorySize;
+        double type=-1;
+        for(auto& it:Clusters){
+            double dis=fabs(it.first-radio);
+            if(dis<minDis){
+                minDis=dis;
+                type=it.first;
+            }
+        }
+        receiver[type].push_back(vmObjVec[i]);
+    }
+    return 0;
+}
+
+//incomplete
+int NewServerDeployer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj) {
+    for(auto it:oldObj->vmObjMap){
+        VMObj* vmObj=it.second;
+        int deployNode=oldObj->vmObjDeployNodeMap[it.first];
+        if(newObj->canDeployOnNode(deployNode,vmObj->info)){
+            newObj->deployVM(deployNode,vmObj);
+        }else{
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int NewServerDeployer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj) {
+    std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
+    classify(doubleNodeVMObj,classifiedVMObjMap);
+    auto Cmp=[](const VMObj* s1,const VMObj* s2){
+        return s1->info.cpuNum>s2->info.cpuNum;
+    };
+    for(auto &it:classifiedVMObjMap){
+        std::sort(it.second.begin(),it.second.end(),Cmp);
+    }
+
+    for(auto& it:Clusters){
+        std::vector<ServerInfo*>& serverCandidates = it.second;
+        std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
+        int j=0;
+        ServerObj serverObj(*serverCandidates[j]);
+        //max-min
+        for(int i=0;i<vmObjVec.size();i++){
+            if(serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)){
+                serverObj.deployVM(NODEAB,vmObjVec[i]);
+            }else{
+                double ful=CalculateFullness(&serverObj);
+                if(ful>1.5){
+                    j=0;
+                    globalCloud->deployServerObj(serverObj);
+                    serverObj=ServerObj(*serverCandidates[j]);
+                }
+                else{
+                    for(j=j+1;j<serverCandidates.size();j++){
+                        ServerObj newServerObj(*serverCandidates[j]);
+                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
+                            serverObj=newServerObj;
+                            break;
+                        }
+                    }
+                    if(j==serverCandidates.size()){
+                        j=0;
+                        globalCloud->deployServerObj(serverObj);
+                        serverObj=ServerObj(*serverCandidates[j]);
+                    }
+                }
+                i--;
+            }
+        }
+
+        if(serverObj.vmObjMap.size()>0){
+            globalCloud->deployServerObj(serverObj);
+        }
+    }
+
+
+    return 0;
+}
+
+int NewServerDeployer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj) {
+    std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
+    classify(singleNodeVMObj, classifiedVMObjMap);
+    auto Cmp=[](const VMObj* s1,const VMObj* s2){
+        return s1->info.cpuNum>s2->info.cpuNum;
+    };
+    for(auto &it:classifiedVMObjMap){
+        std::sort(it.second.begin(),it.second.end(),Cmp);
+    }
+
+    for(auto& it:Clusters){
+        std::vector<ServerInfo*>& serverCandidates = it.second;
+        std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
+        int j=0;
+        ServerObj serverObj(*serverCandidates[j]);
+        int nodeIndex=0;
+        //max-min
+        for(int i=0;i<vmObjVec.size();i++){
+            if(serverObj.canDeployOnSingleNode(nodeIndex,vmObjVec[i]->info)){
+                serverObj.deployVM(nodeIndex,vmObjVec[i]);
+                nodeIndex=(nodeIndex+1)%2;
+            }else if(serverObj.canDeployOnSingleNode(nodeIndex+1,vmObjVec[i]->info)){
+                serverObj.deployVM(nodeIndex+1,vmObjVec[i]);
+            }
+            else{
+                double ful=CalculateFullness(&serverObj);
+                if(ful>1.5){
+                    j=0;
+                    globalCloud->deployServerObj(serverObj);
+                    serverObj=ServerObj(*serverCandidates[j]);
+                }
+                else{
+                    for(j=j+1;j<serverCandidates.size();j++){
+                        ServerObj newServerObj(*serverCandidates[j]);
+                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
+                            serverObj=newServerObj;
+                            break;
+                        }
+                    }
+                    if(j>=serverCandidates.size()){
+                        j=0;
+                        globalCloud->deployServerObj(serverObj);
+                        serverObj=ServerObj(*serverCandidates[j]);
+                    }
+                }
+                i--;
+            }
+        }
+
+        if(serverObj.vmObjMap.size()>0){
+            globalCloud->deployServerObj(serverObj);
+        }
+    }
+    return 0;
+}
+
 
 int ResultRecorder::ouputOneDayRes(std::vector<Request> addReqVec, OneDayResult &receiver) {
     auto objSetCmp=[](const ServerObj* s1,const ServerObj* s2){
@@ -392,4 +559,12 @@ bool isServerInSD(ServerObj* serverObj, double R0){
         return true;
     }
     return false;
+}
+
+double CalculateFullness(ServerObj* serverObj){
+    MultiDimension d1=calSingleNodeUsageState(serverObj,NODEA);
+    MultiDimension d2=calSingleNodeUsageState(serverObj,NODEA);
+    double max1=(d1.Dimension1>d1.Dimension2)?d1.Dimension1:d1.Dimension2;
+    double max2=(d2.Dimension1>d2.Dimension2)?d2.Dimension1:d2.Dimension2;
+    return max1+max2;
 }

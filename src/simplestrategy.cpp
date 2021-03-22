@@ -196,92 +196,8 @@ int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
             singleNodeVMObj.push_back(it);
         }
     }
-
-    std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
-    classify(doubleNodeVMObj,classifiedVMObjMap);
-    auto Cmp=[](const VMObj* s1,const VMObj* s2){
-        return s1->info.cpuNum>s2->info.cpuNum;
-    };
-    for(int i=0;i<classifiedVMObjMap.size();i++){
-        std::sort(classifiedVMObjMap[i].begin(),classifiedVMObjMap[i].end(),Cmp);
-    }
-
-    for(auto& it:Clusters){
-        std::vector<ServerInfo*>& serverCandidates = it.second;
-        std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
-        int j=0;
-        ServerObj serverObj(*serverCandidates[j]);
-        //max-min
-        for(int i=0;i<vmObjVec.size();i++){
-            if(serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)){
-                serverObj.deployVM(NODEAB,vmObjVec[i]);
-            }else{
-                double ful=CalculateFullness(&serverObj);
-                if(ful>1.5){
-                    globalCloud->deployServerObj(serverObj);
-                }
-                else{
-                    for(j=j+1;j<serverCandidates.size();j++){
-                        ServerObj newServerObj(*serverCandidates[j]);
-                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
-                            serverObj=newServerObj;
-                            break;
-                        }
-                    }
-                    if(j==serverCandidates.size()){
-                        j=0;
-                        globalCloud->deployServerObj(serverObj);
-                        ServerObj serverObj(*serverCandidates[j]);
-                    }
-                }
-                i--;
-            }
-        }
-    }
-
-
-    auto& serverObjList=globalCloud->serverObjList;
-    int oldSize=serverObjList.size();
-    for(auto vmObj:unhandledVMObj){
-        VMInfo vmInfo=vmObj->info;
-        ServerObj* DeployableServerObj=NULL;
-        int minFitNessRange=ACCEPT_RANGE;
-
-        for(int i=oldSize;i<serverObjList.size();i++) {
-            int deployNode;
-            ServerObj* serverObj = serverObjList[i];
-            if (serverObj->canDeploy(vmInfo, deployNode)) {
-                double fit = fitnessMap[vmInfo.model][serverObj->info.model];
-                if (fit <= minFitNessRange) {
-                    minFitNessRange = fit;
-                    DeployableServerObj = serverObj;
-                }
-            }
-        }
-
-        if(DeployableServerObj!=NULL){
-            int deployNode;
-            DeployableServerObj->canDeploy(vmInfo,deployNode);
-            rr.deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-            //globalCloud->deployVMObj(DeployableServerObj->id, deployNode, vmObj);
-            continue;
-        }
-
-        for(int i=0;;i++) {
-            std::string serverModel = fitnessRangeMap[vmInfo.model][i];
-            ServerInfo serverInfo=globalCloud->serverInfoMap[serverModel];
-            if(!serverInfo.canDeployOnSingleNode(vmInfo)&&!serverInfo.canDeployOnDoubleNode(vmInfo)){
-                continue;
-            }
-            int newId=globalCloud->createServerObj(serverInfo);
-            int deployNode;
-            globalCloud->serverObjList[newId]->canDeploy(vmInfo,deployNode);
-            rr.deployVMObj(newId, deployNode, vmObj);
-            //globalCloud->deployVMObj(newId, deployNode, vmObj);
-
-            break;
-        }
-    }
+    buyAndDeployDoubleNode(doubleNodeVMObj);
+    buyAndDeploySingleNode(singleNodeVMObj);
 
     return 0;
 }
@@ -334,7 +250,7 @@ int NewServerDeployer::learnModelInfo() {
         return s1->cpuNum<s2->cpuNum;
     };
     for(int i=0;i<Clusters.size();i++){
-        std::sort(Clusters[i].begin(),Clusters[i].end(),Cmp);
+        std::sort(Clusters[ClusterType[i]].begin(),Clusters[ClusterType[i]].end(),Cmp);
     }
 
     return 0;
@@ -347,7 +263,7 @@ int NewServerDeployer::classify(std::vector<VMObj *> &vmObjVec, std::map<double,
         double type=-1;
         for(auto& it:Clusters){
             double dis=fabs(it.first-radio);
-            if(dis-minDis){
+            if(dis<minDis){
                 minDis=dis;
                 type=it.first;
             }
@@ -370,6 +286,116 @@ int NewServerDeployer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newO
     }
     return 0;
 }
+
+int NewServerDeployer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj) {
+    std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
+    classify(doubleNodeVMObj,classifiedVMObjMap);
+    auto Cmp=[](const VMObj* s1,const VMObj* s2){
+        return s1->info.cpuNum>s2->info.cpuNum;
+    };
+    for(auto &it:classifiedVMObjMap){
+        std::sort(it.second.begin(),it.second.end(),Cmp);
+    }
+
+    for(auto& it:Clusters){
+        std::vector<ServerInfo*>& serverCandidates = it.second;
+        std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
+        int j=0;
+        ServerObj serverObj(*serverCandidates[j]);
+        //max-min
+        for(int i=0;i<vmObjVec.size();i++){
+            if(serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)){
+                serverObj.deployVM(NODEAB,vmObjVec[i]);
+            }else{
+                double ful=CalculateFullness(&serverObj);
+                if(ful>1.5){
+                    j=0;
+                    globalCloud->deployServerObj(serverObj);
+                    serverObj=ServerObj(*serverCandidates[j]);
+                }
+                else{
+                    for(j=j+1;j<serverCandidates.size();j++){
+                        ServerObj newServerObj(*serverCandidates[j]);
+                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
+                            serverObj=newServerObj;
+                            break;
+                        }
+                    }
+                    if(j==serverCandidates.size()){
+                        j=0;
+                        globalCloud->deployServerObj(serverObj);
+                        serverObj=ServerObj(*serverCandidates[j]);
+                    }
+                }
+                i--;
+            }
+        }
+
+        if(serverObj.vmObjMap.size()>0){
+            globalCloud->deployServerObj(serverObj);
+        }
+    }
+
+
+    return 0;
+}
+
+int NewServerDeployer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj) {
+    std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
+    classify(singleNodeVMObj, classifiedVMObjMap);
+    auto Cmp=[](const VMObj* s1,const VMObj* s2){
+        return s1->info.cpuNum>s2->info.cpuNum;
+    };
+    for(auto &it:classifiedVMObjMap){
+        std::sort(it.second.begin(),it.second.end(),Cmp);
+    }
+
+    for(auto& it:Clusters){
+        std::vector<ServerInfo*>& serverCandidates = it.second;
+        std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
+        int j=0;
+        ServerObj serverObj(*serverCandidates[j]);
+        int nodeIndex=0;
+        //max-min
+        for(int i=0;i<vmObjVec.size();i++){
+            if(serverObj.canDeployOnSingleNode(nodeIndex,vmObjVec[i]->info)){
+                serverObj.deployVM(nodeIndex,vmObjVec[i]);
+                nodeIndex=(nodeIndex+1)%2;
+            }else if(serverObj.canDeployOnSingleNode(nodeIndex+1,vmObjVec[i]->info)){
+                serverObj.deployVM(nodeIndex+1,vmObjVec[i]);
+            }
+            else{
+                double ful=CalculateFullness(&serverObj);
+                if(ful>1.5){
+                    j=0;
+                    globalCloud->deployServerObj(serverObj);
+                    serverObj=ServerObj(*serverCandidates[j]);
+                }
+                else{
+                    for(j=j+1;j<serverCandidates.size();j++){
+                        ServerObj newServerObj(*serverCandidates[j]);
+                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
+                            serverObj=newServerObj;
+                            break;
+                        }
+                    }
+                    if(j>=serverCandidates.size()){
+                        j=0;
+                        globalCloud->deployServerObj(serverObj);
+                        serverObj=ServerObj(*serverCandidates[j]);
+                    }
+                }
+                i--;
+            }
+        }
+
+        if(serverObj.vmObjMap.size()>0){
+            globalCloud->deployServerObj(serverObj);
+        }
+    }
+    return 0;
+}
+
 
 int ResultRecorder::ouputOneDayRes(std::vector<Request> addReqVec, OneDayResult &receiver) {
     auto objSetCmp=[](const ServerObj* s1,const ServerObj* s2){
@@ -533,4 +559,12 @@ bool isServerInSD(ServerObj* serverObj, double R0){
         return true;
     }
     return false;
+}
+
+double CalculateFullness(ServerObj* serverObj){
+    MultiDimension d1=calSingleNodeUsageState(serverObj,NODEA);
+    MultiDimension d2=calSingleNodeUsageState(serverObj,NODEA);
+    double max1=(d1.Dimension1>d1.Dimension2)?d1.Dimension1:d1.Dimension2;
+    double max2=(d2.Dimension1>d2.Dimension2)?d2.Dimension1:d2.Dimension2;
+    return max1+max2;
 }

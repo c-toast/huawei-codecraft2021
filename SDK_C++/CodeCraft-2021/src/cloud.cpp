@@ -3,6 +3,8 @@
 //
 
 #include "cloud.h"
+
+#include <utility>
 #include "utils.h"
 
 //the type should be Cloud*
@@ -70,6 +72,26 @@ int SimpleCloud::createServerObj(ServerInfo &serverInfo) {
     return id;
 }
 
+int SimpleCloud::deployServerObj(ServerObj objTemplate) {
+    auto* serverObj=new ServerObj(std::move(objTemplate));
+    int id=serverObjList.size();
+    serverObj->deployItselfInCloud(id);
+    serverObjList.push_back(serverObj);
+
+    for(auto it:serverObj->vmObjMap){
+        VMObj* vmObj=it.second;
+        int nodeIndex=serverObj->vmObjDeployNodeMap[it.first];
+        if(nodeIndex==NODEAB){
+            vmObj->deployNodes.push_back(NODEA);
+            vmObj->deployNodes.push_back(NODEB);
+        }else{
+            vmObj->deployNodes.push_back(nodeIndex);
+        }
+        vmObj->deployServerID=id;
+    }
+    return 0;
+}
+
 VMObj * SimpleCloud::createVMObj(int vmID, std::string model) {
     VMInfo info=vmInfoMap[model];
     auto vmObj=new VMObj(info,vmID);
@@ -96,4 +118,6 @@ int SimpleCloud::MigrateVMObj(int vmID) {
     vmObj->deployNodes.clear();
     return 0;
 }
+
+
 
