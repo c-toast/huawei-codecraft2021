@@ -11,19 +11,16 @@
 
 class Dispatcher{
 public:
-    RequestReader* reader;
-
-    ResultWriter* writer;
 
     Strategy* strategy;
 
-    Dispatcher(RequestReader* r,ResultWriter* w,Strategy* s){
-        reader=r;
+    Dispatcher(Strategy* s){
         strategy=s;
-        writer=w;
     };
 
     int run();
+
+
 };
 
 #endif //HUAWEI_CODECRAFT_DISPATCHER_H

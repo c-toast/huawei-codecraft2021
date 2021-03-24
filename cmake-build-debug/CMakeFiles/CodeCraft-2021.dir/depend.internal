@@ -7,46 +7,140 @@ CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o
  ../include/utils.h
  ../include/vm.h
  /home/ctoast/huawei-codecraft/src/cloud.cpp
+CMakeFiles/CodeCraft-2021.dir/src/cloudoperator.cpp.o
+ ../include/cloud.h
+ ../include/cloudoperator.h
+ ../include/global.h
+ ../include/newserverbuyer.h
+ ../include/readwriter.h
+ ../include/server.h
+ ../include/strategytools.h
+ ../include/utils.h
+ ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/src/cloudoperator.cpp
 CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o
  ../include/cloud.h
+ ../include/cloudoperator.h
  ../include/dispatcher.h
+ ../include/global.h
+ ../include/newserverbuyer.h
  ../include/readwriter.h
  ../include/server.h
  ../include/strategy.h
+ ../include/strategytools.h
  ../include/utils.h
  ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
  /home/ctoast/huawei-codecraft/src/dispatcher.cpp
+CMakeFiles/CodeCraft-2021.dir/src/global.cpp.o
+ ../include/cloud.h
+ ../include/cloudoperator.h
+ ../include/global.h
+ ../include/newserverbuyer.h
+ ../include/readwriter.h
+ ../include/server.h
+ ../include/strategytools.h
+ ../include/utils.h
+ ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/src/global.cpp
 CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o
  ../include/cloud.h
+ ../include/cloudoperator.h
  ../include/dispatcher.h
+ ../include/global.h
+ ../include/newserverbuyer.h
  ../include/readwriter.h
  ../include/server.h
  ../include/strategy.h
+ ../include/strategytools.h
  ../include/utils.h
  ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
  /home/ctoast/huawei-codecraft/src/main.cpp
+CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o
+ ../include/cloud.h
+ ../include/cloudoperator.h
+ ../include/global.h
+ ../include/newserverbuyer.h
+ ../include/readwriter.h
+ ../include/server.h
+ ../include/strategytools.h
+ ../include/utils.h
+ ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/src/newserverbuyer.cpp
 CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o
  ../include/server.h
  ../include/utils.h
  ../include/vm.h
  /home/ctoast/huawei-codecraft/src/server.cpp
-CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o
- ../include/cloud.h
- ../include/readwriter.h
- ../include/server.h
- ../include/strategy.h
- ../include/utils.h
- ../include/vm.h
- /home/ctoast/huawei-codecraft/src/simplestrategy.cpp
 CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o
  ../include/readwriter.h
  ../include/server.h
  ../include/utils.h
  ../include/vm.h
  /home/ctoast/huawei-codecraft/src/stdreadwriter.cpp
+CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o
+ ../include/cloud.h
+ ../include/cloudoperator.h
+ ../include/global.h
+ ../include/newserverbuyer.h
+ ../include/readwriter.h
+ ../include/server.h
+ ../include/strategy.h
+ ../include/strategytools.h
+ ../include/utils.h
+ ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/src/strategy.cpp
+CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o
+ ../include/cloud.h
+ ../include/cloudoperator.h
+ ../include/newserverbuyer.h
+ ../include/readwriter.h
+ ../include/server.h
+ ../include/strategytools.h
+ ../include/utils.h
+ ../include/vm.h
+ ../include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/src/strategytools.cpp
 CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o
  /home/ctoast/huawei-codecraft/src/utils.cpp
 CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o
  ../include/utils.h
  ../include/vm.h
  /home/ctoast/huawei-codecraft/src/vm.cpp
+CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o
+ ../include/cloud.h
+ ../include/cloudoperator.h
+ ../include/global.h
+ ../include/newserverbuyer.h
+ ../include/readwriter.h
+ ../include/server.h
+ ../include/strategytools.h
+ ../include/utils.h
+ ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/src/vmdeployer.cpp
+CMakeFiles/CodeCraft-2021.dir/src/vmmigrater.cpp.o
+ ../include/cloud.h
+ ../include/cloudoperator.h
+ ../include/global.h
+ ../include/newserverbuyer.h
+ ../include/readwriter.h
+ ../include/server.h
+ ../include/strategytools.h
+ ../include/utils.h
+ ../include/vm.h
+ ../include/vmdeployer.h
+ ../include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/src/vmmigrater.cpp

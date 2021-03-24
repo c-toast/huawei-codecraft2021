@@ -70,9 +70,22 @@ CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cloud.cpp -o CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.s
 
+CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
+CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/CloudOperator.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/CloudOperator.cpp
+
+CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/CloudOperator.cpp > CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.i
+
+CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/CloudOperator.cpp -o CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.s
+
 CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
 CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.cpp
 
 CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.i: cmake_force
@@ -85,7 +98,7 @@ CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.s: cmake_force
 
 CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
 CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/main.cpp
 
 CMakeFiles/CodeCraft-2021.dir/src/main.cpp.i: cmake_force
@@ -96,9 +109,22 @@ CMakeFiles/CodeCraft-2021.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/main.cpp -o CMakeFiles/CodeCraft-2021.dir/src/main.cpp.s
 
+CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
+CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp
+
+CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp > CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.i
+
+CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp -o CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.s
+
 CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
 CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/server.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/server.cpp
 
 CMakeFiles/CodeCraft-2021.dir/src/server.cpp.i: cmake_force
@@ -109,22 +135,9 @@ CMakeFiles/CodeCraft-2021.dir/src/server.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/server.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/server.cpp -o CMakeFiles/CodeCraft-2021.dir/src/server.cpp.s
 
-CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
-CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/simplestrategy.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/simplestrategy.cpp
-
-CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/simplestrategy.cpp > CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.i
-
-CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/simplestrategy.cpp -o CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.s
-
 CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
 CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/stdreadwriter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/stdreadwriter.cpp
 
 CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.i: cmake_force
@@ -135,9 +148,35 @@ CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/stdreadwriter.cpp -o CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.s
 
+CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
+CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategy.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategy.cpp
+
+CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategy.cpp > CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.i
+
+CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategy.cpp -o CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.s
+
+CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
+CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategytools.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategytools.cpp
+
+CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategytools.cpp > CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.i
+
+CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategytools.cpp -o CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.s
+
 CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
 CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/utils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/utils.cpp
 
 CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.i: cmake_force
@@ -150,7 +189,7 @@ CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.s: cmake_force
 
 CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
 CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vm.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vm.cpp
 
 CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.i: cmake_force
@@ -161,31 +200,67 @@ CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vm.cpp -o CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.s
 
+CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
+CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vmdeployer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vmdeployer.cpp
+
+CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vmdeployer.cpp > CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.i
+
+CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vmdeployer.cpp -o CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.s
+
+CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o: CMakeFiles/CodeCraft-2021.dir/flags.make
+CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o: /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/VMMigrater.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o -c /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/VMMigrater.cpp
+
+CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/VMMigrater.cpp > CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.i
+
+CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/VMMigrater.cpp -o CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.s
+
 # Object files for target CodeCraft-2021
 CodeCraft__2021_OBJECTS = \
 "CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o" \
+"CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o" \
 "CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o" \
 "CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o" \
+"CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o" \
 "CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o" \
-"CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o" \
 "CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o" \
+"CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o" \
+"CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o" \
 "CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o" \
-"CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o"
+"CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o" \
+"CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o" \
+"CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o"
 
 # External object files for target CodeCraft-2021
 CodeCraft__2021_EXTERNAL_OBJECTS =
 
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o
+/home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o
+/home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o
-/home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o
+/home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o
+/home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/utils.cpp.o
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o
+/home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o
+/home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/build.make
 /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021: CMakeFiles/CodeCraft-2021.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable /home/ctoast/huawei-codecraft/SDK_C++/bin/CodeCraft-2021"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CodeCraft-2021.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

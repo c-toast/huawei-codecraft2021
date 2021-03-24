@@ -87,25 +87,43 @@
 		<Unit filename="/home/ctoast/huawei-codecraft/src/cloud.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/cloudoperator.cpp">
+			<Option target="CodeCraft-2021"/>
+		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/dispatcher.cpp">
+			<Option target="CodeCraft-2021"/>
+		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/global.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/main.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/newserverbuyer.cpp">
+			<Option target="CodeCraft-2021"/>
+		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/server.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
-		<Unit filename="/home/ctoast/huawei-codecraft/src/simplestrategy.cpp">
+		<Unit filename="/home/ctoast/huawei-codecraft/src/stdreadwriter.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
-		<Unit filename="/home/ctoast/huawei-codecraft/src/stdreadwriter.cpp">
+		<Unit filename="/home/ctoast/huawei-codecraft/src/strategy.cpp">
+			<Option target="CodeCraft-2021"/>
+		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/strategytools.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/utils.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/src/vm.cpp">
+			<Option target="CodeCraft-2021"/>
+		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/vmdeployer.cpp">
+			<Option target="CodeCraft-2021"/>
+		</Unit>
+		<Unit filename="/home/ctoast/huawei-codecraft/src/vmmigrater.cpp">
 			<Option target="CodeCraft-2021"/>
 		</Unit>
 		<Unit filename="/home/ctoast/huawei-codecraft/CMakeLists.txt">

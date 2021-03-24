@@ -3,35 +3,16 @@
 //
 
 #include "dispatcher.h"
+#include "global.h"
 
-extern SimpleCloud* globalCloud;
+extern Cloud* globalCloud;
 
 int Dispatcher::run() {
-    std::vector<ServerInfo> serversInfos;
-    std::vector<VMInfo> vmachineInfos;
-    reader->ReadServersInfo(serversInfos);
-    reader->ReadVMachineInfo(vmachineInfos);
-
-    auto& serverInfoMap=globalCloud->serverInfoMap;
-    for(auto it:serversInfos){
-        std::string model=it.model;
-        serverInfoMap[model]=it;
-    }
-
-    std::map<std::string,VMInfo>& vmInfoMap=globalCloud->vmInfoMap;
-    for(auto it:vmachineInfos){
-        std::string model=it.model;
-        vmInfoMap[model]=it;
-    }
-
-    RequestsBunch bunch;
-    std::vector<OneDayResult> res;
-    reader->ReadBunchOfRequests(bunch);
-
-    strategy->init();
-    strategy->dispatch(bunch,res);
-
-    writer->write(res);
+    StdWriter writer;
+    ResultList res;
+    //currently it directly handle all request
+    strategy->dispatch(allRequest,res);
+    writer.write(res);
 
     return 0;
 }

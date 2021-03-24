@@ -7,12 +7,11 @@
 #include <utility>
 #include "utils.h"
 
-//the type should be Cloud*
-SimpleCloud* globalCloud=new SimpleCloud();
+
 
 int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, int vmID) {
     if(serverObjID < 0 || serverObjID > serverObjList.size() - 1){
-        LOGE("serverObj id is wrong");
+        LOGE("SimpleCloud::deployVMObj: serverObj id is wrong");
         exit(-1);
     }
     ServerObj* serverObj=serverObjList[serverObjID];
@@ -35,8 +34,8 @@ int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, int vmID) {
 
 int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj) {
     if(serverObjID < 0 || serverObjID > serverObjList.size() - 1){
-        LOGE("serverObj id is wrong");
-        exit(-1);
+        LOGE("SimpleCloud::deployVMObj: serverObj id is invalid");
+        return -1;
     }
     ServerObj* serverObj=serverObjList[serverObjID];
     int doubleNode=vmObj->info.doubleNode;
@@ -54,10 +53,14 @@ int SimpleCloud::deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj) {
     return 0;
 }
 
-int SimpleCloud::delVMObj(int vmID) {
+int SimpleCloud::delVMObjFromCloud(int vmID) {
     auto vmObj=vmObjMap[vmID];
     int serverID=vmObj->deployServerID;
     auto server=serverObjList[serverID];
+    if(server==NULL){
+        LOGE("delVMObjFromCloud: can not find the serverObj in cloud");
+        return -1;
+    }
     server->delVM(vmID);
     delete vmObj;
     vmObjMap.erase(vmID);
@@ -109,10 +112,11 @@ int SimpleCloud::renewServerID(int start) {
     return 0;
 }
 
-int SimpleCloud::MigrateVMObj(int vmID) {
+int SimpleCloud::delVMObjFromServerObj(int vmID) {
     auto vmObj=vmObjMap[vmID];
     int serverID=vmObj->deployServerID;
     auto server=serverObjList[serverID];
+
     server->delVM(vmID);
     vmObj->deployServerID=-1;
     vmObj->deployNodes.clear();

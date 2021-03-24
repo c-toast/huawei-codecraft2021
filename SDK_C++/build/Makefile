@@ -150,6 +150,33 @@ src/cloud.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.s
 .PHONY : src/cloud.cpp.s
 
+src/CloudOperator.o: src/CloudOperator.cpp.o
+
+.PHONY : src/CloudOperator.o
+
+# target to build an object file
+src/CloudOperator.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o
+.PHONY : src/CloudOperator.cpp.o
+
+src/CloudOperator.i: src/CloudOperator.cpp.i
+
+.PHONY : src/CloudOperator.i
+
+# target to preprocess a source file
+src/CloudOperator.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.i
+.PHONY : src/CloudOperator.cpp.i
+
+src/CloudOperator.s: src/CloudOperator.cpp.s
+
+.PHONY : src/CloudOperator.s
+
+# target to generate assembly for a file
+src/CloudOperator.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.s
+.PHONY : src/CloudOperator.cpp.s
+
 src/dispatcher.o: src/dispatcher.cpp.o
 
 .PHONY : src/dispatcher.o
@@ -204,6 +231,33 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/newserverbuyer.o: src/newserverbuyer.cpp.o
+
+.PHONY : src/newserverbuyer.o
+
+# target to build an object file
+src/newserverbuyer.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o
+.PHONY : src/newserverbuyer.cpp.o
+
+src/newserverbuyer.i: src/newserverbuyer.cpp.i
+
+.PHONY : src/newserverbuyer.i
+
+# target to preprocess a source file
+src/newserverbuyer.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.i
+.PHONY : src/newserverbuyer.cpp.i
+
+src/newserverbuyer.s: src/newserverbuyer.cpp.s
+
+.PHONY : src/newserverbuyer.s
+
+# target to generate assembly for a file
+src/newserverbuyer.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.s
+.PHONY : src/newserverbuyer.cpp.s
+
 src/server.o: src/server.cpp.o
 
 .PHONY : src/server.o
@@ -231,33 +285,6 @@ src/server.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/server.cpp.s
 .PHONY : src/server.cpp.s
 
-src/simplestrategy.o: src/simplestrategy.cpp.o
-
-.PHONY : src/simplestrategy.o
-
-# target to build an object file
-src/simplestrategy.cpp.o:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.o
-.PHONY : src/simplestrategy.cpp.o
-
-src/simplestrategy.i: src/simplestrategy.cpp.i
-
-.PHONY : src/simplestrategy.i
-
-# target to preprocess a source file
-src/simplestrategy.cpp.i:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.i
-.PHONY : src/simplestrategy.cpp.i
-
-src/simplestrategy.s: src/simplestrategy.cpp.s
-
-.PHONY : src/simplestrategy.s
-
-# target to generate assembly for a file
-src/simplestrategy.cpp.s:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/simplestrategy.cpp.s
-.PHONY : src/simplestrategy.cpp.s
-
 src/stdreadwriter.o: src/stdreadwriter.cpp.o
 
 .PHONY : src/stdreadwriter.o
@@ -284,6 +311,60 @@ src/stdreadwriter.s: src/stdreadwriter.cpp.s
 src/stdreadwriter.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.s
 .PHONY : src/stdreadwriter.cpp.s
+
+src/strategy.o: src/strategy.cpp.o
+
+.PHONY : src/strategy.o
+
+# target to build an object file
+src/strategy.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o
+.PHONY : src/strategy.cpp.o
+
+src/strategy.i: src/strategy.cpp.i
+
+.PHONY : src/strategy.i
+
+# target to preprocess a source file
+src/strategy.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.i
+.PHONY : src/strategy.cpp.i
+
+src/strategy.s: src/strategy.cpp.s
+
+.PHONY : src/strategy.s
+
+# target to generate assembly for a file
+src/strategy.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.s
+.PHONY : src/strategy.cpp.s
+
+src/strategytools.o: src/strategytools.cpp.o
+
+.PHONY : src/strategytools.o
+
+# target to build an object file
+src/strategytools.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o
+.PHONY : src/strategytools.cpp.o
+
+src/strategytools.i: src/strategytools.cpp.i
+
+.PHONY : src/strategytools.i
+
+# target to preprocess a source file
+src/strategytools.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.i
+.PHONY : src/strategytools.cpp.i
+
+src/strategytools.s: src/strategytools.cpp.s
+
+.PHONY : src/strategytools.s
+
+# target to generate assembly for a file
+src/strategytools.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.s
+.PHONY : src/strategytools.cpp.s
 
 src/utils.o: src/utils.cpp.o
 
@@ -339,6 +420,60 @@ src/vm.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.s
 .PHONY : src/vm.cpp.s
 
+src/vmdeployer.o: src/vmdeployer.cpp.o
+
+.PHONY : src/vmdeployer.o
+
+# target to build an object file
+src/vmdeployer.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o
+.PHONY : src/vmdeployer.cpp.o
+
+src/vmdeployer.i: src/vmdeployer.cpp.i
+
+.PHONY : src/vmdeployer.i
+
+# target to preprocess a source file
+src/vmdeployer.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.i
+.PHONY : src/vmdeployer.cpp.i
+
+src/vmdeployer.s: src/vmdeployer.cpp.s
+
+.PHONY : src/vmdeployer.s
+
+# target to generate assembly for a file
+src/vmdeployer.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.s
+.PHONY : src/vmdeployer.cpp.s
+
+src/VMMigrater.o: src/VMMigrater.cpp.o
+
+.PHONY : src/VMMigrater.o
+
+# target to build an object file
+src/VMMigrater.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o
+.PHONY : src/VMMigrater.cpp.o
+
+src/VMMigrater.i: src/VMMigrater.cpp.i
+
+.PHONY : src/VMMigrater.i
+
+# target to preprocess a source file
+src/VMMigrater.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.i
+.PHONY : src/VMMigrater.cpp.i
+
+src/VMMigrater.s: src/VMMigrater.cpp.s
+
+.PHONY : src/VMMigrater.s
+
+# target to generate assembly for a file
+src/VMMigrater.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.s
+.PHONY : src/VMMigrater.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -351,27 +486,42 @@ help:
 	@echo "... src/cloud.o"
 	@echo "... src/cloud.i"
 	@echo "... src/cloud.s"
+	@echo "... src/CloudOperator.o"
+	@echo "... src/CloudOperator.i"
+	@echo "... src/CloudOperator.s"
 	@echo "... src/dispatcher.o"
 	@echo "... src/dispatcher.i"
 	@echo "... src/dispatcher.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/newserverbuyer.o"
+	@echo "... src/newserverbuyer.i"
+	@echo "... src/newserverbuyer.s"
 	@echo "... src/server.o"
 	@echo "... src/server.i"
 	@echo "... src/server.s"
-	@echo "... src/simplestrategy.o"
-	@echo "... src/simplestrategy.i"
-	@echo "... src/simplestrategy.s"
 	@echo "... src/stdreadwriter.o"
 	@echo "... src/stdreadwriter.i"
 	@echo "... src/stdreadwriter.s"
+	@echo "... src/strategy.o"
+	@echo "... src/strategy.i"
+	@echo "... src/strategy.s"
+	@echo "... src/strategytools.o"
+	@echo "... src/strategytools.i"
+	@echo "... src/strategytools.s"
 	@echo "... src/utils.o"
 	@echo "... src/utils.i"
 	@echo "... src/utils.s"
 	@echo "... src/vm.o"
 	@echo "... src/vm.i"
 	@echo "... src/vm.s"
+	@echo "... src/vmdeployer.o"
+	@echo "... src/vmdeployer.i"
+	@echo "... src/vmdeployer.s"
+	@echo "... src/VMMigrater.o"
+	@echo "... src/VMMigrater.i"
+	@echo "... src/VMMigrater.s"
 .PHONY : help
 
 

@@ -15,26 +15,6 @@
 
 class Cloud{
 public:
-    //deployVMObj is supposed to automatically handle with the double node situation and single node situation
-    //in the former case, nodeIndex is useless
-    virtual int deployVMObj(int serverObjID, int nodeIndex, int vmID) =0;
-
-    virtual int delVMObj(int vmID)=0;
-
-    //the following three method only get the copy, but not the real obj storing in the cloud
-    int getServerObjById(int id, ServerObj& receiver);
-
-    int getVMObjById(int id, VMObj& receiver);
-
-    int getVMInfoByModel(std::string model, VMInfo& receiver);
-
-    //virtual int MovMachine(int from,int to,VirtualMachine& machine)=0;
-
-    //virtual vector<int> FindServersByCondition()=0;
-};
-
-class SimpleCloud: public Cloud{
-public:
     std::map<std::string,VMInfo> vmInfoMap; //[model]info
 
     std::map<std::string,ServerInfo> serverInfoMap; //[model]info
@@ -43,7 +23,7 @@ public:
 
     std::map<int,VMObj*> vmObjMap;//[id]obj.
 
-    SimpleCloud()=default;
+    Cloud()=default;
 
     int createServerObj(ServerInfo &serverInfo);
 
@@ -56,11 +36,13 @@ public:
 
     int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
 
-    int delVMObj(int vmID) override;
+    int delVMObjFromCloud(int vmID);
 
-    int MigrateVMObj(int vmID);
+    int delVMObjFromServerObj(int vmID);
 
     int renewServerID(int start);
 };
+
+
 
 #endif //HUAWEI_CODECRAFT_CLOUD_H
