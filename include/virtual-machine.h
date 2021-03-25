@@ -20,11 +20,13 @@ public:
     VirtualMachineObj()=delete;
 
     VirtualMachineObj(VirtualMachineInfo machineInfo,int machineId){info=machineInfo;ID=machineId;}
+	//VirtualMachineObj(VirtualMachineInfo _info, int _ID, bool _have_try) { info = _info; ID = _ID; have_try = _have_try; }
 
     VirtualMachineInfo info;
     int ID;
     int deployedServerID;
     std::vector<int> deployedNodes;
+	//bool have_try; //used for ant_colony
 };
 
 

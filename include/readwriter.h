@@ -19,6 +19,11 @@ typedef struct{
     int op;
     std::string vMachineModel;
     int vMachineID;
+	//used for ant-colony
+	int assigned; 
+	//0 for A;1 for B; 2 for double
+	int assignType;
+	int index;
 }Request;
 
 typedef std::vector<Request> OneDayRequest;

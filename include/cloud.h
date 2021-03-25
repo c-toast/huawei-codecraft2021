@@ -47,6 +47,8 @@ public:
 
     std::vector<ServerInfo> serverInfoList;
 
+	std::vector<ServerInfo> serverSortList;
+
     int addServerObj(ServerInfo &serverInfo) override;
 
     int addVMObj(int serverObjID, int nodeIndex, std::string vmModel, int vmID) override;

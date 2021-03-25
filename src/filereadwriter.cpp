@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <cstring>
 
-
+/*
 FileReader::FileReader(char* filePath){
     file=fopen(filePath,"r");
 
@@ -120,7 +120,7 @@ int FileReader::ReadOneDayRequests(OneDayRequest &receiver) {
 
     return 0;
 }
-
+*/
 
 
 

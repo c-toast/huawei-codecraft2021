@@ -8,7 +8,8 @@
 #include "cloud.h"
 #include "readwriter.h"
 #include "strategy.h"
-
+#include "utils.h"
+#include <algorithm>
 class Dispatcher{
 public:
     RequestReader* reader;
