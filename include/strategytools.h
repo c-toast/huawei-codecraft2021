@@ -12,6 +12,7 @@
 #include "vmdeployer.h"
 #include "cloudoperator.h"
 #include "newserverbuyer.h"
+#include <array>
 
 extern std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
 extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
@@ -29,7 +30,7 @@ public:
 
     static bool isServerNodeInASD(ServerObj* serverObj,int nodeIndex,double R0,double r0);
 
-    static std::vector<double> calSingleNodeUsageState(ServerObj* obj, int NodeIndex);
+    static std::array<double,2> calSingleNodeUsageState(ServerObj* obj, int NodeIndex);
 };
 
 class BalanceState{
@@ -37,14 +38,14 @@ class BalanceState{
 
     static bool isServerBalanceInAD(ServerObj* serverObj,int nodeIndex,double r0);
 
-    static std::vector<double> calNodeBalanceState(ServerObj* obj);
+    static std::array<double,2> calNodeBalanceState(ServerObj* obj);
 };
 
 //double calDeviation(MultiDimension d);
 
-bool isInSD(std::vector<double> vec, double R0);
+bool isInSD(std::array<double,2> vec, double R0);
 
-bool isInAD(std::vector<double> vec, double r0);
+bool isInAD(std::array<double,2> vec, double r0);
 
 bool isDeployDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
 

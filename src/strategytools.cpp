@@ -40,8 +40,8 @@ std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverMo
 
 
 double CalculateFullness(ServerObj* serverObj){
-    std::vector<double> d1=UsageState::calSingleNodeUsageState(serverObj,NODEA);
-    std::vector<double> d2=UsageState::calSingleNodeUsageState(serverObj,NODEB);
+    std::array<double,2> d1=UsageState::calSingleNodeUsageState(serverObj,NODEA);
+    std::array<double,2> d2=UsageState::calSingleNodeUsageState(serverObj,NODEB);
     double max1=(d1[0]>d1[1])?d1[0]:d1[1];
     double max2=(d2[0]>d2[1])?d2[0]:d2[1];
     return max1+max2;
@@ -60,7 +60,7 @@ int CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo, double &fitnessReceiver) 
     return 0;
 }
 
-bool isInSD(std::vector<double> vec, double R0){
+bool isInSD(std::array<double,2> vec, double R0){
     double dis1,dis2,dis3;
     dis1=CalDistance(vec,{R0,1-R0});
     dis2=CalDistance(vec,{1-R0,R0});
@@ -77,7 +77,7 @@ bool isInSD(std::vector<double> vec, double R0){
     return false;
 }
 
-bool isInAD(std::vector<double> vec, double r0){
+bool isInAD(std::array<double,2> vec, double r0){
     double dis3;
     dis3=CalDistance(vec,{1,1});
     if(dis3 <= r0){
@@ -86,18 +86,18 @@ bool isInAD(std::vector<double> vec, double r0){
     return false;
 }
 
-std::vector<double> UsageState::calSingleNodeUsageState(ServerObj *obj, int NodeIndex) {
+std::array<double,2> UsageState::calSingleNodeUsageState(ServerObj *obj, int NodeIndex) {
     Resource remainingResource= obj->nodes[NodeIndex].remainingResource;
     int allMem=obj->info.memorySize/2;
     int allCpu=obj->info.cpuNum/2;
-    std::vector<double> vec(2,0);
+    std::array<double,2> vec;
     vec[0]= (double)(allCpu - remainingResource.cpuNum) / allCpu;
     vec[1]= (double)(allMem - remainingResource.memorySize) / allMem;
     return vec;
 }
 
 bool UsageState::isServerNodeInSD(ServerObj *serverObj, int nodeIndex, double R0) {
-    std::vector<double> vec1,vec2;
+    std::array<double,2> vec1,vec2;
     if(nodeIndex==NODEAB){
         vec1=calSingleNodeUsageState(serverObj,NODEA);
         vec2=calSingleNodeUsageState(serverObj,NODEB);
@@ -114,7 +114,7 @@ bool UsageState::isServerNodeInSD(ServerObj *serverObj, int nodeIndex, double R0
 }
 
 bool UsageState::isServerNodeInAD(ServerObj *serverObj, int nodeIndex, double R0) {
-    std::vector<double> vec1,vec2;
+    std::array<double,2> vec1,vec2;
     if(nodeIndex==NODEAB){
         vec1=calSingleNodeUsageState(serverObj,NODEA);
         vec2=calSingleNodeUsageState(serverObj,NODEB);
@@ -139,21 +139,21 @@ bool UsageState::isServerNodeInASD(ServerObj *serverObj, int nodeIndex, double R
     return NodeAInASD&&NodeBInASD;
 }
 
-std::vector<double> BalanceState::calNodeBalanceState(ServerObj *obj) {
-    std::vector<double> usageStateA=UsageState::calSingleNodeUsageState(obj, NODEA);
-    std::vector<double> usageStateB=UsageState::calSingleNodeUsageState(obj, NODEB);
-    std::vector<double> ret(2,0);
+std::array<double,2> BalanceState::calNodeBalanceState(ServerObj *obj) {
+    std::array<double,2> usageStateA=UsageState::calSingleNodeUsageState(obj, NODEA);
+    std::array<double,2> usageStateB=UsageState::calSingleNodeUsageState(obj, NODEB);
+    std::array<double,2> ret;
     ret[0]=CalDistance(usageStateA);
     ret[1]=CalDistance(usageStateA);
     return ret;
 }
 
 bool BalanceState::isServerBalanceInSD(ServerObj *serverObj, int nodeIndex, double R0) {
-    std::vector<double> d=BalanceState::calNodeBalanceState(serverObj);
+    std::array<double,2> d=BalanceState::calNodeBalanceState(serverObj);
     return isInSD(d,R0);
 }
 
 bool BalanceState::isServerBalanceInAD(ServerObj *serverObj, int nodeIndex, double r0) {
-    std::vector<double> d=BalanceState::calNodeBalanceState(serverObj);
+    std::array<double,2> d=BalanceState::calNodeBalanceState(serverObj);
     return isInAD(d,r0);
 }

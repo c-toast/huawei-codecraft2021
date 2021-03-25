@@ -16,8 +16,8 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
     std::sort(unhandledVMObj.begin(),unhandledVMObj.end(),Cmp);
 
     deployByAcceptableUsageState(unhandledVMObj, 1);
-//    deployByAcceptableUsageState(unhandledVMObj, 0.8);
-//    deployByAcceptableUsageState(unhandledVMObj, 0.5);
+    deployByAcceptableUsageState(unhandledVMObj, 0.8);
+    deployByAcceptableUsageState(unhandledVMObj, 0.5);
     forceDeploy(unhandledVMObj);
 }
 

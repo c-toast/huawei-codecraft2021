@@ -6,6 +6,7 @@
 #define HUAWEI_CODECRAFT_UTILS_H
 #include "iostream"
 #include "vector"
+#include "array"
 
 #define LOGD(args...) fprintf(stdout,"D:");fprintf(stdout, ##args); putchar('\n')
 #define LOGI(args...) fprintf(stdout,"I:");fprintf(stdout, ##args); putchar('\n')
@@ -31,9 +32,13 @@ struct Resource{
     int freeResource(Resource& requiredResource);
 };
 
-double CalDistance(std::vector<double> coordinate1,std::vector<double> coordinate2);
+//double CalDistance(std::vector<double> coordinate1,std::vector<double> coordinate2);
+//
+//double CalDistance(std::vector<double> coordinate1);
 
-double CalDistance(std::vector<double> coordinate1);
+double CalDistance(std::array<double,2> coordinate1,std::array<double,2> coordinate2);
+
+double CalDistance(std::array<double,2> coordinate1);
 
 double CalResourceMagnitude(Resource r);
 
