@@ -17,34 +17,36 @@ extern std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmode
 extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
 #define ACCEPT_RANGE 5
 
-#define USAGESTATERO 1
-#define USAGESTATErO 0.3
+#define USAGESTATE_RO 1
 #define NODEBANLANCESTATERO 1
 
-struct MultiDimension{
-    double Dimension1;
-    double Dimension2;
+
+class UsageState{
+public:
+    static bool isServerNodeInSD(ServerObj* serverObj,int nodeIndex,double R0);
+
+    static bool isServerNodeInAD(ServerObj* serverObj,int nodeIndex,double r0);
+
+    static bool isServerNodeInASD(ServerObj* serverObj,int nodeIndex,double R0,double r0);
+
+    static std::vector<double> calSingleNodeUsageState(ServerObj* obj, int NodeIndex);
 };
 
-MultiDimension calSingleNodeUsageState(ServerObj* obj, int NodeIndex);
+class BalanceState{
+    static bool isServerBalanceInSD(ServerObj* serverObj,int nodeIndex,double R0);
 
-MultiDimension calNodeBalanceState(ServerObj* obj);
+    static bool isServerBalanceInAD(ServerObj* serverObj,int nodeIndex,double r0);
 
-inline double distance(double x1,double y1,double x2,double y2){
-    return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
-}
+    static std::vector<double> calNodeBalanceState(ServerObj* obj);
+};
 
-double calDeviation(MultiDimension d);
+//double calDeviation(MultiDimension d);
 
-bool isInSD(MultiDimension us, double R0);
+bool isInSD(std::vector<double> vec, double R0);
 
-bool isServerInSD(ServerObj* serverObj, double R0);
-
-bool isServerNodeBalance(ServerObj* serverObj,double R0);
+bool isInAD(std::vector<double> vec, double r0);
 
 bool isDeployDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
-
-bool isMigrateDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
 
 double CalculateFullness(ServerObj* serverObj);
 

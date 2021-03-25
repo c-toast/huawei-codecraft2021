@@ -60,4 +60,3 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
 
     return 0;
 }
-

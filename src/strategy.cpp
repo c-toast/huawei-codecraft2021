@@ -18,8 +18,6 @@ int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &
         std::vector<Request> unhandledDelReqSet;
         std::vector<Request> unhandledAddReqSet;
 
-        vmMigrater->deployVMNum=globalCloud->vmObjMap.size();
-
         for(auto it:oneDayReq){
             if(it.op==ADD){
                 auto vmObj=globalCloud->createVMObj(it.vMachineID,it.vMachineModel);
@@ -32,6 +30,8 @@ int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &
         vmMigrater->migrate(unhandledVMObj);
         vmDeployer->deploy(unhandledVMObj);
         serverBuyer->buyAndDeploy(unhandledVMObj);
+        vmMigrater->availableMigrateTime= (globalCloud->vmObjMap.size() * 5) / 1000;
+
 
         cloudOperator.genOneDayOpeRes(unhandledAddReqSet, oneDayRes);
         receiver.push_back(oneDayRes);
