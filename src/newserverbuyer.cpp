@@ -187,9 +187,9 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
                 //serverObj.deployVM(nodeIndex,vmObjVec[i]);
                 cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], nodeIndex);
                 nodeIndex=(nodeIndex+1)%2;
-            }else if(serverObj.canDeployOnSingleNode(nodeIndex+1,vmObjVec[i]->info)){
+            }else if(serverObj.canDeployOnSingleNode((nodeIndex+1)%2,vmObjVec[i]->info)){
                 //serverObj.deployVM(nodeIndex,vmObjVec[i]);
-                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], nodeIndex + 1);
+                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], (nodeIndex+1)%2);
             }
             else{
                 double ful=CalculateFullness(&serverObj);

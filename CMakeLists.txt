@@ -20,7 +20,7 @@ set(CMAKE_CXX_STANDARD 11)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
 
 # 指定生成目标
-add_executable(CodeCraft-2021 ${DIR_SRCS} src/strategy.cpp src/vmmigrater.cpp src/vmdeployer.cpp)
+add_executable(CodeCraft-2021 ${DIR_SRCS})
 
 target_include_directories(
         CodeCraft-2021 PRIVATE ${PROJECT_SOURCE_DIR}/include

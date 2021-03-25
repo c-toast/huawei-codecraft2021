@@ -28,7 +28,8 @@ int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj) {
             int deployNode;
             if(it->canDeploy(vmInfo,deployNode)){
                 ServerObj tmpObj=*it;
-                tmpObj.deployVM(deployNode,vmObj);
+                cloudOperator.deployVMObjInFakeServerObj(&tmpObj,vmObj,deployNode);
+                //tmpObj.deployVM(deployNode,vmObj);
                 if(isDeployDecisionBetter(it, &tmpObj)){
                     cloudOperator.deployVMObj(it->id, deployNode, vmObj);
                     haveDeploy=true;
