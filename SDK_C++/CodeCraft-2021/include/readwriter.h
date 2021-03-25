@@ -23,11 +23,7 @@ typedef struct{
 
 typedef std::vector<Request> OneDayRequest;
 
-typedef struct{
-    int requestNum;
-    int dayNum;
-    std::vector<OneDayRequest> bunch;
-}RequestsBunch;
+typedef std::vector<OneDayRequest> RequestsBatch;
 
 typedef struct{
     std::string serverName;
@@ -53,35 +49,23 @@ typedef struct{
 
 typedef std::vector<OneDayResult> ResultList;
 
-class RequestReader{
+class StdWriter{
 public:
-    virtual int ReadServersInfo(std::vector<ServerInfo> &receiver) =0;
+	int write(ResultList& resultList);
 
-    virtual int ReadVMachineInfo(std::vector<VMInfo> &receiver) =0;
-
-    virtual int ReadBunchOfRequests(RequestsBunch &receiver) =0;
-};
-
-class ResultWriter{
-public:
-    virtual int write(ResultList& resultList)=0;
-};
-
-class StdWriter : public ResultWriter {
-public:
-	int write(ResultList& resultList) override;
+	int writeOneDayResult(OneDayResult& oneDayResult);
 };
 
 
-class StdReader: public RequestReader{
+class StdReader{
 public:
     StdReader()=default;
 
-    int ReadServersInfo(std::vector<ServerInfo> &receiver) override;
+    int ReadServersInfo(std::vector<ServerInfo> &receiver);
 
-    int ReadVMachineInfo(std::vector<VMInfo> &receiver) override ;
+    int ReadVMachineInfo(std::vector<VMInfo> &receiver);
 
-    int ReadBunchOfRequests(RequestsBunch &receiver) override;
+    int ReadAllRequests(RequestsBatch &receiver);
 
     int ReadOneDayRequests(OneDayRequest &receiver);
 };

@@ -6,8 +6,9 @@
 #include "algorithm"
 #include "cloud.h"
 #include "strategytools.h"
+#include "global.h"
 
-int cloudoperator::ouputOneDayRes(std::vector<Request> addReqVec, OneDayResult &receiver) {
+int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &receiver) {
     auto objSetCmp=[](const ServerObj* s1,const ServerObj* s2){
         return s1->info.model<s2->info.model;
     };
@@ -63,18 +64,6 @@ int cloudoperator::ouputOneDayRes(std::vector<Request> addReqVec, OneDayResult &
         receiver.migrationList.push_back(m);
     }
 
-//    for(auto& it:migrationMap){
-//        Migration m;
-//        m.virtualID=it.first->id;
-//        m.serverID=it.first->deployServerID;
-//        if(it.first->info.doubleNode==1){
-//            m.node=NODEAB;
-//        }else{
-//            m.node=it.first->deployNodes[0];
-//        }
-//        receiver.migrationList.push_back(m);
-//    }
-
     oldSize=serverObjList.size();
     migrationMap.clear();
     migrationVec.clear();
@@ -82,7 +71,7 @@ int cloudoperator::ouputOneDayRes(std::vector<Request> addReqVec, OneDayResult &
     return 0;
 }
 
-int cloudoperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
+int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
     auto it=migrationMap.find(vmObj);
     if(it!=migrationMap.end()){
         if(serverObjID==it->second.originServerID
@@ -98,7 +87,7 @@ int cloudoperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
     return 0;
 }
 
-int cloudoperator::migrateVMObj(ServerObj *serverObj, VMObj *vmObj) {
+int CloudOperator::markMigratedVMObj(ServerObj *serverObj, VMObj *vmObj) {
     originDeployInfo i;
     i.originServerID=vmObj->deployServerID;
     if(vmObj->info.doubleNode==1){
@@ -106,19 +95,70 @@ int cloudoperator::migrateVMObj(ServerObj *serverObj, VMObj *vmObj) {
     }else{
         i.originNodeIndex=vmObj->deployNodes[0];
     }
-    //globalCloud->delVMObjFromServerObj(vmObj->id);
     migrationMap.insert({vmObj,i});
 
     return 0;
 }
 
-int cloudoperator::deployVMObjInServerObj(ServerObj *serverObj, VMObj *vmObj, int nodeIndex) {
-    auto it=migrationMap.find(vmObj);
-    if(it!=migrationMap.end()){
-        globalCloud->delVMObjFromServerObj(vmObj->id);
-        migrationVec.push_back(vmObj);
+int CloudOperator::deployVMObjInNewServerObj(ServerObj *serverObj, VMObj *vmObj, int nodeIndex) {
+    int serverID=serverObj->id;
+    if(serverID!=-1){
+        LOGE("CloudOperator::deployVMObjInNewServerObj: deploy on a old serverObj!");
+        return -1;
     }
     serverObj->deployVM(nodeIndex,vmObj);
     return 0;
 }
+
+int CloudOperator::deployVMObjInFakeServerObj(ServerObj *serverObj, VMObj *vmObj, int nodeIndex) {
+    int serverID=serverObj->id;
+    if(serverID==-1||globalCloud->serverObjList[serverID]==serverObj){
+        LOGE("CloudOperator::deployVMObjInFakeServerObj: deploy on a new or real serverObj!");
+        return -1;
+    }
+    serverObj->deployVM(nodeIndex,vmObj);
+
+    return 0;
+}
+
+int CloudOperator::delVMObjInFakeServerObj(ServerObj *serverObj, int vmID) {
+    int serverID=serverObj->id;
+    if(serverID==-1||globalCloud->serverObjList[serverID]==serverObj){
+        LOGE("CloudOperator::deployVMObjInFakeServerObj: deploy on a new or real serverObj!");
+        return -1;
+    }
+    serverObj->delVM(vmID);
+
+    return 0;
+}
+
+int CloudOperator::deployNewServerObj(ServerObj* serverObj) {
+    int serverID=serverObj->id;
+    if(serverID!=-1){
+        LOGE("CloudOperator::deployNewServerObj: deploy a old serverObj!");
+        return -1;
+    }
+    for(auto mapIt:serverObj->vmObjMap){
+        VMObj* vmObj=mapIt.second;
+        auto it=migrationMap.find(vmObj);
+        if(it!=migrationMap.end()){
+            globalCloud->delVMObjFromServerObj(vmObj->id);
+            migrationVec.push_back(vmObj);
+        }
+    }
+
+    globalCloud->deployServerObj(*serverObj);
+
+    return 0;
+}
+
+ServerObj CloudOperator::getFakeServerObj(ServerObj *serverObj) {
+    return ServerObj(*serverObj);
+}
+
+ServerObj CloudOperator::getNewServerObj(ServerInfo serverInfo) {
+    return ServerObj(serverInfo);
+}
+
+
 

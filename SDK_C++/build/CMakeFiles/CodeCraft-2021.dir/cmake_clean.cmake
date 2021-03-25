@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/cloudoperator.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o"
+  "CMakeFiles/CodeCraft-2021.dir/src/global.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o"
   "CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o"

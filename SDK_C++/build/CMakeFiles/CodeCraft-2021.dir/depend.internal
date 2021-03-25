@@ -7,9 +7,10 @@ CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cloud.cpp
-CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o
+CMakeFiles/CodeCraft-2021.dir/src/cloudoperator.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/CloudOperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
@@ -17,28 +18,55 @@ CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/CloudOperator.cpp
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cloudoperator.cpp
 CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/dispatcher.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategy.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategytools.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.cpp
+CMakeFiles/CodeCraft-2021.dir/src/global.cpp.o
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategytools.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/global.cpp
 CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/dispatcher.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategy.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategytools.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/main.cpp
 CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/CloudOperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
@@ -46,6 +74,7 @@ CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp
 CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
@@ -60,7 +89,8 @@ CMakeFiles/CodeCraft-2021.dir/src/stdreadwriter.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/stdreadwriter.cpp
 CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/CloudOperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
@@ -69,10 +99,11 @@ CMakeFiles/CodeCraft-2021.dir/src/strategy.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategy.cpp
 CMakeFiles/CodeCraft-2021.dir/src/strategytools.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/CloudOperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
@@ -89,7 +120,8 @@ CMakeFiles/CodeCraft-2021.dir/src/vm.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vm.cpp
 CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/CloudOperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
@@ -97,7 +129,18 @@ CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.o
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
  /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vmdeployer.cpp
-CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/VMMigrater.h
- /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/VMMigrater.cpp
+CMakeFiles/CodeCraft-2021.dir/src/vmmigrater.cpp.o
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloud.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/global.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/strategytools.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmdeployer.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vmmigrater.h
+ /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vmmigrater.cpp

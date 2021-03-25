@@ -7,8 +7,9 @@
 #include "algorithm"
 #include "cmath"
 #include "strategytools.h"
+#include "global.h"
 
-int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
+int NewServerBuyer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<VMObj*> doubleNodeVMObj;
     std::vector<VMObj*> singleNodeVMObj;
     for(auto it:unhandledVMObj){
@@ -25,7 +26,7 @@ int NewServerDeployer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
     return 0;
 }
 
-int NewServerDeployer::learnModelInfo() {
+int NewServerBuyer::learnModelInfo() {
     //k-means
     struct infoUnit{
         int type=-1;
@@ -79,7 +80,7 @@ int NewServerDeployer::learnModelInfo() {
     return 0;
 }
 
-int NewServerDeployer::classify(std::vector<VMObj *> &vmObjVec, std::map<double, std::vector<VMObj *>> &receiver) {
+int NewServerBuyer::classify(std::vector<VMObj *> &vmObjVec, std::map<double, std::vector<VMObj *>> &receiver) {
     for(int i=0;i<vmObjVec.size();i++){
         double minDis=1000;
         double radio=(double)vmObjVec[i]->info.cpuNum/vmObjVec[i]->info.memorySize;
@@ -97,12 +98,12 @@ int NewServerDeployer::classify(std::vector<VMObj *> &vmObjVec, std::map<double,
 }
 
 //incomplete
-int NewServerDeployer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj) {
+int NewServerBuyer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj) {
     for(auto it:oldObj->vmObjMap){
         VMObj* vmObj=it.second;
         int deployNode=oldObj->vmObjDeployNodeMap[it.first];
         if(newObj->canDeployOnNode(deployNode,vmObj->info)){
-            newObj->deployVM(deployNode,vmObj);
+            cloudOperator.deployVMObjInNewServerObj(newObj,vmObj,deployNode);
         }else{
             return -1;
         }
@@ -110,7 +111,7 @@ int NewServerDeployer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newO
     return 0;
 }
 
-int NewServerDeployer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj) {
+int NewServerBuyer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj) {
     std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
     classify(doubleNodeVMObj,classifiedVMObjMap);
     auto Cmp=[](const VMObj* s1,const VMObj* s2){
@@ -128,12 +129,13 @@ int NewServerDeployer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVM
         for(int i=0;i<vmObjVec.size();i++){
             if(serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)){
                 //serverObj.deployVM(NODEAB,vmObjVec[i]);
-                rr.deployVMObjInServerObj(&serverObj,vmObjVec[i],NODEAB);
+                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], NODEAB);
             }else{
                 double ful=CalculateFullness(&serverObj);
                 if(ful>1.5){
                     j=0;
-                    globalCloud->deployServerObj(serverObj);
+                    cloudOperator.deployNewServerObj(&serverObj);
+                    //globalCloud->deployServerObj(serverObj);
                     serverObj=ServerObj(*serverCandidates[j]);
                 }
                 else{
@@ -146,7 +148,7 @@ int NewServerDeployer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVM
                     }
                     if(j==serverCandidates.size()){
                         j=0;
-                        globalCloud->deployServerObj(serverObj);
+                        cloudOperator.deployNewServerObj(&serverObj);
                         serverObj=ServerObj(*serverCandidates[j]);
                     }
                 }
@@ -155,7 +157,7 @@ int NewServerDeployer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVM
         }
 
         if(serverObj.vmObjMap.size()>0){
-            globalCloud->deployServerObj(serverObj);
+            cloudOperator.deployNewServerObj(&serverObj);
         }
     }
 
@@ -163,7 +165,7 @@ int NewServerDeployer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVM
     return 0;
 }
 
-int NewServerDeployer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj) {
+int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj) {
     std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
     classify(singleNodeVMObj, classifiedVMObjMap);
     auto Cmp=[](const VMObj* s1,const VMObj* s2){
@@ -183,17 +185,17 @@ int NewServerDeployer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVM
         for(int i=0;i<vmObjVec.size();i++){
             if(serverObj.canDeployOnSingleNode(nodeIndex,vmObjVec[i]->info)){
                 //serverObj.deployVM(nodeIndex,vmObjVec[i]);
-                rr.deployVMObjInServerObj(&serverObj,vmObjVec[i],nodeIndex);
+                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], nodeIndex);
                 nodeIndex=(nodeIndex+1)%2;
             }else if(serverObj.canDeployOnSingleNode(nodeIndex+1,vmObjVec[i]->info)){
                 //serverObj.deployVM(nodeIndex,vmObjVec[i]);
-                rr.deployVMObjInServerObj(&serverObj,vmObjVec[i],nodeIndex+1);
+                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], nodeIndex + 1);
             }
             else{
                 double ful=CalculateFullness(&serverObj);
                 if(ful>1.5){
                     j=0;
-                    globalCloud->deployServerObj(serverObj);
+                    cloudOperator.deployNewServerObj(&serverObj);
                     serverObj=ServerObj(*serverCandidates[j]);
                 }
                 else{
@@ -206,7 +208,7 @@ int NewServerDeployer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVM
                     }
                     if(j>=serverCandidates.size()){
                         j=0;
-                        globalCloud->deployServerObj(serverObj);
+                        cloudOperator.deployNewServerObj(&serverObj);
                         serverObj=ServerObj(*serverCandidates[j]);
                     }
                 }
@@ -216,7 +218,7 @@ int NewServerDeployer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVM
 
 
         if(serverObj.vmObjMap.size()>0){
-            globalCloud->deployServerObj(serverObj);
+            cloudOperator.deployNewServerObj(&serverObj);
         }
 
     }

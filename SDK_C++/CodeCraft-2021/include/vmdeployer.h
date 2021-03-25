@@ -13,6 +13,10 @@ public:
     int deploy(std::vector<VMObj*> &unhandledVMObj);
 
     int deployByFitness(std::vector<VMObj*> &unhandledVMObj);
+
+    int deployDoubleNodeVM();
+
+    int deploySingleNodeVM();
 };
 
 #endif //HUAWEI_CODECRAFT_VMDEPLOYER_H

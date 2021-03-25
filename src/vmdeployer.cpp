@@ -5,6 +5,7 @@
 #include "vmdeployer.h"
 #include "strategytools.h"
 #include "global.h"
+#include "algorithm"
 
 int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
     deployByFitness(unhandledVMObj);
@@ -14,6 +15,11 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
 int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<VMObj *> tmpAddReqSet;
 
+    auto Cmp=[](const VMObj* vm1,const VMObj* vm2){
+        return vm1->info.cpuNum+vm1->info.memorySize > vm2->info.cpuNum+vm2->info.memorySize;
+    };
+    std::sort(unhandledVMObj.begin(),unhandledVMObj.end(),Cmp);
+
     for(auto vmObj:unhandledVMObj){
         VMInfo vmInfo=vmObj->info;
         bool haveDeploy=false;
@@ -22,7 +28,8 @@ int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj) {
             int deployNode;
             if(it->canDeploy(vmInfo,deployNode)){
                 ServerObj tmpObj=*it;
-                tmpObj.deployVM(deployNode,vmObj);
+                cloudOperator.deployVMObjInFakeServerObj(&tmpObj,vmObj,deployNode);
+                //tmpObj.deployVM(deployNode,vmObj);
                 if(isDeployDecisionBetter(it, &tmpObj)){
                     cloudOperator.deployVMObj(it->id, deployNode, vmObj);
                     haveDeploy=true;

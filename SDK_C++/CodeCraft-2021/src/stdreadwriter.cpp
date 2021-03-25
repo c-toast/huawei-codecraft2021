@@ -63,14 +63,13 @@ int StdReader::ReadVMachineInfo(std::vector<VMInfo> &receiver) {
     return 0;
 }
 
-int StdReader::ReadBunchOfRequests(RequestsBunch &receiver) {
+int StdReader::ReadAllRequests(RequestsBatch &receiver) {
     int num;
     scanf("%d",&num);
-    receiver.dayNum = num;
     for(int i=0;i<num;i++) {
         OneDayRequest req;
         ReadOneDayRequests(req);
-        receiver.bunch.push_back(req);
+        receiver.push_back(req);
     }
     return 0;
 }
@@ -139,4 +138,26 @@ int StdWriter::write(ResultList& resultList) {
         }
     }
     return 0;
+}
+
+int StdWriter::writeOneDayResult(OneDayResult &oneDayResult) {
+    std::cout << "(purchase, " << oneDayResult.purchaseVec.size() << ")" << std::endl;
+    for (auto it:oneDayResult.purchaseVec) {
+        std::cout << "(" << it.serverName << ", " << it.num << ")" << std::endl;
+    }
+    std::cout << "(migration, " << oneDayResult.migrationList.size() << ")" << std::endl;
+    for (int j = 0; j < oneDayResult.migrationList.size(); j++) {
+        if (oneDayResult.migrationList[j].node!=NODEAB)
+            std::cout << "("<<oneDayResult.migrationList[j].virtualID << ", " << oneDayResult.migrationList[j].serverID << ", " << char(oneDayResult.migrationList[j].node+'A') << ")" << std::endl;
+        else
+            std::cout << "(" << oneDayResult.migrationList[j].virtualID << ", " << oneDayResult.migrationList[j].serverID  << ")" << std::endl;
+    }
+    for (int j = 0; j < oneDayResult.deployList.size(); j++) {
+        if (oneDayResult.deployList[j].node!=NODEAB)
+            std::cout << "(" << oneDayResult.deployList[j].serverID << ", " << char(oneDayResult.deployList[j].node+'A') << ")" << std::endl;
+        else
+            std::cout << "(" << oneDayResult.deployList[j].serverID << ")" << std::endl;
+    }
+    return 0;
+
 }

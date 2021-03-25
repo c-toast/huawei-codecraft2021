@@ -30,14 +30,6 @@ map
 readwriter.h
 ../include/readwriter.h
 
-../include/dispatcher.h
-cloud.h
-../include/cloud.h
-readwriter.h
-../include/readwriter.h
-strategy.h
-../include/strategy.h
-
 ../include/global.h
 server.h
 ../include/server.h
@@ -84,18 +76,6 @@ vm.h
 map
 -
 
-../include/strategy.h
-map
--
-string
--
-readwriter.h
-../include/readwriter.h
-global.h
-../include/global.h
-cmath
--
-
 ../include/strategytools.h
 server.h
 ../include/server.h
@@ -136,9 +116,13 @@ vm.h
 strategytools.h
 ../include/strategytools.h
 
-/home/ctoast/huawei-codecraft/src/main.cpp
-iostream
--
-dispatcher.h
-/home/ctoast/huawei-codecraft/src/dispatcher.h
+/home/ctoast/huawei-codecraft/src/vmdeployer.cpp
+vmdeployer.h
+/home/ctoast/huawei-codecraft/src/vmdeployer.h
+strategytools.h
+/home/ctoast/huawei-codecraft/src/strategytools.h
+global.h
+/home/ctoast/huawei-codecraft/src/global.h
+algorithm
+/home/ctoast/huawei-codecraft/src/algorithm
 

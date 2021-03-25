@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cloud.cpp" "/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.o"
   "/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cloudoperator.cpp" "/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir/src/cloudoperator.cpp.o"
   "/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.cpp" "/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.o"
+  "/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/global.cpp" "/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir/src/global.cpp.o"
   "/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/main.cpp" "/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir/src/main.cpp.o"
   "/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp" "/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir/src/newserverbuyer.cpp.o"
   "/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/server.cpp" "/home/ctoast/huawei-codecraft/SDK_C++/build/CMakeFiles/CodeCraft-2021.dir/src/server.cpp.o"

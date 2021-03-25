@@ -150,32 +150,32 @@ src/cloud.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloud.cpp.s
 .PHONY : src/cloud.cpp.s
 
-src/CloudOperator.o: src/CloudOperator.cpp.o
+src/cloudoperator.o: src/cloudoperator.cpp.o
 
-.PHONY : src/CloudOperator.o
+.PHONY : src/cloudoperator.o
 
 # target to build an object file
-src/CloudOperator.cpp.o:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.o
-.PHONY : src/CloudOperator.cpp.o
+src/cloudoperator.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloudoperator.cpp.o
+.PHONY : src/cloudoperator.cpp.o
 
-src/CloudOperator.i: src/CloudOperator.cpp.i
+src/cloudoperator.i: src/cloudoperator.cpp.i
 
-.PHONY : src/CloudOperator.i
+.PHONY : src/cloudoperator.i
 
 # target to preprocess a source file
-src/CloudOperator.cpp.i:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.i
-.PHONY : src/CloudOperator.cpp.i
+src/cloudoperator.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloudoperator.cpp.i
+.PHONY : src/cloudoperator.cpp.i
 
-src/CloudOperator.s: src/CloudOperator.cpp.s
+src/cloudoperator.s: src/cloudoperator.cpp.s
 
-.PHONY : src/CloudOperator.s
+.PHONY : src/cloudoperator.s
 
 # target to generate assembly for a file
-src/CloudOperator.cpp.s:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/CloudOperator.cpp.s
-.PHONY : src/CloudOperator.cpp.s
+src/cloudoperator.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/cloudoperator.cpp.s
+.PHONY : src/cloudoperator.cpp.s
 
 src/dispatcher.o: src/dispatcher.cpp.o
 
@@ -203,6 +203,33 @@ src/dispatcher.s: src/dispatcher.cpp.s
 src/dispatcher.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/dispatcher.cpp.s
 .PHONY : src/dispatcher.cpp.s
+
+src/global.o: src/global.cpp.o
+
+.PHONY : src/global.o
+
+# target to build an object file
+src/global.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/global.cpp.o
+.PHONY : src/global.cpp.o
+
+src/global.i: src/global.cpp.i
+
+.PHONY : src/global.i
+
+# target to preprocess a source file
+src/global.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/global.cpp.i
+.PHONY : src/global.cpp.i
+
+src/global.s: src/global.cpp.s
+
+.PHONY : src/global.s
+
+# target to generate assembly for a file
+src/global.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/global.cpp.s
+.PHONY : src/global.cpp.s
 
 src/main.o: src/main.cpp.o
 
@@ -447,32 +474,32 @@ src/vmdeployer.cpp.s:
 	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vmdeployer.cpp.s
 .PHONY : src/vmdeployer.cpp.s
 
-src/VMMigrater.o: src/VMMigrater.cpp.o
+src/vmmigrater.o: src/vmmigrater.cpp.o
 
-.PHONY : src/VMMigrater.o
+.PHONY : src/vmmigrater.o
 
 # target to build an object file
-src/VMMigrater.cpp.o:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.o
-.PHONY : src/VMMigrater.cpp.o
+src/vmmigrater.cpp.o:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vmmigrater.cpp.o
+.PHONY : src/vmmigrater.cpp.o
 
-src/VMMigrater.i: src/VMMigrater.cpp.i
+src/vmmigrater.i: src/vmmigrater.cpp.i
 
-.PHONY : src/VMMigrater.i
+.PHONY : src/vmmigrater.i
 
 # target to preprocess a source file
-src/VMMigrater.cpp.i:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.i
-.PHONY : src/VMMigrater.cpp.i
+src/vmmigrater.cpp.i:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vmmigrater.cpp.i
+.PHONY : src/vmmigrater.cpp.i
 
-src/VMMigrater.s: src/VMMigrater.cpp.s
+src/vmmigrater.s: src/vmmigrater.cpp.s
 
-.PHONY : src/VMMigrater.s
+.PHONY : src/vmmigrater.s
 
 # target to generate assembly for a file
-src/VMMigrater.cpp.s:
-	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/VMMigrater.cpp.s
-.PHONY : src/VMMigrater.cpp.s
+src/vmmigrater.cpp.s:
+	$(MAKE) -f CMakeFiles/CodeCraft-2021.dir/build.make CMakeFiles/CodeCraft-2021.dir/src/vmmigrater.cpp.s
+.PHONY : src/vmmigrater.cpp.s
 
 # Help Target
 help:
@@ -486,12 +513,15 @@ help:
 	@echo "... src/cloud.o"
 	@echo "... src/cloud.i"
 	@echo "... src/cloud.s"
-	@echo "... src/CloudOperator.o"
-	@echo "... src/CloudOperator.i"
-	@echo "... src/CloudOperator.s"
+	@echo "... src/cloudoperator.o"
+	@echo "... src/cloudoperator.i"
+	@echo "... src/cloudoperator.s"
 	@echo "... src/dispatcher.o"
 	@echo "... src/dispatcher.i"
 	@echo "... src/dispatcher.s"
+	@echo "... src/global.o"
+	@echo "... src/global.i"
+	@echo "... src/global.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -519,9 +549,9 @@ help:
 	@echo "... src/vmdeployer.o"
 	@echo "... src/vmdeployer.i"
 	@echo "... src/vmdeployer.s"
-	@echo "... src/VMMigrater.o"
-	@echo "... src/VMMigrater.i"
-	@echo "... src/VMMigrater.s"
+	@echo "... src/vmmigrater.o"
+	@echo "... src/vmmigrater.i"
+	@echo "... src/vmmigrater.s"
 .PHONY : help
 
 

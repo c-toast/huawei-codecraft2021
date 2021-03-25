@@ -10,32 +10,37 @@
 #include "map"
 #include "readwriter.h"
 
-class cloudoperator{
+class CloudOperator{
 public:
     int oldSize=0;
-
 
     struct originDeployInfo{
         int originServerID;
         int originNodeIndex;
     };
 
-    std::map<VMObj*,originDeployInfo> migrationMap;
-    std::vector<VMObj*> migrationVec;
-
-    int movVMObj();
+    std::map<VMObj*,originDeployInfo> migrationMap;//mark the vm to be migrated
+    std::vector<VMObj*> migrationVec;//record the order of migrated vm
 
     int deployVMObj(int serverObjID, int nodeIndex, int vmID);
 
     int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
 
-    int BuyServer();
+    int genOneDayOpeRes(std::vector<Request> addReqVec, OneDayResult &receiver);
 
-    int ouputOneDayRes(std::vector<Request>,OneDayResult &receiver);
+    int markMigratedVMObj(ServerObj* serverObj, VMObj* vmObj);
 
-    int migrateVMObj(ServerObj* serverObj,VMObj* vmObj);
+    ServerObj getFakeServerObj(ServerObj* serverObj);
 
-    int deployVMObjInServerObj(ServerObj* serverObj,VMObj* vmObj,int nodeIndex);
+    ServerObj getNewServerObj(ServerInfo serverInfo);
+
+    int deployVMObjInFakeServerObj(ServerObj* serverObj,VMObj* vmObj,int nodeIndex);
+
+    int delVMObjInFakeServerObj(ServerObj* serverObj, int vmID);
+
+    int deployVMObjInNewServerObj(ServerObj* serverObj, VMObj* vmObj, int nodeIndex);
+
+    int deployNewServerObj(ServerObj* ServerObj);
 };
 
 

@@ -10,15 +10,15 @@
 #include "vm.h"
 #include "readwriter.h"
 
-class NewServerDeployer{
+class NewServerBuyer{
 public:
     std::map<double,std::vector<ServerInfo*>> Clusters; //[radio][servercluster]
 
+    int buyAndDeploy(std::vector<VMObj*> &unhandledVMObj);
+
     int learnModelInfo();
 
-    int learnPosteriorInfo(RequestsBunch &requestsBunch);
-
-    int buyAndDeploy(std::vector<VMObj*> &unhandledVMObj);
+    int learnPosteriorInfo(RequestsBatch &requestsBunch);
 
     int buyAndDeployDoubleNode(std::vector<VMObj*> &unhandledVMObj);
 

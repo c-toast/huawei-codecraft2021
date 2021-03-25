@@ -116,6 +116,12 @@ int CloudOperator::deployVMObjInFakeServerObj(ServerObj *serverObj, VMObj *vmObj
         LOGE("CloudOperator::deployVMObjInFakeServerObj: deploy on a new or real serverObj!");
         return -1;
     }
+    auto it=serverObj->vmObjMap.find(vmObj->id);
+    if(it!=serverObj->vmObjMap.end()){
+        serverObj->vmObjMap.erase(it);
+        serverObj->vmObjDeployNodeMap.erase(vmObj->id);
+    }
+
     serverObj->deployVM(nodeIndex,vmObj);
 
     return 0;

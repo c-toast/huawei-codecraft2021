@@ -13,15 +13,11 @@
 #include "cloudoperator.h"
 #include "newserverbuyer.h"
 
-extern SimpleCloud* globalCloud;
-extern cloudoperator rr;
-extern VMDeployer osd;
-extern NewServerDeployer nsd;
 extern std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
 extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
-extern int ACCEPT_RANGE;
+#define ACCEPT_RANGE 5
 
-#define USAGESTATERO 0.7
+#define USAGESTATERO 1
 #define USAGESTATErO 0.3
 #define NODEBANLANCESTATERO 1
 
