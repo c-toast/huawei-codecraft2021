@@ -45,6 +45,10 @@ int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &
 
 int Strategy::HandleDel(Request &del, OneDayResult &receiver) {
     int machineId=del.vMachineID;
+    if(globalCloud->vmObjMap[machineId]->pairVMObj!=NULL){
+        globalCloud->vmObjMap[machineId]->pairVMObj->pairVMObj=NULL;
+    }
+
     globalCloud->delVMObjFromCloud(machineId);
     return 0;
 }

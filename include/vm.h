@@ -39,6 +39,9 @@ public:
     VMInfo info;
     int id;
     int deployServerID;
+
+    //need for better deploy
+    VMObj* pairVMObj=NULL;
 };
 
 

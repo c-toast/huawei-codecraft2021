@@ -81,6 +81,12 @@ int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 
         globalCloud->delVMObjFromServerObj(vmObj->id);
         migrationVec.push_back(vmObj);
+
+        //pair
+        if(vmObj->pairVMObj!=NULL){
+            vmObj->pairVMObj->pairVMObj=NULL;
+            vmObj->pairVMObj=NULL;
+        }
     }
 
     globalCloud->deployVMObj(serverObjID,nodeIndex,vmObj);
@@ -164,6 +170,14 @@ ServerObj CloudOperator::getFakeServerObj(ServerObj *serverObj) {
 
 ServerObj CloudOperator::getNewServerObj(ServerInfo serverInfo) {
     return ServerObj(serverInfo);
+}
+
+int CloudOperator::deployPairVMObj(int serverObjID, VMObj *vmObj1, VMObj *vmObj2) {
+    deployVMObj(serverObjID,NODEA,vmObj1);
+    deployVMObj(serverObjID,NODEB,vmObj2);
+    vmObj1->pairVMObj=vmObj2;
+    vmObj2->pairVMObj=vmObj1;
+    return 0;
 }
 
 

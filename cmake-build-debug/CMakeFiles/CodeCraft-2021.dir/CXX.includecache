@@ -133,6 +133,8 @@ utils.h
 ../include/vmdeployer.h
 vector
 -
+map
+-
 vm.h
 ../include/vm.h
 
