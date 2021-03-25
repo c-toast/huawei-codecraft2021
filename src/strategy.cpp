@@ -3,14 +3,7 @@
 //
 
 #include "strategy.h"
-#include "cloud.h"
-#include "utils.h"
-#include "cstring"
-#include "strategytools.h"
-#include "newserverbuyer.h"
 #include "vmdeployer.h"
-#include <cmath>
-#include <algorithm>
 #include <cloudoperator.h>
 #include "global.h"
 

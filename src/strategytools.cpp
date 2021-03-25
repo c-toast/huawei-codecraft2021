@@ -4,11 +4,8 @@
 
 #include "strategytools.h"
 
-
-
 std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
 std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
-int ACCEPT_RANGE=10;
 
 MultiDimension calSingleNodeUsageState(ServerObj* obj, int NodeIndex){
     Resource remainingResource= obj->nodes[NodeIndex].remainingResource;

@@ -15,7 +15,7 @@
 
 extern std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
 extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
-extern int ACCEPT_RANGE;
+#define ACCEPT_RANGE 10
 
 #define USAGESTATERO 0.7
 #define USAGESTATErO 0.3

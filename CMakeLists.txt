@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # 查找当前目录下的所有源文件
 # 并将名称保存到 DIR_LIB_SRCS 变量
-aux_source_directory(./src DIR_SRCS)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
 
 # 指定生成目标
 add_executable(CodeCraft-2021 ${DIR_SRCS} src/strategy.cpp src/vmmigrater.cpp src/vmdeployer.cpp)
