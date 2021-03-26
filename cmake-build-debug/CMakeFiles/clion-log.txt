@@ -1,4 +1,4 @@
-/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/ctoast/huawei-codecraft
+/home/ctoast/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7148.70/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/ctoast/huawei-codecraft
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/ctoast/huawei-codecraft/cmake-build-debug

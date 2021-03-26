@@ -212,9 +212,8 @@ int VMDeployer::forceDeploy(std::vector<DoubleNodeVMWrapper> &unhandledDoubleVMO
             bool haveDeploy = false;
             for (auto &it:globalCloud->serverObjList) {
                 std::string serverModel = it->info.model;
-                int deployNode;
                 if (it->canDeployOnDoubleNode(vmInfo)) {
-                    cloudOperator.deployVMObj(it->id, deployNode, vmObj);
+                    cloudOperator.deployVMObj(it->id, NODEAB, vmObj);
                     haveDeploy = true;
                     break;
                 }

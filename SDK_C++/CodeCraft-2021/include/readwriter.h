@@ -11,6 +11,8 @@
 
 #include "server.h"
 #include "vm.h"
+#include <iostream>
+
 
 #define ADD 1
 #define DEL 0
@@ -49,8 +51,11 @@ typedef struct{
 
 typedef std::vector<OneDayResult> ResultList;
 
+
 class StdWriter{
 public:
+    static std::ostream* stream;
+
 	int write(ResultList& resultList);
 
 	int writeOneDayResult(OneDayResult& oneDayResult);
@@ -60,6 +65,8 @@ public:
 class StdReader{
 public:
     StdReader()=default;
+
+    static FILE* file;
 
     int ReadServersInfo(std::vector<ServerInfo> &receiver);
 

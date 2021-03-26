@@ -75,6 +75,8 @@ server.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
 vm.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+iostream
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
 utility
@@ -181,6 +183,8 @@ iostream
 -
 dispatcher.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.h
+fstream
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp
 newserverbuyer.h

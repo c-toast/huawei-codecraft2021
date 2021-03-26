@@ -4,9 +4,9 @@
 
 int main() {
     //StdWriter::stream=&std::cout; StdReader::file=stdin;
-    std::ofstream stream("/home/ctoast/huawei-codecraft/cmake-build-debug/simple-result.txt",std::fstream::out);
-    StdWriter::stream=&stream;
-    StdReader::file=fopen("/home/ctoast/huawei-codecraft/cmake-build-debug/training-1.txt","r");
+//    std::ofstream stream("/home/ctoast/huawei-codecraft/cmake-build-debug/simple-result.txt",std::fstream::out);
+//    StdWriter::stream=&stream;
+//    StdReader::file=fopen("/home/ctoast/huawei-codecraft/cmake-build-debug/training-1.txt","r");
 
     initAll();
     VMDeployer defaultVMDeployer;
