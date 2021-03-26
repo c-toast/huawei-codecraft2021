@@ -127,7 +127,7 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
         getNodeRemainingResource(NODEA,resA);
         getNodeRemainingResource(NODEA,resB);
         //may have problem here
-        if(resA.memorySize>resB.memorySize&&resA.cpuNum>resB.cpuNum){
+        if(CalResourceMagnitude(resA)>CalResourceMagnitude(resB)){
             deployNode=NODEA;
         }else{
             deployNode=NODEB;

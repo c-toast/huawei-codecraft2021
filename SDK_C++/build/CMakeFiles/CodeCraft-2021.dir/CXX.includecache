@@ -75,6 +75,8 @@ server.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
 vm.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
+iostream
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/server.h
 utility
@@ -109,10 +111,16 @@ cloudoperator.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/cloudoperator.h
 newserverbuyer.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/newserverbuyer.h
+array
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/utils.h
 iostream
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/iostream
+vector
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vector
+array
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/array
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/vm.h
 string
@@ -173,6 +181,8 @@ iostream
 -
 dispatcher.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.h
+fstream
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp
 newserverbuyer.h
@@ -217,6 +227,12 @@ strategytools.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/strategytools.h
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/utils.cpp
+array
+-
+utils.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/utils.h
+cmath
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cmath
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/vm.cpp
 vm.h
