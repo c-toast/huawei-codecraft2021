@@ -17,6 +17,9 @@ public:
     int migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
 
     int migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
+
+    int migrateByVMNum(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
+
 };
 
 

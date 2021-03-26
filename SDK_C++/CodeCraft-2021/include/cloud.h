@@ -41,6 +41,10 @@ public:
     int delVMObjFromServerObj(int vmID);
 
     int renewServerID(int start);
+
+
+    Resource ServerResource=Resource(0,0);
+    Resource VMResource=Resource(0,0);
 };
 
 

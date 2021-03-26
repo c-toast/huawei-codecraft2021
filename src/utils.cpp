@@ -13,11 +13,13 @@ int Resource::allocResource(Resource& requiredResource){
         LOGE("allocation resource exceeds the limit");
         exit(-1);
     }
+    return 0;
 }
 
 int Resource::freeResource(Resource& requiredResource){
     this->cpuNum+=requiredResource.cpuNum;
     this->memorySize+=requiredResource.memorySize;
+    return 0;
 }
 
 //double CalDistance(std::vector<double> coordinate1, std::vector<double> coordinate2) {

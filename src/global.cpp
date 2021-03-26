@@ -77,6 +77,7 @@ int initAll(){
     initCloud();
     initFitness();
     initAllRequest();
+    return 0;
 }
 
 

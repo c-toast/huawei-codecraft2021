@@ -147,12 +147,16 @@ std::array<double,2> BalanceState::calNodeBalanceState(ServerObj *obj) {
     return ret;
 }
 
-bool BalanceState::isServerBalanceInSD(ServerObj *serverObj, int nodeIndex, double R0) {
+bool BalanceState::isServerBalanceInSD(ServerObj *serverObj, double R0) {
     std::array<double,2> d=BalanceState::calNodeBalanceState(serverObj);
     return isInSD(d,R0);
 }
 
-bool BalanceState::isServerBalanceInAD(ServerObj *serverObj, int nodeIndex, double r0) {
+bool BalanceState::isServerBalanceInAD(ServerObj *serverObj, double r0) {
     std::array<double,2> d=BalanceState::calNodeBalanceState(serverObj);
     return isInAD(d,r0);
+}
+
+bool BalanceState::isServerBalanceInASD(ServerObj *serverObj, double R0, double r0) {
+    return isServerBalanceInSD(serverObj,R0)||isServerBalanceInAD(serverObj,r0);
 }

@@ -19,7 +19,7 @@ extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][s
 #define ACCEPT_RANGE 5
 
 #define USAGESTATE_RO 1
-#define NODEBANLANCESTATERO 1
+#define BALANCESTATE_R0 1
 
 
 class UsageState{
@@ -34,9 +34,12 @@ public:
 };
 
 class BalanceState{
-    static bool isServerBalanceInSD(ServerObj* serverObj,int nodeIndex,double R0);
+public:
+    static bool isServerBalanceInSD(ServerObj* serverObj,double R0);
 
-    static bool isServerBalanceInAD(ServerObj* serverObj,int nodeIndex,double r0);
+    static bool isServerBalanceInAD(ServerObj* serverObj,double r0);
+
+    static bool isServerBalanceInASD(ServerObj* serverObj,double R0,double r0);
 
     static std::array<double,2> calNodeBalanceState(ServerObj* obj);
 };

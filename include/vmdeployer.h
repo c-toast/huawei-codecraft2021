@@ -20,11 +20,13 @@ int separateUnhandledVM(std::vector<VMObj *> &unhandledSingleVMObj,std::vector<D
 
 int aggregateUnhandledVM(std::vector<VMObj *> &unhandledSingleVMObj,std::vector<DoubleNodeVMWrapper>& unhandledDoubleNodeVMObj);
 
+bool isSimiliar(VMInfo& info1,VMInfo& info2);
+
 class VMDeployer{
 public:
     int deploy(std::vector<VMObj*> &unhandledVMObj);
 
-    int deployDoubleNodeVM(std::vector<DoubleNodeVMWrapper>& unhandledDoubleVMObj);
+    int deployDoubleNodeVM(std::vector<DoubleNodeVMWrapper>& wp1);
 
     int deploySingleNodeVM(std::vector<VMObj *> &unhandledSingleVMObj);
 

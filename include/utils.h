@@ -20,8 +20,8 @@
 #define DOUBLEDEPLOY 1
 
 struct Resource{
-    int cpuNum;
-    int memorySize;
+    long long int cpuNum;
+    long long int memorySize;
 
     Resource()=default;
 
