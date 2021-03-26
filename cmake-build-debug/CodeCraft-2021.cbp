@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6"/>
 	<Project>
-		<Option title="huawei_codecraft"/>
+		<Option title="CodeCraft-2021"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
 		<Option virtualFolders="CMake Files\;"/>
@@ -38,8 +38,8 @@
 				</MakeCommands>
 			</Target>
 			<Target title="CodeCraft-2021">
-				<Option output="/home/ctoast/huawei-codecraft/cmake-build-debug/CodeCraft-2021" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/ctoast/huawei-codecraft/cmake-build-debug"/>
+				<Option output="/home/ctoast/huawei-codecraft/bin/CodeCraft-2021" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ctoast/huawei-codecraft/cmake-build-debug/../bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -61,8 +61,8 @@
 				</MakeCommands>
 			</Target>
 			<Target title="CodeCraft-2021/fast">
-				<Option output="/home/ctoast/huawei-codecraft/cmake-build-debug/CodeCraft-2021" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/ctoast/huawei-codecraft/cmake-build-debug"/>
+				<Option output="/home/ctoast/huawei-codecraft/bin/CodeCraft-2021" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ctoast/huawei-codecraft/cmake-build-debug/../bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>

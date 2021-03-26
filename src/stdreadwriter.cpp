@@ -6,25 +6,27 @@
 #include "cstring"
 #include <iostream>
 
-int StdReader::ReadServersInfo(std::vector<ServerInfo> &receiver) {
+FILE* StdReader::file=stdin;
+std::ostream* StdWriter::stream=&std::cout;
 
+int StdReader::ReadServersInfo(std::vector<ServerInfo> &receiver) {
     int num;
-    scanf("%d",&num);
+    fscanf(file,"%d",&num);
     char model[21];
     int cpuNum,memorySize,hardwareCost,energyCost;
 
-    getchar();
+    fgetc(file);
     for(int i=0;i<num;i++) {
-        getchar();
+        fgetc(file);
         for (int j = 0;; j++) {
-            scanf("%c", &model[j]);
+            fscanf(file,"%c", &model[j]);
             if (model[j] == ',') {
                 model[j] = '\0';
                 break;
             }
         }
-        scanf("%d, %d, %d, %d)", &cpuNum, &memorySize, &hardwareCost, &energyCost);
-        getchar();
+        fscanf(file,"%d, %d, %d, %d)", &cpuNum, &memorySize, &hardwareCost, &energyCost);
+        fgetc(file);
 
         ServerInfo info(model,cpuNum,memorySize,hardwareCost,energyCost);
         receiver.push_back(info);
@@ -36,24 +38,24 @@ int StdReader::ReadServersInfo(std::vector<ServerInfo> &receiver) {
 int StdReader::ReadVMachineInfo(std::vector<VMInfo> &receiver) {
 
     int num;
-    scanf("%d",&num);
+    fscanf(file,"%d",&num);
     VMInfo info;
 
     char model[21];
     int cpuNum,memorySize,doubleNode;
 
-    getchar();
+    fgetc(file);
     for(int i=0;i<num;i++) {
-        getchar();
+        fgetc(file);
         for (int j = 0;; j++) {
-            scanf("%c", &model[j]);
+            fscanf(file,"%c", &model[j]);
             if (model[j] == ',') {
                 model[j] = '\0';
                 break;
             }
         }
-        scanf("%d, %d, %d)", &cpuNum, &memorySize, &doubleNode);
-        getchar();
+        fscanf(file,"%d, %d, %d)", &cpuNum, &memorySize, &doubleNode);
+        fgetc(file);
 
         VMInfo info(model,cpuNum,memorySize,doubleNode);
         receiver.push_back(info);
@@ -65,7 +67,7 @@ int StdReader::ReadVMachineInfo(std::vector<VMInfo> &receiver) {
 
 int StdReader::ReadAllRequests(RequestsBatch &receiver) {
     int num;
-    scanf("%d",&num);
+    fscanf(file,"%d",&num);
     for(int i=0;i<num;i++) {
         OneDayRequest req;
         ReadOneDayRequests(req);
@@ -77,15 +79,15 @@ int StdReader::ReadAllRequests(RequestsBatch &receiver) {
 int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
 
     int num;
-    scanf("%d",&num);
+    fscanf(file,"%d",&num);
 
-    getchar();
+    fgetc(file);
     for(int i=0;i<num;i++) {
-        getchar();
+        fgetc(file);
         Request req;
         char opStr[4];
         for (int j = 0;; j++) {
-            scanf("%c", &opStr[j]);
+            fscanf(file,"%c", &opStr[j]);
             if (opStr[j] == ',') {
                 opStr[j] = '\0';
                 break;
@@ -93,23 +95,23 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
         }
         if(strcmp(opStr,"add")==0){
             req.op=ADD;
-            getchar();
+            fgetc(file);
             char vMachineModel[21];
             for (int j = 0;; j++) {
-                scanf("%c", &vMachineModel[j]);
+                fscanf(file,"%c", &vMachineModel[j]);
                 if (vMachineModel[j] == ',') {
                     vMachineModel[j] = '\0';
                     break;
                 }
             }
             req.vMachineModel=std::string(vMachineModel);
-            scanf("%d)", &req.vMachineID);
+            fscanf(file,"%d)", &req.vMachineID);
         }
         else{
             req.op=DEL;
-            scanf("%d)", &req.vMachineID);
+            fscanf(file,"%d)", &req.vMachineID);
         }
-        getchar();
+        fgetc(file);
         receiver.push_back(req);
     }
 
@@ -119,22 +121,22 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
 int StdWriter::write(ResultList& resultList) {
     int days = resultList.size();
     for (int i = 0; i < days; i++) {
-        std::cout << "(purchase, " << resultList[i].purchaseVec.size() << ")" << std::endl;
+        *stream << "(purchase, " << resultList[i].purchaseVec.size() << ")" << std::endl;
         for (auto it:resultList[i].purchaseVec) {
-            std::cout << "(" << it.serverName << ", " << it.num << ")" << std::endl;
+            *stream << "(" << it.serverName << ", " << it.num << ")" << std::endl;
         }
-        std::cout << "(migration, " << resultList[i].migrationList.size() << ")" << std::endl;
+        *stream << "(migration, " << resultList[i].migrationList.size() << ")" << std::endl;
         for (int j = 0; j < resultList[i].migrationList.size(); j++) {
             if (resultList[i].migrationList[j].node!=NODEAB)
-                std::cout << "("<<resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID << ", " << char(resultList[i].migrationList[j].node+'A') << ")" << std::endl;
+                *stream << "("<<resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID << ", " << char(resultList[i].migrationList[j].node+'A') << ")" << std::endl;
             else
-                std::cout << "(" << resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID  << ")" << std::endl;
+                *stream << "(" << resultList[i].migrationList[j].virtualID << ", " << resultList[i].migrationList[j].serverID  << ")" << std::endl;
         }
         for (int j = 0; j < resultList[i].deployList.size(); j++) {
             if (resultList[i].deployList[j].node!=NODEAB)
-                std::cout << "(" << resultList[i].deployList[j].serverID << ", " << char(resultList[i].deployList[j].node+'A') << ")" << std::endl;
+                *stream << "(" << resultList[i].deployList[j].serverID << ", " << char(resultList[i].deployList[j].node+'A') << ")" << std::endl;
             else
-                std::cout << "(" << resultList[i].deployList[j].serverID << ")" << std::endl;
+                *stream << "(" << resultList[i].deployList[j].serverID << ")" << std::endl;
         }
     }
     return 0;
