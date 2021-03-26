@@ -41,6 +41,9 @@ public:
     int deployVMObjInNewServerObj(ServerObj* serverObj, VMObj* vmObj, int nodeIndex);
 
     int deployNewServerObj(ServerObj* ServerObj);
+
+    //pair
+    int deployPairVMObj(int serverObjID, VMObj* vmObj1, VMObj* vmObj2);
 };
 
 

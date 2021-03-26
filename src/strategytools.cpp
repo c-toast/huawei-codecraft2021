@@ -61,10 +61,9 @@ int CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo, double &fitnessReceiver) 
 }
 
 bool isInSD(std::array<double,2> vec, double R0){
-    double dis1,dis2,dis3;
+    double dis1,dis2;
     dis1=CalDistance(vec,{R0,1-R0});
     dis2=CalDistance(vec,{1-R0,R0});
-    dis3=CalDistance(vec,{1,1});
     if(dis1<=R0&&dis2<=R0){
         return true;
     }
@@ -144,7 +143,7 @@ std::array<double,2> BalanceState::calNodeBalanceState(ServerObj *obj) {
     std::array<double,2> usageStateB=UsageState::calSingleNodeUsageState(obj, NODEB);
     std::array<double,2> ret;
     ret[0]=CalDistance(usageStateA);
-    ret[1]=CalDistance(usageStateA);
+    ret[1]=CalDistance(usageStateB);
     return ret;
 }
 

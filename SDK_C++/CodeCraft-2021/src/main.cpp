@@ -2,8 +2,8 @@
 #include "dispatcher.h"
 
 int main() {
-    //freopen("./training-1.txt","r",stdin);
-    //freopen("./simple-result.txt","w",stdout);
+//    freopen("./training-1.txt","r",stdin);
+//    freopen("./simple-result.txt","w",stdout);
     initAll();
     VMDeployer defaultVMDeployer;
     NewServerBuyer defaultServerBuyer; defaultServerBuyer.learnModelInfo();

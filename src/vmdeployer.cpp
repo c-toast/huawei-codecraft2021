@@ -21,7 +21,7 @@ int separateUnhandledVM(std::vector<VMObj *> &unhandledSingleVMObj,std::vector<D
                 continue;;
             }
             std::string model=unhandledSingleVMObj[i]->info.model;
-            int j=i+1;
+            long unsigned int j=i+1;
             for(;j<unhandledSingleVMObj.size();j++){
                 if(unhandledSingleVMObj[j]->info.model==model){
                     DoubleNodeVMWrapper w(unhandledSingleVMObj[i],unhandledSingleVMObj[j],true);
@@ -36,15 +36,17 @@ int separateUnhandledVM(std::vector<VMObj *> &unhandledSingleVMObj,std::vector<D
         }
     }
     unhandledSingleVMObj=singleVMObj;
+    return 0;
 }
 
-int aggregateUnhandledVM(std::vector<VMObj *> &unhandledSingleVMObj,std::vector<DoubleNodeVMWrapper>& unhandledDoubleNodeVMObj){
-    for(auto& it:unhandledDoubleNodeVMObj){
+int aggregateUnhandledVM(std::vector<VMObj *> &unhandledSingleVMObj,std::vector<DoubleNodeVMWrapper>& unhandledDoubleNodeVMObj) {
+    for (auto &it:unhandledDoubleNodeVMObj) {
         unhandledSingleVMObj.push_back(it.vm1);
-        if(it.isPair){
+        if (it.isPair) {
             unhandledSingleVMObj.push_back(it.vm2);
         }
     }
+    return 0;
 }
 
 int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
@@ -53,6 +55,7 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
     deployDoubleNodeVM(unhandledDoubleVMObj);
     deploySingleNodeVM(unhandledVMObj);
     aggregateUnhandledVM(unhandledVMObj,unhandledDoubleVMObj);
+    return 0;
 }
 
 
@@ -85,7 +88,7 @@ int VMDeployer::deployByAcceptableUsageState(std::vector<VMObj *> &unhandledVMOb
         }
     }
     unhandledVMObj = tmpAddReqSet;
-
+    return 0;
 }
 
 int VMDeployer::forceDeploy(std::vector<VMObj *> &unhandledVMObj) {
@@ -197,7 +200,7 @@ int VMDeployer::deployByAcceptableUsageState(std::vector<DoubleNodeVMWrapper> &u
         }
     }
     unhandledDoubleVMObj = tmpdoubleVMSet;
-
+    return 0;
 }
 
 int VMDeployer::forceDeploy(std::vector<DoubleNodeVMWrapper> &unhandledDoubleVMObj) {

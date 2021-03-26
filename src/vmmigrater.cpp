@@ -8,6 +8,7 @@
 #define MIGRATER_USAGESTATE_r0 0.3
 
 int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
+    std::vector<ServerObj*> serverObjList=globalCloud->serverObjList;
 
     for(auto serverIt:globalCloud->serverObjList){
         if(availableMigrateTime == 0){
