@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/utils_tes.dir/utils.cpp.o CMakeFiles/utils_tes.dir/utils_test.cpp.o  -o utils_tes   -L/home/ctoast/huawei-codecraft/googletest  -Wl,-rpath,/home/ctoast/huawei-codecraft/googletest lib/libgtestd.a -lpthread 
