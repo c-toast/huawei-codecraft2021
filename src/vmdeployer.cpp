@@ -19,24 +19,24 @@ int deployServerCmp(ServerObj* s1, ServerObj* s2){
 }
 
 int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
-//    auto Cmp=[](const VMObj* vm1,const VMObj* vm2){
-//        return vm1->info.cpuNum+vm1->info.memorySize > vm2->info.cpuNum+vm2->info.memorySize;
-//    };
-//    std::sort(unhandledVMObj.begin(),unhandledVMObj.end(),Cmp);
-//
+    auto Cmp=[](const VMObj* vm1,const VMObj* vm2){
+        return vm1->info.cpuNum+vm1->info.memorySize > vm2->info.cpuNum+vm2->info.memorySize;
+    };
+    std::sort(unhandledVMObj.begin(),unhandledVMObj.end(),Cmp);
+
     DeployerServerList=globalCloud->serverObjList;
     std::sort(DeployerServerList.begin(), DeployerServerList.end(), deployServerCmp);
 //
-//    deployByAcceptableUsageState(unhandledVMObj, 1);
+    deployByAcceptableUsageState(unhandledVMObj, 1);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.8);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.5);
-//    forceDeploy(unhandledVMObj);
+    forceDeploy(unhandledVMObj);
 
-    std::vector<DoubleNodeVMWrapper> unhandledDoubleVMObj;
-    separateUnhandledVM(unhandledVMObj,unhandledDoubleVMObj);
-    deployDoubleNodeVM(unhandledDoubleVMObj);
-    deploySingleNodeVM(unhandledVMObj);
-    aggregateUnhandledVM(unhandledVMObj,unhandledDoubleVMObj);
+//    std::vector<DoubleNodeVMWrapper> unhandledDoubleVMObj;
+//    separateUnhandledVM(unhandledVMObj,unhandledDoubleVMObj);
+//    deployDoubleNodeVM(unhandledDoubleVMObj);
+//    deploySingleNodeVM(unhandledVMObj);
+//    aggregateUnhandledVM(unhandledVMObj,unhandledDoubleVMObj);
     return 0;
 }
 

@@ -42,6 +42,7 @@ public:
 
     int renewServerID(int start);
 
+    int total_day;
 
     Resource ServerResource=Resource(0,0);
     Resource VMResource=Resource(0,0);

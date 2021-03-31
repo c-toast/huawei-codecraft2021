@@ -77,6 +77,7 @@ int initAll(){
     initCloud();
     initFitness();
     initAllRequest();
+    globalCloud->total_day=allRequest.size();
     return 0;
 }
 
