@@ -25,27 +25,17 @@ public:
 
     Cloud()=default;
 
-    int createServerObj(ServerInfo &serverInfo);
+    //int createServerObj(ServerInfo &serverInfo);
 
     int deployServerObj(ServerObj C);
 
-    VMObj * createVMObj(int vmID, std::string model);
-
-    //nodeIndex can be NODEA NODEB or NODEAB
-    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
+    VMObj* createVMObj(int vmID, std::string model);
 
     int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
 
     int delVMObjFromCloud(int vmID);
 
     int delVMObjFromServerObj(int vmID);
-
-    int renewServerID(int start);
-
-    int total_day;
-
-    Resource ServerResource=Resource(0,0);
-    Resource VMResource=Resource(0,0);
 };
 
 

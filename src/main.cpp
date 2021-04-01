@@ -1,16 +1,14 @@
 #include <iostream>
 #include "dispatcher.h"
-#include <fstream>
+#include "global.h"
 
 int main() {
-    //StdWriter::stream=&std::cout; StdReader::file=stdin;
-//    std::ofstream stream("/home/ctoast/huawei-codecraft/cmake-build-debug/simple-result.txt",std::fstream::out);
-//    StdWriter::stream=&stream;
-//    StdReader::file=fopen("/home/ctoast/huawei-codecraft/cmake-build-debug/training-2.txt","r");
+//    reader.file=fopen("/home/ctoast/huawei-codecraft/bin/training-1.txt","r");
+//    writer.file=fopen("/home/ctoast/huawei-codecraft/bin/result.txt","w");
 
     initAll();
     VMDeployer defaultVMDeployer;
-    NewServerBuyer defaultServerBuyer; defaultServerBuyer.learnModelInfo();
+    NewServerBuyer defaultServerBuyer;
     VMMigrater defaultVMMigrater;
 
     Strategy strategy(&defaultVMDeployer,&defaultServerBuyer,&defaultVMMigrater);

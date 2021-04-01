@@ -20,7 +20,6 @@ public:
 
     int dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &receiver);
 
-    int HandleDel(Request &del, OneDayResult &receiver);
 public:
     VMDeployer* vmDeployer;
     NewServerBuyer* serverBuyer;

@@ -13,7 +13,6 @@
 #include "vm.h"
 #include <iostream>
 
-
 #define ADD 1
 #define DEL 0
 
@@ -54,7 +53,7 @@ typedef std::vector<OneDayResult> ResultList;
 
 class StdWriter{
 public:
-    static std::ostream* stream;
+    FILE *file=stdout;
 
 	int write(ResultList& resultList);
 
@@ -66,7 +65,7 @@ class StdReader{
 public:
     StdReader()=default;
 
-    static FILE* file;
+    FILE* file=stdin;
 
     int ReadServersInfo(std::vector<ServerInfo> &receiver);
 

@@ -18,8 +18,9 @@ public:
 
     int migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
 
-    int migrateByVMNum(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
+    int initWhenNewBatchCome(){return 0;}
 
+    int initWhenNewDayStart();
 };
 
 

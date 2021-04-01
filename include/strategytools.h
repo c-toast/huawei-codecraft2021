@@ -16,10 +16,6 @@
 
 extern std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
 extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
-#define ACCEPT_RANGE 5
-
-#define USAGESTATE_RO 1
-#define BALANCESTATE_R0 1
 
 
 class UsageState{

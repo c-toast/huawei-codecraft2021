@@ -12,7 +12,7 @@
 
 class CloudOperator{
 public:
-    int oldSize=0;
+    int oldServerListSize=0;
 
     struct originDeployInfo{
         int originServerID;
@@ -42,8 +42,7 @@ public:
 
     int deployNewServerObj(ServerObj* ServerObj);
 
-    //pair
-    int deployPairVMObj(int serverObjID, VMObj* vmObj1, VMObj* vmObj2);
+
 };
 
 

@@ -5,12 +5,17 @@
 #include "dispatcher.h"
 #include "global.h"
 
-extern Cloud* globalCloud;
-
 int Dispatcher::run() {
-    StdWriter writer;
     ResultList res;
-    //currently it directly handle all request
+    allRequest.clear();
+    reader.ReadAllRequests(allRequest);
+
+    totalDay=allRequest.size();
+    strategy->serverBuyer->learnModelInfo();
+
+    strategy->serverBuyer->initWhenNewBatchCome();
+    strategy->vmMigrater->initWhenNewBatchCome();
+    strategy->vmDeployer->initWhenNewBatchCome();
     strategy->dispatch(allRequest,res);
     writer.write(res);
 

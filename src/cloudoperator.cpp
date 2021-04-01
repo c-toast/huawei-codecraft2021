@@ -13,13 +13,18 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
         return s1->info.model<s2->info.model;
     };
     auto& serverObjList=globalCloud->serverObjList;
-    if(serverObjList.size()>oldSize){
-        std::sort(serverObjList.begin()+oldSize, serverObjList.end(), objSetCmp);
+    if(serverObjList.size() > oldServerListSize){
+        std::sort(serverObjList.begin() + oldServerListSize, serverObjList.end(), objSetCmp);
+    }
+    //renew server id;
+    for(int i=oldServerListSize; i < serverObjList.size(); i++){
+        serverObjList[i]->id=i;
+        for(auto& it:serverObjList[i]->vmObjMap){
+            it.second->deployServerID=i;
+        }
     }
 
-    globalCloud->renewServerID(oldSize);
-
-    for(int i=oldSize; i < serverObjList.size();){
+    for(int i=oldServerListSize; i < serverObjList.size();){
         std::string model=serverObjList[i]->info.model;
         Purchase p;
         p.serverName=model;
@@ -64,7 +69,7 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
         receiver.migrationList.push_back(m);
     }
 
-    oldSize=serverObjList.size();
+    oldServerListSize=serverObjList.size();
     migrationMap.clear();
     migrationVec.clear();
 
@@ -170,14 +175,6 @@ ServerObj CloudOperator::getFakeServerObj(ServerObj *serverObj) {
 
 ServerObj CloudOperator::getNewServerObj(ServerInfo serverInfo) {
     return ServerObj(serverInfo);
-}
-
-int CloudOperator::deployPairVMObj(int serverObjID, VMObj *vmObj1, VMObj *vmObj2) {
-    deployVMObj(serverObjID,NODEA,vmObj1);
-    deployVMObj(serverObjID,NODEB,vmObj2);
-    vmObj1->pairVMObj=vmObj2;
-    vmObj2->pairVMObj=vmObj1;
-    return 0;
 }
 
 

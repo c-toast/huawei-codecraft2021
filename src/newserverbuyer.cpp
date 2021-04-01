@@ -73,8 +73,8 @@ int NewServerBuyer::learnModelInfo() {
 
     auto Cmp=[](const ServerInfo* s1,const ServerInfo* s2){
         double costPer1,costPer2;
-        costPer1 = 1.0*(s1->hardwareCost+(s1->energyCost*globalCloud->total_day*0.75)/1.0)/(s1->memorySize+2*s1->cpuNum);
-        costPer2 = 1.0*(s2->hardwareCost+(s2->energyCost*globalCloud->total_day*0.75)/1.0)/(s2->memorySize+2*s2->cpuNum);
+        costPer1 = 1.0*(s1->hardwareCost+(s1->energyCost*totalDay*0.75)/1.0)/(s1->memorySize+2*s1->cpuNum);
+        costPer2 = 1.0*(s2->hardwareCost+(s2->energyCost*totalDay*0.75)/1.0)/(s2->memorySize+2*s2->cpuNum);
         return costPer1<costPer2;
     };
     for(int i=0;i<Clusters.size();i++){
@@ -226,5 +226,9 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
         }
 
     }
+    return 0;
+}
+
+int NewServerBuyer::initWhenNewBatchCome() {
     return 0;
 }
