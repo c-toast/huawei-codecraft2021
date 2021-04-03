@@ -47,17 +47,35 @@ double CalculateFullness(ServerObj* serverObj){
     return max1+max2;
 }
 
-int CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo, double &fitnessReceiver) {
+double CalFitness(std::array<int,2> serverRes,std::array<int,2>vmRes){
+    double cpuNumRadio=((double)vmRes[0])/serverRes[0];
+    double memSizeRadio=((double)vmRes[1])/serverRes[1];
+    double average=(cpuNumRadio+memSizeRadio)/2;
+    return (pow(cpuNumRadio-average,2)+pow(memSizeRadio-average,2))/2;
+}
+
+double CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo) {
     int serverCpuNum=serverInfo.cpuNum;
     int serverMemSize=serverInfo.memorySize;
     int vmCpuNum=vmInfo.cpuNum;
     int vmMemSize=vmInfo.memorySize;
+    return CalFitness({serverCpuNum,serverMemSize},{vmCpuNum,vmMemSize});
+}
 
-    double cpuNumRadio=((double)vmCpuNum)/serverCpuNum;
-    double memSizeRadio=((double)vmMemSize)/serverMemSize;
-    double average=(cpuNumRadio+memSizeRadio)/2;
-    fitnessReceiver=(pow(cpuNumRadio-average,2)+pow(memSizeRadio-average,2))/2;
-    return 0;
+double CalFitness(ServerObj *serverObj, int nodeIndex,VMInfo &vmInfo) {
+    auto nodeARemainingRes= serverObj->nodes[0].remainingResource.getResourceArray();
+    auto nodeBRemainingRes= serverObj->nodes[1].remainingResource.getResourceArray();
+    int vmCpuNum=vmInfo.cpuNum;
+    int vmMemSize=vmInfo.memorySize;
+    if(nodeIndex==NODEA){
+        return CalFitness(nodeARemainingRes,{vmCpuNum,vmMemSize});
+    }else if(nodeIndex==NODEB){
+        return CalFitness(nodeBRemainingRes,{vmCpuNum,vmMemSize});
+    }else{
+        double nodeAfitness=CalFitness(nodeARemainingRes,{vmCpuNum,vmMemSize});
+        double nodeBfitness=CalFitness(nodeBRemainingRes,{vmCpuNum,vmMemSize});
+        return (nodeAfitness<nodeBfitness)?nodeAfitness:nodeBfitness;
+    }
 }
 
 bool isInSD(std::array<double,2> vec, double R0){

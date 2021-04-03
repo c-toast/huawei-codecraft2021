@@ -11,6 +11,7 @@
 #define MIGRATER_USAGESTATE_R0 1
 #define MIGRATER_BALANCESTATE_R0 1
 #define ACCEPT_RANGE 20
+#define MIGRATE_ACCEPT_FITNESS 0.00001
 
 int VMMigrater::initWhenNewDayStart(){
     availableMigrateTime= (globalCloud->vmObjMap.size() * 3) / 100;
@@ -66,9 +67,15 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
         sort(vmObjList.begin(),vmObjList.end(),vmObjResMagnitudeCmp);
 
         for (auto vmMapIt:vmObjList) {
-            std::string vmModel = vmMapIt->info.model;
-            int range = fitnessMap[vmModel][simulatedServerObj->info.model];
-            if (range > ACCEPT_RANGE) {
+            ServerObj fakeServerObj=cloudOperator.getFakeServerObj(simulatedServerObj);
+            cloudOperator.delVMObjInFakeServerObj(&fakeServerObj,vmMapIt->id);
+            double fitness;
+            if(vmMapIt->info.doubleNode==1){
+                fitness=CalFitness(&fakeServerObj,NODEAB,vmMapIt->info);
+            }else{
+                fitness=CalFitness(&fakeServerObj,NODEAB,vmMapIt->info);
+            }
+            if (fitness>MIGRATE_ACCEPT_FITNESS) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
                 cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
                 unhandledVMObj.push_back(vmMapIt);

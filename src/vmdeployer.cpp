@@ -25,10 +25,13 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
     DeployerServerList=globalCloud->serverObjList;
     std::sort(DeployerServerList.begin(), DeployerServerList.end(), deployServerCmp);
 
+
     deployByFitness(unhandledVMObj);
     deployByAcceptableUsageState(unhandledVMObj, 1);
+
 //    deployByAcceptableUsageState(unhandledVMObj, 0.8);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.5);
+
     forceDeploy(unhandledVMObj);
 
     return 0;
@@ -98,14 +101,14 @@ int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj) {
 
     for (auto vmObj:unhandledVMObj) {
         VMInfo vmInfo = vmObj->info;
-        int minRange=1000;
+        double minRange=1000;
         int minRangeServerId=-1;
         int minRangeServerDeployNode=-1;
         for (auto &it:DeployerServerList) {
             std::string serverModel = it->info.model;
             int deployNode;
             if (it->canDeploy(vmInfo, deployNode)) {
-                int range=fitnessMap[vmInfo.model][it->info.model];
+                double range=CalFitness(it,deployNode,vmInfo);
                 if(range<minRange){
                     minRange=range;
                     minRangeServerId=it->id;

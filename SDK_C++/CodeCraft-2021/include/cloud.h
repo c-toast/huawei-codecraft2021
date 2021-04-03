@@ -41,7 +41,7 @@ public:
 
     std::vector<CloudListener*> beforelistenerList;
 
-    //int createServerObj(ServerInfo &serverInfo);
+    int createServerObj(ServerInfo &serverInfo);
 
     int deployServerObj(ServerObj C);
 

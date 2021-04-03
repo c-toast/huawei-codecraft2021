@@ -50,7 +50,11 @@ bool isDeployDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
 
 double CalculateFullness(ServerObj* serverObj);
 
-int CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo, double &fitnessReceiver);
+double CalFitness(std::array<int,2> serverRes,std::array<int,2>vmRes);
+
+double CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo);
+
+double CalFitness(ServerObj *serverObj, int nodeIndex,VMInfo &vmInfo);
 
 int vmObjResMagnitudeCmp(const VMObj* vm1,const VMObj* vm2);
 

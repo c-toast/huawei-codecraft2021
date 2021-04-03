@@ -50,7 +50,7 @@ int ServerObj::deployVM(int nodeIndex, VMObj* vmObj) {
     int vmID=vmObj->id;
     if(vmObjMap.find(vmID)!=vmObjMap.end()||vmObjDeployNodeMap.find(vmID)!=vmObjDeployNodeMap.end()){
         LOGE("ServerObj::deployVM: the vmObj have already been deploy in this serverObj");
-        return -1;
+        exit(-1);
     }
     vmObjMap.insert({vmID, vmObj});
     vmObjDeployNodeMap.insert({vmID,nodeIndex});

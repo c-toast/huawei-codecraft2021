@@ -187,6 +187,8 @@ dispatcher.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/dispatcher.h
 global.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/global.h
+cloud.h
+/home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/cloud.h
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/src/newserverbuyer.cpp
 newserverbuyer.h
