@@ -19,15 +19,13 @@ int deployServerCmp(ServerObj* s1, ServerObj* s2){
 }
 
 int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
-    auto Cmp=[](const VMObj* vm1,const VMObj* vm2){
-        return vm1->info.cpuNum+vm1->info.memorySize > vm2->info.cpuNum+vm2->info.memorySize;
-    };
-    std::sort(unhandledVMObj.begin(),unhandledVMObj.end(),Cmp);
+
+    std::sort(unhandledVMObj.begin(),unhandledVMObj.end(),vmObjResMagnitudeCmp);
 
     DeployerServerList=globalCloud->serverObjList;
     std::sort(DeployerServerList.begin(), DeployerServerList.end(), deployServerCmp);
 
-    //deployByFitness(unhandledVMObj);
+    deployByFitness(unhandledVMObj);
     deployByAcceptableUsageState(unhandledVMObj, 1);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.8);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.5);

@@ -160,3 +160,9 @@ bool BalanceState::isServerBalanceInAD(ServerObj *serverObj, double r0) {
 bool BalanceState::isServerBalanceInASD(ServerObj *serverObj, double R0, double r0) {
     return isServerBalanceInSD(serverObj,R0)||isServerBalanceInAD(serverObj,r0);
 }
+
+int vmObjResMagnitudeCmp(const VMObj* vm1,const VMObj* vm2){
+    double m1=Resource::CalResourceMagnitude(vm1->info.cpuNum,vm1->info.memorySize);
+    double m2=Resource::CalResourceMagnitude(vm2->info.cpuNum,vm2->info.memorySize);
+    return m1>m2;
+}

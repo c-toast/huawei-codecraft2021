@@ -52,6 +52,6 @@ double CalculateFullness(ServerObj* serverObj);
 
 int CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo, double &fitnessReceiver);
 
-
+int vmObjResMagnitudeCmp(const VMObj* vm1,const VMObj* vm2);
 
 #endif //HUAWEI_CODECRAFT_STRATEGYTOOLS_H

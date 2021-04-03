@@ -10,7 +10,7 @@
 #define MIGRATER_BALANCESTATE_r0 0.3
 #define MIGRATER_USAGESTATE_R0 1
 #define MIGRATER_BALANCESTATE_R0 1
-#define ACCEPT_RANGE 5
+#define ACCEPT_RANGE 20
 
 int VMMigrater::initWhenNewDayStart(){
     availableMigrateTime= (globalCloud->vmObjMap.size() * 3) / 100;
@@ -59,13 +59,19 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
     }
     for (; !UsageState::isServerNodeInASD(simulatedServerObj, NODEAB, MIGRATER_USAGESTATE_R0, MIGRATER_USAGESTATE_r0);) {
         int preMigrateTime = availableMigrateTime;
-        for (auto vmMapIt:simulatedServerObj->vmObjMap) {
-            std::string vmModel = vmMapIt.second->info.model;
+        std::vector<VMObj*> vmObjList;
+        for (auto vmMapIt:simulatedServerObj->vmObjMap){
+            vmObjList.push_back(vmMapIt.second);
+        }
+        sort(vmObjList.begin(),vmObjList.end(),vmObjResMagnitudeCmp);
+
+        for (auto vmMapIt:vmObjList) {
+            std::string vmModel = vmMapIt->info.model;
             int range = fitnessMap[vmModel][simulatedServerObj->info.model];
             if (range > ACCEPT_RANGE) {
-                cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt.second);
-                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt.second->id);
-                unhandledVMObj.push_back(vmMapIt.second);
+                cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
+                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
+                unhandledVMObj.push_back(vmMapIt);
                 availableMigrateTime--;
                 break;
             }
