@@ -20,28 +20,35 @@
 #define DOUBLEDEPLOY 1
 
 struct Resource{
-    long long int cpuNum;
-    long long int memorySize;
+    int cpuNum;
+    int memorySize;
 
     Resource()=default;
 
     Resource(int cpuNum,int memorySize):cpuNum(cpuNum),memorySize(memorySize){};
 
+    Resource(std::array<int,2> res):cpuNum(res[0]),memorySize(res[1]){};
+
     int allocResource(Resource& requiredResource);
 
     int freeResource(Resource& requiredResource);
-};
 
-//double CalDistance(std::vector<double> coordinate1,std::vector<double> coordinate2);
-//
-//double CalDistance(std::vector<double> coordinate1);
+    std::array<int,2> getResourceArray();//return cpuNum memSize
+
+    static int isResourceEnough(Resource ownRes,Resource requiredRes);
+    static int isResourceEnough(std::array<int,2> ownRes,std::array<int,2> requiredRes);
+
+    static double CalResourceMagnitude(Resource r);
+
+    static double CalResourceMagnitude(int cpuNum,int memorySize);
+
+    static double CalResourceMagnitude(std::array<int,2> r);
+};
 
 double CalDistance(std::array<double,2> coordinate1,std::array<double,2> coordinate2);
 
 double CalDistance(std::array<double,2> coordinate1);
 
-double CalResourceMagnitude(Resource r);
 
-double CalResourceMagnitude(int cpuNum,int memorySize);
 
 #endif //HUAWEI_CODECRAFT_UTILS_H

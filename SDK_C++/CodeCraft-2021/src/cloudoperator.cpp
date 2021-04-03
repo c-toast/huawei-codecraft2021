@@ -13,13 +13,18 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
         return s1->info.model<s2->info.model;
     };
     auto& serverObjList=globalCloud->serverObjList;
-    if(serverObjList.size()>oldSize){
-        std::sort(serverObjList.begin()+oldSize, serverObjList.end(), objSetCmp);
+    if(serverObjList.size() > oldServerListSize){
+        std::sort(serverObjList.begin() + oldServerListSize, serverObjList.end(), objSetCmp);
+    }
+    //renew server id;
+    for(int i=oldServerListSize; i < serverObjList.size(); i++){
+        serverObjList[i]->id=i;
+        for(auto& it:serverObjList[i]->vmObjMap){
+            it.second->deployServerID=i;
+        }
     }
 
-    globalCloud->renewServerID(oldSize);
-
-    for(int i=oldSize; i < serverObjList.size();){
+    for(int i=oldServerListSize; i < serverObjList.size();){
         std::string model=serverObjList[i]->info.model;
         Purchase p;
         p.serverName=model;
@@ -64,7 +69,7 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
         receiver.migrationList.push_back(m);
     }
 
-    oldSize=serverObjList.size();
+    oldServerListSize=serverObjList.size();
     migrationMap.clear();
     migrationVec.clear();
 
@@ -81,12 +86,6 @@ int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 
         globalCloud->delVMObjFromServerObj(vmObj->id);
         migrationVec.push_back(vmObj);
-
-        //pair
-        if(vmObj->pairVMObj!=NULL){
-            vmObj->pairVMObj->pairVMObj=NULL;
-            vmObj->pairVMObj=NULL;
-        }
     }
 
     globalCloud->deployVMObj(serverObjID,nodeIndex,vmObj);
@@ -96,11 +95,7 @@ int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 int CloudOperator::markMigratedVMObj(ServerObj *serverObj, VMObj *vmObj) {
     originDeployInfo i;
     i.originServerID=vmObj->deployServerID;
-    if(vmObj->info.doubleNode==1){
-        i.originNodeIndex=NODEAB;
-    }else{
-        i.originNodeIndex=vmObj->deployNodes[0];
-    }
+    i.originNodeIndex=vmObj->getDeployNode();
     migrationMap.insert({vmObj,i});
 
     return 0;
@@ -122,6 +117,7 @@ int CloudOperator::deployVMObjInFakeServerObj(ServerObj *serverObj, VMObj *vmObj
         LOGE("CloudOperator::deployVMObjInFakeServerObj: deploy on a new or real serverObj!");
         return -1;
     }
+
     auto it=serverObj->vmObjMap.find(vmObj->id);
     if(it!=serverObj->vmObjMap.end()){
         serverObj->vmObjMap.erase(it);
@@ -170,14 +166,6 @@ ServerObj CloudOperator::getFakeServerObj(ServerObj *serverObj) {
 
 ServerObj CloudOperator::getNewServerObj(ServerInfo serverInfo) {
     return ServerObj(serverInfo);
-}
-
-int CloudOperator::deployPairVMObj(int serverObjID, VMObj *vmObj1, VMObj *vmObj2) {
-    deployVMObj(serverObjID,NODEA,vmObj1);
-    deployVMObj(serverObjID,NODEB,vmObj2);
-    vmObj1->pairVMObj=vmObj2;
-    vmObj2->pairVMObj=vmObj1;
-    return 0;
 }
 
 

@@ -40,7 +40,8 @@ int NewServerBuyer::learnModelInfo() {
         unit.radio=(double)it.second.cpuNum/it.second.memorySize;
         infoVec.push_back(unit);
     }
-    std::vector<double> ClusterType={0.05,0.3,0.7,1,2,4,7};
+    //std::vector<double> ClusterType={0.05,0.3,0.7,1,2,4,7};
+    std::vector<double> ClusterType={0.05,0.5,1,3,7};
     int itTime=30;
     for(int i=0;i<itTime;i++){
         std::vector<double> NewClusterType(ClusterType.size(),0);
@@ -71,7 +72,10 @@ int NewServerBuyer::learnModelInfo() {
     }
 
     auto Cmp=[](const ServerInfo* s1,const ServerInfo* s2){
-        return s1->cpuNum<s2->cpuNum;
+        double costPer1,costPer2;
+        costPer1 = 1.0*(s1->hardwareCost+(s1->energyCost*totalDay*0.75)/1.0)/(s1->memorySize+2*s1->cpuNum);
+        costPer2 = 1.0*(s2->hardwareCost+(s2->energyCost*totalDay*0.75)/1.0)/(s2->memorySize+2*s2->cpuNum);
+        return costPer1<costPer2;
     };
     for(int i=0;i<Clusters.size();i++){
         std::sort(Clusters[ClusterType[i]].begin(),Clusters[ClusterType[i]].end(),Cmp);
@@ -115,7 +119,7 @@ int NewServerBuyer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj
     std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
     classify(doubleNodeVMObj,classifiedVMObjMap);
     auto Cmp=[](const VMObj* s1,const VMObj* s2){
-        return s1->info.cpuNum>s2->info.cpuNum;
+        return 2*s1->info.cpuNum+s1->info.memorySize>2*s2->info.cpuNum+s2->info.memorySize;
     };
     for(auto &it:classifiedVMObjMap){
         std::sort(it.second.begin(),it.second.end(),Cmp);
@@ -132,7 +136,7 @@ int NewServerBuyer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj
                 cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], NODEAB);
             }else{
                 double ful=CalculateFullness(&serverObj);
-                if(ful>1.5){
+                if(ful>1.2){
                     j=0;
                     cloudOperator.deployNewServerObj(&serverObj);
                     //globalCloud->deployServerObj(serverObj);
@@ -169,7 +173,7 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
     std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
     classify(singleNodeVMObj, classifiedVMObjMap);
     auto Cmp=[](const VMObj* s1,const VMObj* s2){
-        return s1->info.cpuNum>s2->info.cpuNum;
+        return 2*s1->info.cpuNum+s1->info.memorySize>2*s2->info.cpuNum+s2->info.memorySize;
     };
     for(auto &it:classifiedVMObjMap){
         std::sort(it.second.begin(),it.second.end(),Cmp);
@@ -225,3 +229,6 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
     return 0;
 }
 
+int NewServerBuyer::initWhenNewBatchCome() {
+    return 0;
+}

@@ -7,19 +7,19 @@
 #include <cloudoperator.h>
 #include "global.h"
 
-int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &receiver) {
-    int dayNum=requestsBatch.size();
+int Strategy::dispatch(RequestsBatch &batch, std::vector<OneDayResult> &receiver) {
+    for(int i=0; i < batch.size(); i++,globalDay++){
+        vmMigrater->initWhenNewDayStart();
+        vmDeployer->initWhenNewDayStart();
+        serverBuyer->initWhenNewDayStart();
 
-    for(int i=0;i<dayNum;i++,globalDay++){
         OneDayResult oneDayRes;
-        OneDayRequest& oneDayReq=requestsBatch[i];
+        OneDayRequest& oneDayReq=batch[i];
 
         std::vector<VMObj *> unhandledVMObj;
         std::vector<Request> unhandledDelReqSet;
         std::vector<Request> unhandledAddReqSet;
 
-
-        vmMigrater->availableMigrateTime= (globalCloud->vmObjMap.size() * 5) / 1000;
         for(auto it:oneDayReq){
             if(it.op==ADD){
                 auto vmObj=globalCloud->createVMObj(it.vMachineID,it.vMachineModel);
@@ -36,22 +36,14 @@ int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &
         cloudOperator.genOneDayOpeRes(unhandledAddReqSet, oneDayRes);
         receiver.push_back(oneDayRes);
 
+
         for(auto it:unhandledDelReqSet){
-            HandleDel(it,oneDayRes);
+            globalCloud->delVMObjFromCloud(it.vMachineID);
         }
     }
     return 0;
 }
 
-int Strategy::HandleDel(Request &del, OneDayResult &receiver) {
-    int machineId=del.vMachineID;
-    if(globalCloud->vmObjMap[machineId]->pairVMObj!=NULL){
-        globalCloud->vmObjMap[machineId]->pairVMObj->pairVMObj=NULL;
-    }
-
-    globalCloud->delVMObjFromCloud(machineId);
-    return 0;
-}
 
 
 

@@ -22,7 +22,7 @@ public:
     std::map<VMObj*,originDeployInfo> migrationMap;//mark the vm to be migrated
     std::vector<VMObj*> migrationVec;//record the order of migrated vm
 
-    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
+//    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
 
     int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
 

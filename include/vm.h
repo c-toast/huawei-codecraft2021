@@ -31,17 +31,17 @@ public:
 
     VMObj(VMInfo& machineInfo, int machineId): info(machineInfo), id(machineId), deployServerID(-1){}
 
-    int deployInServer(int serverNode);
+//    int deployInServer(int serverNode);
+//
+//    int deployInCloud(int serverId);
 
-    int deployInCloud(int serverId);
+    int getDeployNode();
 
     std::vector<int> deployNodes;
     VMInfo info;
     int id;
     int deployServerID;
 
-    //need for better deploy
-    VMObj* pairVMObj=NULL;
 };
 
 

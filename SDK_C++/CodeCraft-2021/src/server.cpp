@@ -14,10 +14,10 @@ bool ServerInfo::canDeployOnSingleNode(VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes(cpuNum/2,memorySize/2);
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
-        return false;
+    if(Resource::isResourceEnough(ownRes,requiredRes)){
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
@@ -29,7 +29,7 @@ bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes(cpuNum/2,memorySize/2);
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     return true;
@@ -44,7 +44,6 @@ int ServerObj::deployVM(int nodeIndex, VMObj* vmObj) {
     if(nodeIndex==NODEAB){
         nodes[NODEA].remainingResource.allocResource(requiredRes);
         nodes[NODEB].remainingResource.allocResource(requiredRes);
-
     }else {
         nodes[nodeIndex].remainingResource.allocResource(requiredRes);
     }
@@ -90,7 +89,7 @@ bool ServerObj::canDeployOnSingleNode(int nodeIndex, VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes=nodes[nodeIndex].remainingResource;
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     return true;
@@ -105,11 +104,11 @@ bool ServerObj::canDeployOnDoubleNode(VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes=nodes[0].remainingResource;
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     ownRes=nodes[1].remainingResource;
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     return true;
@@ -127,7 +126,7 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
         getNodeRemainingResource(NODEA,resA);
         getNodeRemainingResource(NODEA,resB);
         //may have problem here
-        if(CalResourceMagnitude(resA)>CalResourceMagnitude(resB)){
+        if(Resource::CalResourceMagnitude(resA)>Resource::CalResourceMagnitude(resB)){
             deployNode=NODEA;
         }else{
             deployNode=NODEB;
@@ -144,13 +143,13 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
     return false;
 }
 
-int ServerObj::deployItselfInCloud(int serverID) {
-    id=serverID;
-    for(auto& it:vmObjMap){
-        it.second->deployServerID=id;
-    }
-    return 0;
-}
+//int ServerObj::deployItselfInCloud(int serverID) {
+//    id=serverID;
+//    for(auto& it:vmObjMap){
+//        it.second->deployServerID=id;
+//    }
+//    return 0;
+//}
 
 bool ServerObj::canDeployOnNode(int nodeIndex, VMInfo &vmInfo) {
     if(nodeIndex==NODEAB){

@@ -63,10 +63,8 @@ int StdReader::ReadVMachineInfo(std::vector<VMInfo> &receiver) {
     return 0;
 }
 
-int StdReader::ReadAllRequests(RequestsBatch &receiver) {
-    int num;
-    fscanf(file, "%d", &num);
-    for (int i = 0; i < num; i++) {
+int StdReader::ReadSeveralDaysRequests(int dayNum, RequestsBatch &receiver) {
+    for (int i = 0; i < dayNum; i++) {
         OneDayRequest req;
         ReadOneDayRequests(req);
         receiver.push_back(req);
@@ -113,6 +111,18 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
     }
 
     return 0;
+}
+
+int StdReader::ReadTotalDayNum() {
+    int dayNum;
+    fscanf(file, "%d", &dayNum);
+    return dayNum;
+}
+
+int StdReader::ReadReadableDayNum() {
+    int dayNum;
+    fscanf(file, "%d", &dayNum);
+    return dayNum;
 }
 
 int StdWriter::write(ResultList &resultList) {

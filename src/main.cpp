@@ -14,6 +14,6 @@ int main() {
     Strategy strategy(&defaultVMDeployer,&defaultServerBuyer,&defaultVMMigrater);
     Dispatcher dispatcher(&strategy);
     dispatcher.run();
-    fflush(stdout);
+
     return 0;
 }

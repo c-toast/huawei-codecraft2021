@@ -6,53 +6,65 @@
 #include "utils.h"
 #include "cmath"
 
-int Resource::allocResource(Resource& requiredResource){
-    this->cpuNum-=requiredResource.cpuNum;
-    this->memorySize-=requiredResource.memorySize;
-    if(cpuNum<0||memorySize<0){
+int Resource::allocResource(Resource &requiredResource) {
+    this->cpuNum -= requiredResource.cpuNum;
+    this->memorySize -= requiredResource.memorySize;
+    if (cpuNum < 0 || memorySize < 0) {
         LOGE("allocation resource exceeds the limit");
         exit(-1);
     }
     return 0;
 }
 
-int Resource::freeResource(Resource& requiredResource){
-    this->cpuNum+=requiredResource.cpuNum;
-    this->memorySize+=requiredResource.memorySize;
+int Resource::freeResource(Resource &requiredResource) {
+    this->cpuNum += requiredResource.cpuNum;
+    this->memorySize += requiredResource.memorySize;
     return 0;
 }
 
-//double CalDistance(std::vector<double> coordinate1, std::vector<double> coordinate2) {
-//    double res=0;
-//    for(int i=0;i<coordinate1.size();i++){
-//        res+=pow(coordinate1[i]-coordinate2[i],2);
-//    }
-//    return sqrt(res);
-//}
-//
-//double CalDistance(std::vector<double> coordinate1) {
-//    std::vector<double> coordinate2(coordinate1.size(),0);
-//    return CalDistance(coordinate1,coordinate2);
-//}
-
-double CalDistance(std::array<double,2> coordinate1) {
-    return sqrt(pow(coordinate1[0],2)+pow(coordinate1[1],2));
+std::array<int, 2> Resource::getResourceArray() {
+    return std::array<int, 2>({cpuNum,memorySize});
 }
 
-double CalResourceMagnitude(Resource r) {
-    double res=CalDistance({(double)r.cpuNum,(double)r.memorySize},{0,0});
+
+double Resource::CalResourceMagnitude(Resource r) {
+    return CalResourceMagnitude(r.cpuNum,r.memorySize);
+}
+
+double Resource::CalResourceMagnitude(std::array<int, 2> r) {
+    return CalResourceMagnitude(r[0],r[1]);
+}
+
+double Resource::CalResourceMagnitude(int cpuNum, int memorySize) {
+    double res = CalDistance({(double) cpuNum, (double) memorySize});
     return res;
 }
 
-double CalResourceMagnitude(int cpuNum, int memorySize) {
-    double res=CalDistance({(double)cpuNum,(double)memorySize},{0,0});
-    return res;
+int Resource::isResourceEnough(std::array<int, 2> ownRes, std::array<int, 2> requiredRes) {
+    return isResourceEnough(Resource(ownRes),Resource(requiredRes));
+}
+
+
+int Resource::isResourceEnough(Resource ownRes, Resource requiredRes) {
+    if(ownRes.cpuNum>=requiredRes.cpuNum&&ownRes.memorySize>=requiredRes.memorySize){
+        return true;
+    }
+    return false;
+}
+
+
+
+
+double CalDistance(std::array<double, 2> coordinate1) {
+    return sqrt(pow(coordinate1[0], 2) + pow(coordinate1[1], 2));
 }
 
 double CalDistance(std::array<double, 2> coordinate1, std::array<double, 2> coordinate2) {
-    double res=0;
-    for(int i=0;i<2;i++){
-        res+=pow(coordinate1[i]-coordinate2[i],2);
+    double res = 0;
+    for (int i = 0; i < 2; i++) {
+        res += pow(coordinate1[i] - coordinate2[i], 2);
     }
     return sqrt(res);
 }
+
+

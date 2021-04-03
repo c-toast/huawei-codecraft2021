@@ -8,11 +8,14 @@
 Cloud* globalCloud=new Cloud();
 CloudOperator cloudOperator;
 
+int totalDay=0;
 int globalDay=0;
-RequestsBatch allRequest;
+RequestsBatch requestsBatch;
+
+StdReader reader;
+StdWriter writer;
 
 int initCloud() {
-    StdReader reader;
     std::vector<ServerInfo> serversInfos;
     std::vector<VMInfo> vmInfos;
     reader.ReadServersInfo(serversInfos);
@@ -30,16 +33,10 @@ int initCloud() {
         vmInfoMap[model]=it;
     }
 
-
-
     return 0;
 }
 
-int initAllRequest() {
-    StdReader reader;
-    reader.ReadAllRequests(allRequest);
-    return 0;
-}
+
 
 int initFitness() {
     auto& serverInfoMap= globalCloud->serverInfoMap;
@@ -76,7 +73,6 @@ int initFitness() {
 int initAll(){
     initCloud();
     initFitness();
-    initAllRequest();
     return 0;
 }
 

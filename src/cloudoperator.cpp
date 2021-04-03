@@ -86,12 +86,6 @@ int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 
         globalCloud->delVMObjFromServerObj(vmObj->id);
         migrationVec.push_back(vmObj);
-
-        //pair
-        if(vmObj->pairVMObj!=NULL){
-            vmObj->pairVMObj->pairVMObj=NULL;
-            vmObj->pairVMObj=NULL;
-        }
     }
 
     globalCloud->deployVMObj(serverObjID,nodeIndex,vmObj);
@@ -101,11 +95,7 @@ int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 int CloudOperator::markMigratedVMObj(ServerObj *serverObj, VMObj *vmObj) {
     originDeployInfo i;
     i.originServerID=vmObj->deployServerID;
-    if(vmObj->info.doubleNode==1){
-        i.originNodeIndex=NODEAB;
-    }else{
-        i.originNodeIndex=vmObj->deployNodes[0];
-    }
+    i.originNodeIndex=vmObj->getDeployNode();
     migrationMap.insert({vmObj,i});
 
     return 0;
@@ -127,6 +117,7 @@ int CloudOperator::deployVMObjInFakeServerObj(ServerObj *serverObj, VMObj *vmObj
         LOGE("CloudOperator::deployVMObjInFakeServerObj: deploy on a new or real serverObj!");
         return -1;
     }
+
     auto it=serverObj->vmObjMap.find(vmObj->id);
     if(it!=serverObj->vmObjMap.end()){
         serverObj->vmObjMap.erase(it);

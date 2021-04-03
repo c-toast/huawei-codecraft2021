@@ -7,14 +7,14 @@
 #include <cloudoperator.h>
 #include "global.h"
 
-int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &receiver) {
-    for(int i=0;i<requestsBatch.size();i++,globalDay++){
+int Strategy::dispatch(RequestsBatch &batch, std::vector<OneDayResult> &receiver) {
+    for(int i=0; i < batch.size(); i++,globalDay++){
         vmMigrater->initWhenNewDayStart();
         vmDeployer->initWhenNewDayStart();
         serverBuyer->initWhenNewDayStart();
 
         OneDayResult oneDayRes;
-        OneDayRequest& oneDayReq=requestsBatch[i];
+        OneDayRequest& oneDayReq=batch[i];
 
         std::vector<VMObj *> unhandledVMObj;
         std::vector<Request> unhandledDelReqSet;

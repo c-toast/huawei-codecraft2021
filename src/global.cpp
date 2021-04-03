@@ -10,7 +10,7 @@ CloudOperator cloudOperator;
 
 int totalDay=0;
 int globalDay=0;
-RequestsBatch allRequest;
+RequestsBatch requestsBatch;
 
 StdReader reader;
 StdWriter writer;

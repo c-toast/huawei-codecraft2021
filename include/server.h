@@ -70,10 +70,6 @@ public:
     int deployVM(int nodeIndex, VMObj* vmObj);
 
     int delVM(int vmID);
-
-    int deployItselfInCloud(int serverID);
-
-
 };
 
 

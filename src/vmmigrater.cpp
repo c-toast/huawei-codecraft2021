@@ -13,7 +13,7 @@
 #define ACCEPT_RANGE 5
 
 int VMMigrater::initWhenNewDayStart(){
-    availableMigrateTime= (globalCloud->vmObjMap.size() * 5) / 1000;
+    availableMigrateTime= (globalCloud->vmObjMap.size() * 3) / 100;
     return 0;
 }
 
@@ -98,9 +98,6 @@ int VMMigrater::migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, Serve
         }
         for (auto vmMapIt:simulatedServerObj->vmObjMap) {
             VMObj *vmObj = vmMapIt.second;
-            if (vmObj->pairVMObj != NULL) {
-                continue;
-            }
             if (vmObj->info.doubleNode != 1 && vmObj->deployNodes[0] == nodeIndex) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt.second);
                 cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt.second->id);

@@ -6,18 +6,30 @@
 #include "global.h"
 
 int Dispatcher::run() {
-    ResultList res;
-    allRequest.clear();
-    reader.ReadAllRequests(allRequest);
+    int totalDayNum,readableDayNum;
+    totalDayNum=reader.ReadTotalDayNum();
+    readableDayNum=reader.ReadReadableDayNum();
 
-    totalDay=allRequest.size();
-    strategy->serverBuyer->learnModelInfo();
+    strategy->serverBuyer->learnModelInfo();//need to modify
+    totalDay=requestsBatch.size();//need to modify
 
-    strategy->serverBuyer->initWhenNewBatchCome();
-    strategy->vmMigrater->initWhenNewBatchCome();
-    strategy->vmDeployer->initWhenNewBatchCome();
-    strategy->dispatch(allRequest,res);
-    writer.write(res);
+    int remainingDayNum=totalDayNum;
+    while(remainingDayNum != 0){
+        int BatchDayNum= (remainingDayNum > readableDayNum) ? readableDayNum : remainingDayNum;
+        remainingDayNum-=BatchDayNum;
+
+        ResultList res;
+        requestsBatch.clear();
+        reader.ReadSeveralDaysRequests(BatchDayNum, requestsBatch);
+
+        strategy->serverBuyer->initWhenNewBatchCome();
+        strategy->vmMigrater->initWhenNewBatchCome();
+        strategy->vmDeployer->initWhenNewBatchCome();
+        strategy->dispatch(requestsBatch, res);
+        writer.write(res);
+        fflush(stdout);
+    }
+
 
     return 0;
 }

@@ -7,35 +7,37 @@
 #include <utility>
 #include "utils.h"
 
-
-
-int Cloud::deployVMObj(int serverObjID, int nodeIndex, int vmID) {
-    if(serverObjID < 0 || serverObjID > serverObjList.size() - 1){
-        LOGE("Cloud::deployVMObj: serverObj id is wrong");
-        exit(-1);
-    }
-    ServerObj* serverObj=serverObjList[serverObjID];
-    VMObj* vmObj=vmObjMap[vmID];
-
-    int doubleNode=vmObj->info.doubleNode;
-
-    if(doubleNode==1){
-        serverObj->deployVM(NODEAB, vmObj);
-        vmObj->deployNodes.push_back(NODEA);
-        vmObj->deployNodes.push_back(NODEB);
-    }else{
-        serverObj->deployVM(nodeIndex,vmObj);
-        vmObj->deployNodes.push_back(nodeIndex);
-    }
-    vmObj->deployServerID=serverObjID;
-
-    return 0;
-}
+//int Cloud::deployVMObj(int serverObjID, int nodeIndex, int vmID) {
+//    if(serverObjID < 0 || serverObjID > serverObjList.size() - 1){
+//        LOGE("Cloud::deployVMObj: serverObj id is wrong");
+//        exit(-1);
+//    }
+//    ServerObj* serverObj=serverObjList[serverObjID];
+//    VMObj* vmObj=vmObjMap[vmID];
+//
+//    int doubleNode=vmObj->info.doubleNode;
+//
+//    if(doubleNode==1){
+//        serverObj->deployVM(NODEAB, vmObj);
+//        vmObj->deployNodes.push_back(NODEA);
+//        vmObj->deployNodes.push_back(NODEB);
+//    }else{
+//        serverObj->deployVM(nodeIndex,vmObj);
+//        vmObj->deployNodes.push_back(nodeIndex);
+//    }
+//    vmObj->deployServerID=serverObjID;
+//
+//    return 0;
+//}
 
 int Cloud::deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj) {
+    for(auto h:beforelistenerList){
+        h->deployVMObj(serverObjID,nodeIndex,vmObj);
+    }
+
     if(serverObjID < 0 || serverObjID > serverObjList.size() - 1){
         LOGE("Cloud::deployVMObj: serverObj id is invalid");
-        return -1;
+        exit(-1);
     }
     ServerObj* serverObj=serverObjList[serverObjID];
     int doubleNode=vmObj->info.doubleNode;
@@ -54,39 +56,41 @@ int Cloud::deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj) {
 }
 
 int Cloud::delVMObjFromCloud(int vmID) {
+    for(auto h:beforelistenerList){
+        h->delVMObjFromCloud(vmID);
+    }
+
     auto vmObj=vmObjMap[vmID];
     int serverID=vmObj->deployServerID;
     auto server=serverObjList[serverID];
     if(server==NULL){
         LOGE("delVMObjFromCloud: can not find the serverObj in cloud");
-        return -1;
+        exit(-1);
     }
     server->delVM(vmID);
-
-    VMResource.memorySize-=vmObj->info.memorySize;
-    VMResource.cpuNum-=vmObj->info.cpuNum;
 
     delete vmObj;
     vmObjMap.erase(vmID);
     return 0;
 }
 
-int Cloud::createServerObj(ServerInfo &serverInfo) {
-    auto* serverObj=new ServerObj(serverInfo);
-    int id=serverObjList.size();
-    serverObj->deployItselfInCloud(id);
-    serverObjList.push_back(serverObj);
-    return id;
-}
+//int Cloud::createServerObj(ServerInfo &serverInfo) {
+//    auto* serverObj=new ServerObj(serverInfo);
+//    int id=serverObjList.size();
+//    serverObj->deployItselfInCloud(id);
+//    serverObjList.push_back(serverObj);
+//    return id;
+//}
 
 int Cloud::deployServerObj(ServerObj objTemplate) {
+    for(auto h:beforelistenerList){
+        h->deployServerObj(objTemplate);
+    }
+
     auto* serverObj=new ServerObj(std::move(objTemplate));
     int id=serverObjList.size();
-    serverObj->deployItselfInCloud(id);
+    serverObj->id=id;
     serverObjList.push_back(serverObj);
-
-    ServerResource.cpuNum+=serverObj->info.cpuNum;
-    ServerResource.memorySize+=serverObj->info.memorySize;
 
     for(auto it:serverObj->vmObjMap){
         VMObj* vmObj=it.second;
@@ -103,27 +107,23 @@ int Cloud::deployServerObj(ServerObj objTemplate) {
 }
 
 VMObj * Cloud::createVMObj(int vmID, std::string model) {
+    for(auto h:beforelistenerList){
+        h->createVMObj(vmID, model);
+    }
+
     VMInfo info=vmInfoMap[model];
     auto vmObj=new VMObj(info,vmID);
     vmObjMap.insert({vmID,vmObj});
 
-    VMResource.memorySize+=info.memorySize;
-    VMResource.cpuNum+=info.cpuNum;
-
     return vmObj;
 }
 
-int Cloud::renewServerID(int start) {
-    for(int i=start;i<serverObjList.size();i++){
-        serverObjList[i]->id=i;
-        for(auto& it:serverObjList[i]->vmObjMap){
-            it.second->deployServerID=i;
-        }
-    }
-    return 0;
-}
 
 int Cloud::delVMObjFromServerObj(int vmID) {
+    for(auto h:beforelistenerList){
+        h->delVMObjFromServerObj(vmID);
+    }
+
     auto vmObj=vmObjMap[vmID];
     int serverID=vmObj->deployServerID;
     auto server=serverObjList[serverID];

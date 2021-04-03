@@ -71,9 +71,13 @@ public:
 
     int ReadVMachineInfo(std::vector<VMInfo> &receiver);
 
-    int ReadAllRequests(RequestsBatch &receiver);
+    int ReadSeveralDaysRequests(int dayNum, RequestsBatch &receiver);
 
     int ReadOneDayRequests(OneDayRequest &receiver);
+
+    int ReadTotalDayNum();
+
+    int ReadReadableDayNum();
 };
 
 #endif //HUAWEI_CODECRAFT_READWRITER_H

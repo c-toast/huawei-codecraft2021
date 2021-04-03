@@ -13,7 +13,6 @@
 #include "vm.h"
 #include <iostream>
 
-
 #define ADD 1
 #define DEL 0
 
@@ -54,7 +53,7 @@ typedef std::vector<OneDayResult> ResultList;
 
 class StdWriter{
 public:
-    static std::ostream* stream;
+    FILE *file=stdout;
 
 	int write(ResultList& resultList);
 
@@ -66,15 +65,19 @@ class StdReader{
 public:
     StdReader()=default;
 
-    static FILE* file;
+    FILE* file=stdin;
 
     int ReadServersInfo(std::vector<ServerInfo> &receiver);
 
     int ReadVMachineInfo(std::vector<VMInfo> &receiver);
 
-    int ReadAllRequests(RequestsBatch &receiver);
+    int ReadSeveralDaysRequests(int dayNum, RequestsBatch &receiver);
 
     int ReadOneDayRequests(OneDayRequest &receiver);
+
+    int ReadTotalDayNum();
+
+    int ReadReadableDayNum();
 };
 
 #endif //HUAWEI_CODECRAFT_READWRITER_H

@@ -9,7 +9,7 @@
 
 #define DEPLOYER_USAGESTATE_r0 0.3
 
-std::vector<ServerObj*> DeployerServerList;
+
 
 int deployServerCmp(ServerObj* s1, ServerObj* s2){
     double ful1=CalculateFullness(s1);
@@ -26,17 +26,13 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
 
     DeployerServerList=globalCloud->serverObjList;
     std::sort(DeployerServerList.begin(), DeployerServerList.end(), deployServerCmp);
-//
+
+    //deployByFitness(unhandledVMObj);
     deployByAcceptableUsageState(unhandledVMObj, 1);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.8);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.5);
     forceDeploy(unhandledVMObj);
 
-//    std::vector<DoubleNodeVMWrapper> unhandledDoubleVMObj;
-//    separateUnhandledVM(unhandledVMObj,unhandledDoubleVMObj);
-//    deployDoubleNodeVM(unhandledDoubleVMObj);
-//    deploySingleNodeVM(unhandledVMObj);
-//    aggregateUnhandledVM(unhandledVMObj,unhandledDoubleVMObj);
     return 0;
 }
 
@@ -94,6 +90,37 @@ int VMDeployer::forceDeploy(std::vector<VMObj *> &unhandledVMObj) {
         }
     }
 
+    unhandledVMObj = tmpAddReqSet;
+    return 0;
+
+}
+
+int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj) {
+    std::vector<VMObj *> tmpAddReqSet;
+
+    for (auto vmObj:unhandledVMObj) {
+        VMInfo vmInfo = vmObj->info;
+        int minRange=1000;
+        int minRangeServerId=-1;
+        int minRangeServerDeployNode=-1;
+        for (auto &it:DeployerServerList) {
+            std::string serverModel = it->info.model;
+            int deployNode;
+            if (it->canDeploy(vmInfo, deployNode)) {
+                int range=fitnessMap[vmInfo.model][it->info.model];
+                if(range<minRange){
+                    minRange=range;
+                    minRangeServerId=it->id;
+                    minRangeServerDeployNode=deployNode;
+                }
+            }
+        }
+        if(minRangeServerId!=-1){
+            cloudOperator.deployVMObj(minRangeServerId,minRangeServerDeployNode,vmObj);
+        }else{
+            tmpAddReqSet.push_back(vmObj);
+        }
+    }
     unhandledVMObj = tmpAddReqSet;
     return 0;
 

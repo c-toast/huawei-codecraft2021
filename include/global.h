@@ -17,7 +17,7 @@ extern CloudOperator cloudOperator;
 
 extern int totalDay;
 extern int globalDay;
-extern RequestsBatch allRequest;
+extern RequestsBatch requestsBatch;
 
 extern StdReader reader;
 extern StdWriter writer;

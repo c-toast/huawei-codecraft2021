@@ -13,6 +13,20 @@
 #include "server.h"
 #include "vm.h"
 
+class CloudListener{
+public:
+    int deployServerObj(ServerObj C){return 0;}
+
+    VMObj* createVMObj(int vmID, std::string model){return NULL;}
+
+    int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj){return 0;}
+
+    int delVMObjFromCloud(int vmID){return 0;}
+
+    int delVMObjFromServerObj(int vmID){return 0;}
+};
+
+
 class Cloud{
 public:
     std::map<std::string,VMInfo> vmInfoMap; //[model]info
@@ -25,6 +39,8 @@ public:
 
     Cloud()=default;
 
+    std::vector<CloudListener*> beforelistenerList;
+
     //int createServerObj(ServerInfo &serverInfo);
 
     int deployServerObj(ServerObj C);
@@ -36,7 +52,10 @@ public:
     int delVMObjFromCloud(int vmID);
 
     int delVMObjFromServerObj(int vmID);
+
+    int registerBeforeListener(CloudListener* h){beforelistenerList.push_back(h);return 0;}
 };
+
 
 
 

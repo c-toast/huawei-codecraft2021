@@ -27,6 +27,10 @@ public:
     int classify(std::vector<VMObj *> &vmObjVec,std::map<double,std::vector<VMObj*>>& receiver);
 
     int movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj);
+
+    int initWhenNewBatchCome();
+
+    int initWhenNewDayStart(){return 0;}
 };
 
 
