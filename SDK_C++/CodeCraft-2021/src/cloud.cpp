@@ -75,6 +75,9 @@ int Cloud::delVMObjFromCloud(int vmID) {
 }
 
 int Cloud::createServerObj(ServerInfo &serverInfo) {
+    for(auto h:beforelistenerList){
+        h->createServerObj(serverInfo);
+    }
     auto* serverObj=new ServerObj(serverInfo);
     int id=serverObjList.size();
     serverObj->id=id;

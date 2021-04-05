@@ -15,15 +15,17 @@
 
 class CloudListener{
 public:
-    int deployServerObj(ServerObj C){return 0;}
+    virtual int deployServerObj(ServerObj C){return 0;}
 
-    VMObj* createVMObj(int vmID, std::string model){return NULL;}
+    virtual VMObj* createVMObj(int vmID, std::string model){return NULL;}
 
-    int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj){return 0;}
+    virtual int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj){return 0;}
 
-    int delVMObjFromCloud(int vmID){return 0;}
+    virtual int delVMObjFromCloud(int vmID){return 0;}
 
-    int delVMObjFromServerObj(int vmID){return 0;}
+    virtual int delVMObjFromServerObj(int vmID){return 0;}
+
+    virtual int createServerObj(ServerInfo &serverInfo){return 0;}
 };
 
 

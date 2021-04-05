@@ -10,7 +10,7 @@
 #define MIGRATER_BALANCESTATE_r0 0.3
 #define MIGRATER_USAGESTATE_R0 1
 #define MIGRATER_BALANCESTATE_R0 1
-#define ACCEPT_RANGE 20
+#define ACCEPT_RANGE 5
 #define MIGRATE_ACCEPT_FITNESS 0.00001
 
 int VMMigrater::initWhenNewDayStart(){
@@ -67,15 +67,9 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
         sort(vmObjList.begin(),vmObjList.end(),vmObjResMagnitudeCmp);
 
         for (auto vmMapIt:vmObjList) {
-            ServerObj fakeServerObj=cloudOperator.getFakeServerObj(simulatedServerObj);
-            cloudOperator.delVMObjInFakeServerObj(&fakeServerObj,vmMapIt->id);
-            double fitness;
-            if(vmMapIt->info.doubleNode==1){
-                fitness=CalFitness(&fakeServerObj,NODEAB,vmMapIt->info);
-            }else{
-                fitness=CalFitness(&fakeServerObj,NODEAB,vmMapIt->info);
-            }
-            if (fitness>MIGRATE_ACCEPT_FITNESS) {
+            std::string vmModel = vmMapIt->info.model;
+            int range = fitnessMap[vmModel][simulatedServerObj->info.model];
+            if (range > ACCEPT_RANGE) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
                 cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
                 unhandledVMObj.push_back(vmMapIt);
@@ -83,6 +77,25 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
                 break;
             }
         }
+
+        //fitness version
+//        for (auto vmMapIt:vmObjList) {
+//            ServerObj fakeServerObj=cloudOperator.getFakeServerObj(simulatedServerObj);
+//            cloudOperator.delVMObjInFakeServerObj(&fakeServerObj,vmMapIt->id);
+//            double fitness;
+//            if(vmMapIt->info.doubleNode==1){
+//                fitness=CalFitness(&fakeServerObj,NODEAB,vmMapIt->info);
+//            }else{
+//                fitness=CalFitness(&fakeServerObj,NODEAB,vmMapIt->info);
+//            }
+//            if (fitness>MIGRATE_ACCEPT_FITNESS) {
+//                cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
+//                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
+//                unhandledVMObj.push_back(vmMapIt);
+//                availableMigrateTime--;
+//                break;
+//            }
+//        }
         return 0;
         if (availableMigrateTime == 0) {
             return 0;

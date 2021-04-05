@@ -95,16 +95,16 @@ int Monitor::createServerObj(ServerInfo &serverInfo) {
 
 
 int main() {
-    reader.file = fopen("/home/ctoast/huawei-codecraft/bin/training-1.txt", "r");
-    writer.file = fopen("/home/ctoast/huawei-codecraft/bin/result.txt", "w");
+//    reader.file = fopen("/home/ctoast/huawei-codecraft/bin/training-1.txt", "r");
+//    writer.file = fopen("/home/ctoast/huawei-codecraft/bin/result.txt", "w");
 
     initAll();
     VMDeployer defaultVMDeployer;
     NewServerBuyer defaultServerBuyer;
     VMMigrater defaultVMMigrater;
 
-    Monitor *m = new Monitor(fopen("/home/ctoast/huawei-codecraft/bin/log.txt", "w"));
-    globalCloud->registerBeforeListener(m);
+//    Monitor *m = new Monitor(fopen("/home/ctoast/huawei-codecraft/bin/log.txt", "w"));
+//    globalCloud->registerBeforeListener(m);
 
     Strategy strategy(&defaultVMDeployer, &defaultServerBuyer, &defaultVMMigrater);
     Dispatcher dispatcher(&strategy);
