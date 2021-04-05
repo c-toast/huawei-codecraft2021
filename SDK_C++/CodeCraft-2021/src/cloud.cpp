@@ -69,10 +69,16 @@ int Cloud::delVMObjFromCloud(int vmID) {
     }
     server->delVM(vmID);
 
+    return 0;
+}
+
+int Cloud::eraseVMObj(int vmID) {
+    auto vmObj=vmObjMap[vmID];
     delete vmObj;
     vmObjMap.erase(vmID);
     return 0;
 }
+
 
 int Cloud::createServerObj(ServerInfo &serverInfo) {
     for(auto h:beforelistenerList){
@@ -133,6 +139,7 @@ int Cloud::delVMObjFromServerObj(int vmID) {
     vmObj->deployNodes.clear();
     return 0;
 }
+
 
 
 

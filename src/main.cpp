@@ -23,7 +23,7 @@ public:
 
     std::map<VMObj *, bool> migrateMap;
 
-    int counter = 1000;
+    int counter = 10000;
 
 };
 
@@ -39,6 +39,7 @@ int Monitor::delVMObjFromServerObj(int vmID) {
     fprintf(file, "source server:\n");
     printServer(globalCloud->serverObjList[vmObj->deployServerID]);
     migrateMap[vmObj] = true;
+    return 0;
 }
 
 int Monitor::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
@@ -56,6 +57,7 @@ int Monitor::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
         printVM(vmObj);
         printServer(globalCloud->serverObjList[serverObjID]);
     }
+    return 0;
 }
 
 int Monitor::printVM(VMObj *vmObj) {
@@ -95,7 +97,7 @@ int Monitor::createServerObj(ServerInfo &serverInfo) {
 
 
 int main() {
-//    reader.file = fopen("/home/ctoast/huawei-codecraft/bin/training-1.txt", "r");
+//    reader.file = fopen("/home/ctoast/huawei-codecraft/bin/training1-1.txt", "r");
 //    writer.file = fopen("/home/ctoast/huawei-codecraft/bin/result.txt", "w");
 
     initAll();

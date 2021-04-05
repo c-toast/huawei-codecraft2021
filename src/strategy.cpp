@@ -9,37 +9,61 @@
 
 int Strategy::dispatch(RequestsBatch &batch, std::vector<OneDayResult> &receiver) {
     for(int i=0; i < batch.size(); i++,globalDay++){
-        vmMigrater->initWhenNewDayStart();
-        vmDeployer->initWhenNewDayStart();
-        serverBuyer->initWhenNewDayStart();
-
         OneDayResult oneDayRes;
         OneDayRequest& oneDayReq=batch[i];
 
+        vmMigrater->initWhenNewDayStart(oneDayReq);
+        vmDeployer->initWhenNewDayStart();
+        serverBuyer->initWhenNewDayStart();
+
+
         std::vector<VMObj *> unhandledVMObj;
         std::vector<Request> unhandledDelReqSet;
+        std::vector<Request> unhandledAllDelReqSet;
         std::vector<Request> unhandledAddReqSet;
 
+        std::vector<VMObj *> unhandledMigrateVMObj;
+        vmMigrater->migrate(unhandledMigrateVMObj);
+        vmDeployer->deploy(unhandledMigrateVMObj);
         for(auto it:oneDayReq){
             if(it.op==ADD){
                 auto vmObj=globalCloud->createVMObj(it.vMachineID,it.vMachineModel);
                 unhandledVMObj.push_back(vmObj);
                 unhandledAddReqSet.push_back(it);
+                cloudOperator.newVMMap[vmObj]=true;
             }else{
                 unhandledDelReqSet.push_back(it);
+                unhandledAllDelReqSet.push_back(it);
+            }
+
+            if(unhandledDelReqSet.size()>20){
+                vmDeployer->deploy(unhandledVMObj);
+                serverBuyer->buyAndDeploy(unhandledVMObj);
+
+                for(auto it:unhandledDelReqSet){
+                    cloudOperator.delVMObjFromCloud(it.vMachineID);
+                }
+                unhandledDelReqSet.clear();
+                unhandledVMObj.clear();
             }
         }
-        vmMigrater->migrate(unhandledVMObj);
+
         vmDeployer->deploy(unhandledVMObj);
+        unhandledVMObj.insert(unhandledVMObj.end(),unhandledMigrateVMObj.begin(),unhandledMigrateVMObj.end());
         serverBuyer->buyAndDeploy(unhandledVMObj);
+
+        for(auto it:unhandledDelReqSet){
+            cloudOperator.delVMObjFromCloud(it.vMachineID);
+        }
 
         cloudOperator.genOneDayOpeRes(unhandledAddReqSet, oneDayRes);
         receiver.push_back(oneDayRes);
 
-
-        for(auto it:unhandledDelReqSet){
-            globalCloud->delVMObjFromCloud(it.vMachineID);
+        for(auto it:unhandledAllDelReqSet){
+            globalCloud->eraseVMObj(it.vMachineID);
         }
+
+
     }
     return 0;
 }

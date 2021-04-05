@@ -53,6 +53,8 @@ public:
 
     int delVMObjFromCloud(int vmID);
 
+    int eraseVMObj(int vmID);
+
     int delVMObjFromServerObj(int vmID);
 
     int registerBeforeListener(CloudListener* h){beforelistenerList.push_back(h);return 0;}

@@ -29,6 +29,8 @@ map
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/map
 readwriter.h
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/readwriter.h
+deque
+-
 
 /home/ctoast/huawei-codecraft/SDK_C++/CodeCraft-2021/include/dispatcher.h
 cloud.h

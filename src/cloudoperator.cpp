@@ -21,6 +21,12 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
         serverObjList[i]->id=i;
         for(auto& it:serverObjList[i]->vmObjMap){
             it.second->deployServerID=i;
+            //renew delVMId
+            for(auto& delVMIt:delVMMap){
+                if(delVMIt.second==serverObjList[i]){
+                    delVMIt.first->deployServerID=i;
+                }
+            }
         }
     }
 
@@ -72,6 +78,8 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
     oldServerListSize=serverObjList.size();
     migrationMap.clear();
     migrationVec.clear();
+    newVMMap.clear();
+    delVMMap.clear();
 
     return 0;
 }
@@ -79,8 +87,8 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
 int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
     auto it=migrationMap.find(vmObj);
     if(it!=migrationMap.end()){
-        if(serverObjID==it->second.originServerID
-           &&nodeIndex==it->second.originNodeIndex){
+        if(serverObjID==it->first->deployServerID
+           &&nodeIndex==it->first->getDeployNode()){
             migrationMap.erase(it);
         }
 
@@ -93,6 +101,9 @@ int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 }
 
 int CloudOperator::markMigratedVMObj(ServerObj *serverObj, VMObj *vmObj) {
+    if(migrationMap.find(vmObj)!=migrationMap.end()||newVMMap.find(vmObj)!=newVMMap.end()){
+        return -1;
+    }
     originDeployInfo i;
     i.originServerID=vmObj->deployServerID;
     i.originNodeIndex=vmObj->getDeployNode();
@@ -166,6 +177,15 @@ ServerObj CloudOperator::getFakeServerObj(ServerObj *serverObj) {
 
 ServerObj CloudOperator::getNewServerObj(ServerInfo serverInfo) {
     return ServerObj(serverInfo);
+}
+
+int CloudOperator::delVMObjFromCloud(int vmID) {
+    VMObj* vmObj=globalCloud->vmObjMap[vmID];
+    ServerObj* serverObj=globalCloud->serverObjList[vmObj->deployServerID];
+    delVMMap[vmObj]=serverObj;
+
+    globalCloud->delVMObjFromCloud(vmID);
+    return 0;
 }
 
 

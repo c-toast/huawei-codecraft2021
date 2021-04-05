@@ -16,6 +16,7 @@ int Dispatcher::run() {
     int remainingDayNum=totalDayNum;
     while(remainingDayNum != 0){
         int BatchDayNum= (remainingDayNum > readableDayNum) ? readableDayNum : remainingDayNum;
+//        int BatchDayNum=totalDayNum;
         remainingDayNum-=BatchDayNum;
 
         ResultList res;

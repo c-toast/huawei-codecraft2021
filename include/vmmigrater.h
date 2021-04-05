@@ -20,7 +20,9 @@ public:
 
     int initWhenNewBatchCome(){return 0;}
 
-    int initWhenNewDayStart();
+    int initWhenNewDayStart(OneDayRequest &oneDayReq);
+
+    std::map<int,bool> ignoreVMObj;
 };
 
 

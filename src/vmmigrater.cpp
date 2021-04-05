@@ -13,8 +13,15 @@
 #define ACCEPT_RANGE 20
 #define MIGRATE_ACCEPT_FITNESS 0.00001
 
-int VMMigrater::initWhenNewDayStart(){
-    availableMigrateTime= (globalCloud->vmObjMap.size() * 3) / 100;
+int VMMigrater::initWhenNewDayStart(OneDayRequest &oneDayReq) {
+    availableMigrateTime= (globalCloud->vmObjMap.size() * 5) / 1000;
+
+    ignoreVMObj.clear();
+    for(auto it:oneDayReq) {
+        if (it.op != ADD) {
+            ignoreVMObj.insert({it.vMachineID, true});
+        }
+    }
     return 0;
 }
 
@@ -67,10 +74,16 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
         sort(vmObjList.begin(),vmObjList.end(),vmObjResMagnitudeCmp);
 
         for (auto vmMapIt:vmObjList) {
+            if(ignoreVMObj.find(vmMapIt->id)!=ignoreVMObj.end()){
+                continue;
+            }
             std::string vmModel = vmMapIt->info.model;
             int range = fitnessMap[vmModel][simulatedServerObj->info.model];
             if (range > ACCEPT_RANGE) {
-                cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
+                int canMigrate=cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
+                if(canMigrate<0){
+                    continue;
+                }
                 cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
                 unhandledVMObj.push_back(vmMapIt);
                 availableMigrateTime--;
