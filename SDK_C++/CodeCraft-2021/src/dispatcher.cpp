@@ -8,14 +8,14 @@
 int Dispatcher::run() {
     int totalDayNum,readableDayNum;
     totalDayNum=reader.ReadTotalDayNum();
-    readableDayNum=reader.ReadReadableDayNum();
+    readableDayNum=reader.ReadReadableDayNum();//second round
 
     strategy->serverBuyer->learnModelInfo();//need to modify
     totalDay=requestsBatch.size();//need to modify
 
     int remainingDayNum=totalDayNum;
     while(remainingDayNum != 0){
-        int BatchDayNum= (remainingDayNum > readableDayNum) ? readableDayNum : remainingDayNum;
+        int BatchDayNum= (remainingDayNum > readableDayNum) ? readableDayNum : remainingDayNum;//second round
 //        int BatchDayNum=totalDayNum;
         remainingDayNum-=BatchDayNum;
 

@@ -11,6 +11,30 @@
 #include "readwriter.h"
 #include <deque>
 
+class MigrateDependencyTree{
+public:
+    struct Node{
+        VMObj* vmObj;
+        std::vector<Node*> parents;
+        std::vector<Node*> children;
+    };
+
+    std::map<VMObj*, int> migrateTime;
+    std::map<VMObj*, Node*> vmObjNodeMap;
+
+    int init(std::vector<VMObj*> migrateVMVec);
+
+    int clear();
+
+    int AddDep(VMObj* dependent,VMObj* target);
+
+    int renewMigrateTime(VMObj* root);
+
+    bool isAncestor(VMObj* parent, VMObj* child);
+
+    int getMigrateVecInOrder(std::vector<VMObj*>& receiver);
+};
+
 class CloudOperator{
 public:
     int oldServerListSize=0;
@@ -21,14 +45,25 @@ public:
     };
 
     std::map<VMObj*,originDeployInfo> migrationMap;//mark the vm to be migrated
-    std::deque<VMObj*> migrationVec;//record the order of migrated vm
+    std::vector<VMObj*> migrationVec;//record the order of migrated vm
 
-    std::map<VMObj*,bool> newVMMap;
+//    std::map<VMObj*,bool> newVMMap;//used to stop migrate new VM
 
-    std::map<VMObj*,ServerObj*> delVMMap;
+//    //used to renew delVM migrate server id. useless because we do not migrate del VM now
+//    std::map<VMObj*,ServerObj*> serverDelVMMap;
 
-    std::map<int,ServerObj> backupServerObj;
 
+    std::map<VMObj*,int> vmReqTimeMap;
+
+    std::map<ServerObj*,std::vector<VMObj*>> serverDelVMMap;
+
+    std::map<ServerObj*,std::vector<VMObj*>> serverMigrateVMMap;
+
+    std::map<VMObj*,originDeployInfo> delVMOriginInfoMap;//mark the vm to be del
+
+    MigrateDependencyTree depTree;
+
+    int initWhenNewDayStart(OneDayRequest &oneDayReq);
 
 //    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
 
@@ -44,15 +79,16 @@ public:
 
     int genOneDayOpeRes(std::vector<Request> addReqVec, OneDayResult &receiver);
 
-    ServerObj getFakeServerObj(ServerObj* serverObj);
+    int getFakeServerObj(ServerObj *serverObj, ServerObj &receiver, int time);
 
     ServerObj getNewServerObj(ServerInfo serverInfo);
 
     int deployVMObjInNewServerObj(ServerObj* serverObj, VMObj* vmObj, int nodeIndex);
 
     int deployNewServerObj(ServerObj* ServerObj);
-
 };
+
+
 
 
 #endif //HUAWEI_CODECRAFT_CLOUDOPERATOR_H

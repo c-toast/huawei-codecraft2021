@@ -19,7 +19,8 @@
 typedef struct{
     int op;
     std::string vMachineModel;
-    int vMachineID;
+    int vmID;
+    int reqTime;
 }Request;
 
 typedef std::vector<Request> OneDayRequest;

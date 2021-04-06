@@ -22,7 +22,6 @@ public:
 
     int initWhenNewDayStart(OneDayRequest &oneDayReq);
 
-    std::map<int,bool> ignoreVMObj;
 };
 
 

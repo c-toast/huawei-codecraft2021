@@ -14,14 +14,8 @@
 #define MIGRATE_ACCEPT_FITNESS 0.00001
 
 int VMMigrater::initWhenNewDayStart(OneDayRequest &oneDayReq) {
-    availableMigrateTime= (globalCloud->vmObjMap.size() * 5) / 1000;
+    availableMigrateTime= (globalCloud->vmObjMap.size() * 3) / 100;
 
-    ignoreVMObj.clear();
-    for(auto it:oneDayReq) {
-        if (it.op != ADD) {
-            ignoreVMObj.insert({it.vMachineID, true});
-        }
-    }
     return 0;
 }
 
@@ -40,11 +34,12 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
         if (availableMigrateTime == 0) {
             return 0;
         }
-        ServerObj tmpserverIt = cloudOperator.getFakeServerObj(serverIt);
+//        ServerObj tmpserverIt=*serverIt;
+        //cloudOperator.getFakeServerObj(serverIt,tmpserverIt, );
         //unknown reason, write code by this will decrease the number of migrate
-        while (!UsageState::isServerNodeInASD(&tmpserverIt, NODEAB, MIGRATER_USAGESTATE_R0, MIGRATER_USAGESTATE_r0)) {
+        while (!UsageState::isServerNodeInASD(serverIt, NODEAB, MIGRATER_USAGESTATE_R0, MIGRATER_USAGESTATE_r0)) {
             int preMigrateTime = availableMigrateTime;
-            migrateByUsageState(unhandledVMObj, &tmpserverIt);
+            migrateByUsageState(unhandledVMObj, serverIt);
             //migrateByNodeBalance(unhandledVMObj, &tmpserverIt);//migrateByVMNum(unhandledVMObj,&tmpserverIt);
             if (availableMigrateTime == 0 || preMigrateTime == availableMigrateTime) {
                 break;
@@ -74,9 +69,10 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
         sort(vmObjList.begin(),vmObjList.end(),vmObjResMagnitudeCmp);
 
         for (auto vmMapIt:vmObjList) {
-            if(ignoreVMObj.find(vmMapIt->id)!=ignoreVMObj.end()){
-                continue;
-            }
+//            if(cloudOperator.delVMOriginInfoMap.find(vmMapIt)!=cloudOperator.delVMOriginInfoMap.end()){
+//                continue;
+//            }
+
             std::string vmModel = vmMapIt->info.model;
             int range = fitnessMap[vmModel][simulatedServerObj->info.model];
             if (range > ACCEPT_RANGE) {
@@ -84,7 +80,7 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
                 if(canMigrate<0){
                     continue;
                 }
-                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
+//                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
                 unhandledVMObj.push_back(vmMapIt);
                 availableMigrateTime--;
                 break;

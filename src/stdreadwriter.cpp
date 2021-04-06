@@ -81,6 +81,7 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
     for (int i = 0; i < num; i++) {
         fgetc(file);
         Request req;
+        req.reqTime=i;
         char opStr[4];
         for (int j = 0;; j++) {
             fscanf(file, "%c", &opStr[j]);
@@ -101,10 +102,10 @@ int StdReader::ReadOneDayRequests(OneDayRequest &receiver) {
                 }
             }
             req.vMachineModel = std::string(vMachineModel);
-            fscanf(file, "%d)", &req.vMachineID);
+            fscanf(file, "%d)", &req.vmID);
         } else {
             req.op = DEL;
-            fscanf(file, "%d)", &req.vMachineID);
+            fscanf(file, "%d)", &req.vmID);
         }
         fgetc(file);
         receiver.push_back(req);

@@ -15,6 +15,8 @@ public:
 
     int createServerObj(ServerInfo &serverInfo);
 
+    int delVMObjFromCloud(int vmID) override;
+
     int printVM(VMObj *vmObj);
 
     int printServer(ServerObj *serverObj);
@@ -23,7 +25,7 @@ public:
 
     std::map<VMObj *, bool> migrateMap;
 
-    int counter = 10000;
+    int counter = 50000;
 
 };
 
@@ -50,6 +52,8 @@ int Monitor::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 
     if (migrateMap.find(vmObj) != migrateMap.end()) {
         migrateMap.erase(vmObj);
+        fprintf(file, "\nmigrate:\n");
+        printVM(vmObj);
         fprintf(file, "migrate node %d, target server:\n", nodeIndex);
         printServer(globalCloud->serverObjList[serverObjID]);
     } else {
@@ -92,6 +96,18 @@ int Monitor::createServerObj(ServerInfo &serverInfo) {
     counter--;
 
     fprintf(file, "create new server\n");
+    return 0;
+}
+
+int Monitor::delVMObjFromCloud(int vmID) {
+    if (counter < 0) {
+        return 0;
+    }
+    counter--;
+
+    VMObj *vmObj = globalCloud->vmObjMap[vmID];
+    fprintf(file, "\ndel VM, vmInfo:\n");
+    printdeployedVM(vmObj);
     return 0;
 }
 

@@ -61,23 +61,26 @@ int Cloud::delVMObjFromCloud(int vmID) {
     }
 
     auto vmObj=vmObjMap[vmID];
-    int serverID=vmObj->deployServerID;
-    auto server=serverObjList[serverID];
-    if(server==NULL){
-        LOGE("delVMObjFromCloud: can not find the serverObj in cloud");
-        exit(-1);
+    if(vmObj->deployServerID!=-1){
+        MoveVMObjFromServerObj(vmID);
     }
-    server->delVM(vmID);
-
-    return 0;
-}
-
-int Cloud::eraseVMObj(int vmID) {
-    auto vmObj=vmObjMap[vmID];
     delete vmObj;
     vmObjMap.erase(vmID);
+
+//    auto vmObj=vmObjMap[vmID];
+//    int serverID=vmObj->deployServerID;
+//    auto server=serverObjList[serverID];
+//    server->delVM(vmID);
+
     return 0;
 }
+
+//int Cloud::eraseVMObj(int vmID) {
+//    auto vmObj=vmObjMap[vmID];
+//    delete vmObj;
+//    vmObjMap.erase(vmID);
+//    return 0;
+//}
 
 
 int Cloud::createServerObj(ServerInfo &serverInfo) {
@@ -95,8 +98,8 @@ int Cloud::deployServerObj(ServerObj objTemplate) {
     for(auto h:beforelistenerList){
         h->deployServerObj(objTemplate);
     }
-    int id=createServerObj(objTemplate.info);
 
+    int id=createServerObj(objTemplate.info);
     for(auto it:objTemplate.vmObjMap){
         deployVMObj(id,objTemplate.vmObjDeployNodeMap[it.first],it.second);
 //        VMObj* vmObj=it.second;
@@ -125,13 +128,20 @@ VMObj * Cloud::createVMObj(int vmID, std::string model) {
 }
 
 
-int Cloud::delVMObjFromServerObj(int vmID) {
+int Cloud::MoveVMObjFromServerObj(int vmID) {
     for(auto h:beforelistenerList){
         h->delVMObjFromServerObj(vmID);
     }
+//    if(vmID<0||vmID>serverObjList.size()){
+//        LOGE("Cloud::MoveVMObjFromServerObj: id is invalid");
+//        exit(-1);
+//    }
 
     auto vmObj=vmObjMap[vmID];
     int serverID=vmObj->deployServerID;
+    if(serverID==-1){
+        LOGE("break point");
+    }
     auto server=serverObjList[serverID];
 
     server->delVM(vmID);
