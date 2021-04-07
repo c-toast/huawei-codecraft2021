@@ -30,28 +30,25 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<ServerObj *> serverObjList = globalCloud->serverObjList;
     std::sort(serverObjList.begin(), serverObjList.end(), migrateServerCmp);
 
-    for (auto serverIt:serverObjList) {
+    //do not migrate the vm to be delete!!
+    for (auto serverIt:serverObjList) {//the server used for migrate do not have the vm to be deleted
         if (availableMigrateTime == 0) {
             return 0;
         }
-//        ServerObj tmpserverIt=*serverIt;
-        //cloudOperator.getFakeServerObj(serverIt,tmpserverIt, );
-        //unknown reason, write code by this will decrease the number of migrate
+
+        //the serverState is the main target, so it is the condition of the while loop
+        //migrate by node balance, then the server may be not in ad state again, which will increase
+        //the migrate next time
+
         while (!UsageState::isServerNodeInASD(serverIt, NODEAB, MIGRATER_USAGESTATE_R0, MIGRATER_USAGESTATE_r0)) {
             int preMigrateTime = availableMigrateTime;
             migrateByUsageState(unhandledVMObj, serverIt);
-            //migrateByNodeBalance(unhandledVMObj, &tmpserverIt);//migrateByVMNum(unhandledVMObj,&tmpserverIt);
+            //migrateByNodeBalance(unhandledVMObj, &tmpserverIt);
+            // migrateByVMNum(unhandledVMObj,&tmpserverIt);
             if (availableMigrateTime == 0 || preMigrateTime == availableMigrateTime) {
                 break;
             }
         }
-
-        //migrate by node balance, then the server may be not in ad state again, which will increase
-        //the migrate next time
-//        ServerObj tmpserverIt=cloudOperator.getFakeServerObj(serverIt);
-//        migrateByUsageState(unhandledVMObj,&tmpserverIt);
-//        migrateByNodeBalance(unhandledVMObj,&tmpserverIt);
-        //migrateByVMNum(unhandledVMObj,&tmpserverIt);
     }
     return 0;
 }
@@ -61,32 +58,20 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
         return 0;
     }
     for (; !UsageState::isServerNodeInASD(simulatedServerObj, NODEAB, MIGRATER_USAGESTATE_R0, MIGRATER_USAGESTATE_r0);) {
-        int preMigrateTime = availableMigrateTime;
         std::vector<VMObj*> vmObjList;
-        for (auto vmMapIt:simulatedServerObj->vmObjMap){
-            vmObjList.push_back(vmMapIt.second);
-        }
-        sort(vmObjList.begin(),vmObjList.end(),vmObjResMagnitudeCmp);
+        sortServerVMObj(simulatedServerObj,vmObjList);
 
         for (auto vmMapIt:vmObjList) {
-//            if(cloudOperator.delVMOriginInfoMap.find(vmMapIt)!=cloudOperator.delVMOriginInfoMap.end()){
-//                continue;
-//            }
-
             std::string vmModel = vmMapIt->info.model;
             int range = fitnessMap[vmModel][simulatedServerObj->info.model];
             if (range > ACCEPT_RANGE) {
-                int canMigrate=cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
-                if(canMigrate<0){
-                    continue;
-                }
-//                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt->id);
+                cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
                 unhandledVMObj.push_back(vmMapIt);
                 availableMigrateTime--;
                 break;
             }
         }
-
+        return 0;
         //fitness version
 //        for (auto vmMapIt:vmObjList) {
 //            ServerObj fakeServerObj=cloudOperator.getFakeServerObj(simulatedServerObj);
@@ -105,13 +90,13 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
 //                break;
 //            }
 //        }
-        return 0;
-        if (availableMigrateTime == 0) {
-            return 0;
-        }
-        if (preMigrateTime == availableMigrateTime) {
-            return 0;
-        }
+
+//        if (availableMigrateTime == 0) {
+//            return 0;
+//        }
+//        if (preMigrateTime == availableMigrateTime) {
+//            return 0;
+//        }
     }
 }
 
@@ -135,7 +120,8 @@ int VMMigrater::migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, Serve
             VMObj *vmObj = vmMapIt.second;
             if (vmObj->info.doubleNode != 1 && vmObj->deployNodes[0] == nodeIndex) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt.second);
-                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt.second->id);
+                globalCloud->MoveVMObjFromServerObj(vmMapIt.second->id);
+//                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt.second->id);
                 unhandledVMObj.push_back(vmMapIt.second);
                 availableMigrateTime--;
                 break;
@@ -148,6 +134,16 @@ int VMMigrater::migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, Serve
             return 0;
         }
     }
+
+    return 0;
+}
+
+int VMMigrater::sortServerVMObj(ServerObj *serverObj, std::vector<VMObj *> &receiver) {
+    receiver.clear();
+    for (auto vmMapIt:serverObj->vmObjMap){
+        receiver.push_back(vmMapIt.second);
+    }
+    sort(receiver.begin(),receiver.end(),vmObjResMagnitudeCmp);
 
     return 0;
 }

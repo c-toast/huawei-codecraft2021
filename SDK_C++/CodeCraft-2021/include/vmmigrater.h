@@ -18,6 +18,8 @@ public:
 
     int migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
 
+    int sortServerVMObj(ServerObj* serverObj, std::vector<VMObj *> &receiver);
+
     int initWhenNewBatchCome(){return 0;}
 
     int initWhenNewDayStart(OneDayRequest &oneDayReq);

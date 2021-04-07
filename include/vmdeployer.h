@@ -29,6 +29,14 @@ public:
     int getFakeServerForVM(ServerObj *serverObj, VMObj* vmObj, ServerObj &receiver);
 
     bool getFakeServerAndJudgeDeployable(ServerObj *serverObj, ServerObj &fakeServerObj, VMObj *vmObj, int &nodeIndex);
+
+    //the index of server that have resource larger than magnitude
+    std::vector<std::pair<double,int>> serverIndex; //magnitude,index
+
+    int initServerList();
+
+    int getStartIndexOfServerList(VMObj* vmObj);
+
 };
 
 #endif //HUAWEI_CODECRAFT_VMDEPLOYER_H

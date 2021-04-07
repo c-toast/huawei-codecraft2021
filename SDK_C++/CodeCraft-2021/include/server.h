@@ -70,6 +70,12 @@ public:
     int deployVM(int nodeIndex, VMObj* vmObj);
 
     int delVM(int vmID);
+
+    int delVM(int nodeIndex, VMObj* vmObj);
+
+    int allocResForDeploy(int nodeIndex, VMObj* vmObj);
+
+    int freeResForDel(int nodeIndex, VMObj* vmObj);
 };
 
 

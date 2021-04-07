@@ -17,6 +17,7 @@ public:
         VMObj* vmObj;
         std::vector<Node*> parents;
         std::vector<Node*> children;
+        std::vector<std::string> treePrefix;
     };
 
     std::map<VMObj*, int> migrateTime;
@@ -30,7 +31,9 @@ public:
 
     int renewMigrateTime(VMObj* root);
 
-    bool isAncestor(VMObj* parent, VMObj* child);
+    bool isAncestor(VMObj *parent, VMObj *child);
+
+    bool isAncestorRecursive(VMObj *parent, VMObj *child, std::map<VMObj *, bool> &haveBeenSearch, int layerNum=0);
 
     int getMigrateVecInOrder(std::vector<VMObj*>& receiver);
 };
@@ -65,21 +68,19 @@ public:
 
     int initWhenNewDayStart(OneDayRequest &oneDayReq);
 
-//    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
-
     int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
+
+    int getFakeServerObj(ServerObj *serverObj, ServerObj &receiver, int time);
 
     int deployVMObjInFakeServerObj(ServerObj* serverObj,VMObj* vmObj,int nodeIndex);
 
-    int markMigratedVMObj(ServerObj* serverObj, VMObj* vmObj);
+    int delVMObjInFakeServerObj(ServerObj *serverObj, int nodeIndex, VMObj *vmObj);
 
-    int delVMObjInFakeServerObj(ServerObj* serverObj, int vmID);
+    int markMigratedVMObj(ServerObj* serverObj, VMObj* vmObj);
 
     int delVMObjFromCloud(int vmID);
 
     int genOneDayOpeRes(std::vector<Request> addReqVec, OneDayResult &receiver);
-
-    int getFakeServerObj(ServerObj *serverObj, ServerObj &receiver, int time);
 
     ServerObj getNewServerObj(ServerInfo serverInfo);
 
