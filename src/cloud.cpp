@@ -91,6 +91,9 @@ int Cloud::createServerObj(ServerInfo &serverInfo) {
     int id=serverObjList.size();
     serverObj->id=id;
     serverObjList.push_back(serverObj);
+
+    modelServerMap[serverInfo.model].push_back(serverObj);
+
     return id;
 }
 
@@ -141,6 +144,7 @@ int Cloud::MoveVMObjFromServerObj(int vmID) {
     int serverID=vmObj->deployServerID;
     if(serverID==-1){
         LOGE("break point");
+        exit(-1);
     }
     auto server=serverObjList[serverID];
 

@@ -23,7 +23,9 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
     DeployerServerList = globalCloud->serverObjList;
     std::sort(DeployerServerList.begin(), DeployerServerList.end(), deployServerCmp);
 
-    //deployByFitness(unhandledVMObj);
+//    deployByFitness(unhandledVMObj,0,10);
+//    deployByFitness(unhandledVMObj,10,20);
+//    deployByFitness(unhandledVMObj,20,30);
     deployByAcceptableUsageState(unhandledVMObj, 1);
 
 //    deployByAcceptableUsageState(unhandledVMObj, 0.8);
@@ -41,34 +43,19 @@ int VMDeployer::deployByAcceptableUsageState(std::vector<VMObj *> &unhandledVMOb
         VMInfo vmInfo = vmObj->info;
         bool haveDeploy = false;
 
-        int time = 0;
-        //if the vm to be deployed is new
-        if (cloudOperator.migrationMap.find(vmObj) == cloudOperator.migrationMap.end()) {
-            time = cloudOperator.vmReqTimeMap[vmObj];
-        }
         for (auto &it:DeployerServerList) {
             std::string serverModel = it->info.model;
             int deployNode;
             ServerObj tmpObj;
 
-            if (it->canDeploy(vmInfo, deployNode)) {//judge first, otherwise it is too costly to copy fake server
-                if (cloudOperator.getFakeServerObj(it, tmpObj, time) < 0) {
-                    continue;
-                }
-                if (tmpObj.canDeploy(vmInfo, deployNode)) {
-                    cloudOperator.deployVMObjInFakeServerObj(&tmpObj, vmObj, deployNode);
-                    if (UsageState::isServerNodeInASD(&tmpObj, NODEAB, acceptableR0, DEPLOYER_USAGESTATE_r0)) {
-                        if (cloudOperator.deployVMObj(it->id, deployNode, vmObj) < 0) {
-                            continue;
-                        }
-                        haveDeploy = true;
-                        break;
+            if (getFakeServerAndJudgeDeployable(it, tmpObj, vmObj, deployNode)) {
+                cloudOperator.deployVMObjInFakeServerObj(&tmpObj, vmObj, deployNode);
+                if (UsageState::isServerNodeInASD(&tmpObj, deployNode, acceptableR0, DEPLOYER_USAGESTATE_r0)) {
+                    if (cloudOperator.deployVMObj(it->id, deployNode, vmObj) < 0) {
+                        continue;
                     }
-//                if(isDeployDecisionBetter(it, &tmpObj)){
-//                    cloudOperator.deployVMObj(it->id, deployNode, vmObj);
-//                    haveDeploy=true;
-//                    break;
-//                }
+                    haveDeploy = true;
+                    break;
                 }
             }
         }
@@ -87,27 +74,18 @@ int VMDeployer::forceDeploy(std::vector<VMObj *> &unhandledVMObj) {
     for (auto vmObj:unhandledVMObj) {
         VMInfo vmInfo = vmObj->info;
         bool haveDeploy = false;
-        int time = 0;
-        //new
-        if (cloudOperator.migrationMap.find(vmObj) == cloudOperator.migrationMap.end()) {
-            time = cloudOperator.vmReqTimeMap[vmObj];
-        }
+
 
         for (auto &it:DeployerServerList) {
             std::string serverModel = it->info.model;
             int deployNode;
-            if (it->canDeploy(vmInfo, deployNode)) {
-                ServerObj tmpObj;
-                if (cloudOperator.getFakeServerObj(it, tmpObj, time) < 0) {
+            ServerObj tmpObj;
+            if (getFakeServerAndJudgeDeployable(it, tmpObj, vmObj, deployNode)) {
+                if (cloudOperator.deployVMObj(it->id, deployNode, vmObj) < 0) {
                     continue;
                 }
-                if (tmpObj.canDeploy(vmInfo, deployNode)) {
-                    if (cloudOperator.deployVMObj(it->id, deployNode, vmObj) < 0) {
-                        continue;
-                    }
-                    haveDeploy = true;
-                    break;
-                }
+                haveDeploy = true;
+                break;
             }
         }
         if (!haveDeploy) {
@@ -120,37 +98,60 @@ int VMDeployer::forceDeploy(std::vector<VMObj *> &unhandledVMObj) {
 
 }
 
-int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj) {
+int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj,int start,int end) {
     std::vector<VMObj *> tmpAddReqSet;
 
     for (auto vmObj:unhandledVMObj) {
         VMInfo vmInfo = vmObj->info;
-//        double minRange=1000;//redisual
-        int minRange = 1000;
-        int minRangeServerId = -1;
-        int minRangeServerDeployNode = -1;
-        for (auto &it:DeployerServerList) {
-            std::string serverModel = it->info.model;
-            int deployNode;
-            if (it->canDeploy(vmInfo, deployNode)) {
-                int range = fitnessMap[vmInfo.model][it->info.model];
-                //double range=CalFitness(it,deployNode,vmInfo);//redisual
-                if (range < minRange) {
-                    minRange = range;
-                    minRangeServerId = it->id;
-                    minRangeServerDeployNode = deployNode;
+        bool haveDeploy = false;
+
+        for(int i=start;i<end;i++){
+            std::string serverModel=fitnessRangeMap[vmInfo.model][i];
+            for(auto &it:globalCloud->modelServerMap[serverModel]){
+                int deployNode;
+                ServerObj tmpObj;
+                if (getFakeServerAndJudgeDeployable(it, tmpObj, vmObj, deployNode)) {
+                    if (cloudOperator.deployVMObj(it->id, deployNode, vmObj) < 0) {
+                        continue;
+                    }
+                    haveDeploy = true;
+                    break;
                 }
             }
+            if(haveDeploy){
+                break;
+            }
         }
-        if (minRangeServerId != -1) {
-            cloudOperator.deployVMObj(minRangeServerId, minRangeServerDeployNode, vmObj);
-        } else {
+
+        if (!haveDeploy) {
             tmpAddReqSet.push_back(vmObj);
         }
     }
     unhandledVMObj = tmpAddReqSet;
     return 0;
+}
 
+int VMDeployer::getFakeServerForVM(ServerObj *serverObj, VMObj *vmObj, ServerObj &receiver) {
+    int time = 0;
+    //new
+    if (cloudOperator.migrationMap.find(vmObj) == cloudOperator.migrationMap.end()) {
+        time = cloudOperator.vmReqTimeMap[vmObj];
+    }
+    return cloudOperator.getFakeServerObj(serverObj, receiver, time);
+}
+
+bool VMDeployer::getFakeServerAndJudgeDeployable(ServerObj *serverObj, ServerObj &fakeServerObj, VMObj *vmObj,
+                                                 int &nodeIndex) {
+    if (!serverObj->canDeploy(vmObj->info, nodeIndex)) {
+        return false;
+    }
+    if (getFakeServerForVM(serverObj, vmObj, fakeServerObj) < 0) {
+        return false;
+    }
+    if (!fakeServerObj.canDeploy(vmObj->info, nodeIndex)) {
+        return false;
+    }
+    return true;
 }
 
 

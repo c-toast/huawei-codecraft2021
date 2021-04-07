@@ -120,7 +120,8 @@ int VMMigrater::migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, Serve
             VMObj *vmObj = vmMapIt.second;
             if (vmObj->info.doubleNode != 1 && vmObj->deployNodes[0] == nodeIndex) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt.second);
-                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt.second->id);
+                globalCloud->MoveVMObjFromServerObj(vmMapIt.second->id);
+//                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt.second->id);
                 unhandledVMObj.push_back(vmMapIt.second);
                 availableMigrateTime--;
                 break;

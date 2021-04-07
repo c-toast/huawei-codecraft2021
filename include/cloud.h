@@ -41,6 +41,8 @@ public:
 
     Cloud()=default;
 
+    std::map<std::string,std::vector<ServerObj*>> modelServerMap;
+
     std::vector<CloudListener*> beforelistenerList;
 
     int createServerObj(ServerInfo &serverInfo);

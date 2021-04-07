@@ -17,6 +17,7 @@ public:
         VMObj* vmObj;
         std::vector<Node*> parents;
         std::vector<Node*> children;
+        std::vector<std::string> treePrefix;
     };
 
     std::map<VMObj*, int> migrateTime;
@@ -30,7 +31,9 @@ public:
 
     int renewMigrateTime(VMObj* root);
 
-    bool isAncestor(VMObj* parent, VMObj* child);
+    bool isAncestor(VMObj *parent, VMObj *child);
+
+    bool isAncestorRecursive(VMObj *parent, VMObj *child, std::map<VMObj *, bool> &haveBeenSearch, int layerNum=0);
 
     int getMigrateVecInOrder(std::vector<VMObj*>& receiver);
 };
@@ -71,7 +74,7 @@ public:
 
     int deployVMObjInFakeServerObj(ServerObj* serverObj,VMObj* vmObj,int nodeIndex);
 
-    int delVMObjInFakeServerObj(ServerObj* serverObj, int vmID);
+    int delVMObjInFakeServerObj(ServerObj *serverObj, int nodeIndex, VMObj *vmObj);
 
     int markMigratedVMObj(ServerObj* serverObj, VMObj* vmObj);
 
