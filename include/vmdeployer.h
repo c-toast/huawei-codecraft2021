@@ -12,7 +12,8 @@
 
 class VMDeployer{
 public:
-    std::vector<ServerObj*> DeployerServerList;
+    std::vector<ServerObj*> DoubleServerList;
+    std::vector<ServerObj*> SingleServerList;
 
     int initWhenNewBatchCome(){return 0;}
 
@@ -31,11 +32,12 @@ public:
     bool getFakeServerAndJudgeDeployable(ServerObj *serverObj, ServerObj &fakeServerObj, VMObj *vmObj, int &nodeIndex);
 
     //the index of server that have resource larger than magnitude
-    std::vector<std::pair<double,int>> serverIndex; //magnitude,index
+    std::vector<std::pair<double,int>> doubleServerIndex; //magnitude,index
+    std::vector<std::pair<double,int>> singleServerIndex; //magnitude,index
 
     int initServerList();
 
-    int getStartIndexOfServerList(VMObj* vmObj);
+    int getStartIndexOfServerList(VMObj *vmObj, std::vector<ServerObj *> *&deployServerList);
 
 };
 
