@@ -18,12 +18,10 @@ int deployServerCmp(ServerObj *s1, ServerObj *s2) {
 }
 
 int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
-
     std::sort(unhandledVMObj.begin(), unhandledVMObj.end(), vmObjResMagnitudeCmp);
 
     DeployerServerList = globalCloud->serverObjList;
     std::sort(DeployerServerList.begin(), DeployerServerList.end(), deployServerCmp);
-
 
     //deployByFitness(unhandledVMObj);
     deployByAcceptableUsageState(unhandledVMObj, 1);
@@ -42,8 +40,9 @@ int VMDeployer::deployByAcceptableUsageState(std::vector<VMObj *> &unhandledVMOb
     for (auto vmObj:unhandledVMObj) {
         VMInfo vmInfo = vmObj->info;
         bool haveDeploy = false;
+
         int time = 0;
-        //new
+        //if the vm to be deployed is new
         if (cloudOperator.migrationMap.find(vmObj) == cloudOperator.migrationMap.end()) {
             time = cloudOperator.vmReqTimeMap[vmObj];
         }
@@ -51,9 +50,6 @@ int VMDeployer::deployByAcceptableUsageState(std::vector<VMObj *> &unhandledVMOb
             std::string serverModel = it->info.model;
             int deployNode;
             ServerObj tmpObj;
-//            if(vmObj->id==95088318&&it->id==1909){
-//                LOGE("b");
-//            }
 
             if (it->canDeploy(vmInfo, deployNode)) {//judge first, otherwise it is too costly to copy fake server
                 if (cloudOperator.getFakeServerObj(it, tmpObj, time) < 0) {

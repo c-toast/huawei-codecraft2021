@@ -77,11 +77,6 @@ int CloudOperator::genOneDayOpeRes(std::vector<Request>addReqVec, OneDayResult &
         receiver.migrationList.push_back(m);
     }
 
-    oldServerListSize=serverObjList.size();
-    migrationMap.clear();
-    migrationVec.clear();
-    serverDelVMMap.clear();
-
     return 0;
 }
 
@@ -113,7 +108,8 @@ int CloudOperator::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
 
 int CloudOperator::markMigratedVMObj(ServerObj *serverObj, VMObj *vmObj) {
     if(migrationMap.find(vmObj)!=migrationMap.end()){
-        return -1;
+        LOGE("CloudOperator::markMigratedVMObj: have already migrate the vmObj");
+        exit(-1);
     }
     originDeployInfo i;
     i.originServerID=vmObj->deployServerID;
@@ -220,6 +216,11 @@ int CloudOperator::delVMObjFromCloud(int vmID) {
 }
 
 int CloudOperator::initWhenNewDayStart(OneDayRequest &oneDayReq) {
+    oldServerListSize=globalCloud->serverObjList.size();
+    migrationMap.clear();
+    migrationVec.clear();
+    serverDelVMMap.clear();
+
     vmReqTimeMap.clear();
     serverMigrateVMMap.clear();
     delVMOriginInfoMap.clear();

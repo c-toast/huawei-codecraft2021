@@ -65,21 +65,19 @@ public:
 
     int initWhenNewDayStart(OneDayRequest &oneDayReq);
 
-//    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
-
     int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
+
+    int getFakeServerObj(ServerObj *serverObj, ServerObj &receiver, int time);
 
     int deployVMObjInFakeServerObj(ServerObj* serverObj,VMObj* vmObj,int nodeIndex);
 
-    int markMigratedVMObj(ServerObj* serverObj, VMObj* vmObj);
-
     int delVMObjInFakeServerObj(ServerObj* serverObj, int vmID);
+
+    int markMigratedVMObj(ServerObj* serverObj, VMObj* vmObj);
 
     int delVMObjFromCloud(int vmID);
 
     int genOneDayOpeRes(std::vector<Request> addReqVec, OneDayResult &receiver);
-
-    int getFakeServerObj(ServerObj *serverObj, ServerObj &receiver, int time);
 
     ServerObj getNewServerObj(ServerInfo serverInfo);
 
