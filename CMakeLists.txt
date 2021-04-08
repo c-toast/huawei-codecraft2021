@@ -27,4 +27,4 @@ SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O3 -Wall -g -ggdb -std=c++11")
 aux_source_directory(./src DIR_SRCS)
 
 # 指定生成目标
-add_executable(CodeCraft-2021 ${DIR_SRCS})
+add_executable(CodeCraft-2021 ${DIR_SRCS} src/monitor.cpp include/monitor.h)

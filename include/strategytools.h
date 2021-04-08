@@ -58,4 +58,6 @@ double CalFitness(ServerObj *serverObj, int nodeIndex,VMInfo &vmInfo);
 
 int vmObjResMagnitudeCmp(const VMObj* vm1,const VMObj* vm2);
 
+double CalCostWithVM(ServerInfo *serverInfo, VMInfo &vmInfo);
+
 #endif //HUAWEI_CODECRAFT_STRATEGYTOOLS_H

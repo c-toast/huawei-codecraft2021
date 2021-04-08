@@ -41,7 +41,8 @@ int NewServerBuyer::learnModelInfo() {
         infoVec.push_back(unit);
     }
     //std::vector<double> ClusterType={0.05,0.3,0.7,1,2,4,7};
-    std::vector<double> ClusterType={0.05,0.5,1,3,7};
+    std::vector<double> ClusterType={1};
+    /*
     int itTime=30;
     for(int i=0;i<itTime;i++){
         std::vector<double> NewClusterType(ClusterType.size(),0);
@@ -65,12 +66,12 @@ int NewServerBuyer::learnModelInfo() {
             ClusterType[j]=NewClusterType[j]/MemberNum[j];
         }
     }
-
+    */
     for(int i=0;i<infoVec.size();i++){
         double radio=ClusterType[infoVec[i].type];
         Clusters[radio].push_back(infoVec[i].info);
     }
-
+    /*
     auto Cmp=[](const ServerInfo* s1,const ServerInfo* s2){
         double costPer1,costPer2;
         costPer1 = 1.0*(s1->hardwareCost+(s1->energyCost*totalDay*0.75)/1.0)/(s1->memorySize+2*s1->cpuNum);
@@ -80,7 +81,7 @@ int NewServerBuyer::learnModelInfo() {
     for(int i=0;i<Clusters.size();i++){
         std::sort(Clusters[ClusterType[i]].begin(),Clusters[ClusterType[i]].end(),Cmp);
     }
-
+    */
     return 0;
 }
 
@@ -118,54 +119,64 @@ int NewServerBuyer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj)
 int NewServerBuyer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj) {
     std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
     classify(doubleNodeVMObj,classifiedVMObjMap);
-    auto Cmp=[](const VMObj* s1,const VMObj* s2){
-        return 2*s1->info.cpuNum+s1->info.memorySize>2*s2->info.cpuNum+s2->info.memorySize;
-    };
+    
+//    auto Cmp=[](const VMObj* s1,const VMObj* s2){
+//
+//        return s1->info.cpuNum+s1->info.memorySize > s2->info.cpuNum+s2->info.memorySize;
+//    };
     for(auto &it:classifiedVMObjMap){
-        std::sort(it.second.begin(),it.second.end(),Cmp);
+        std::sort(it.second.begin(),it.second.end(),vmObjResMagnitudeCmp);
     }
-
+    
     for(auto& it:Clusters){
         std::vector<ServerInfo*>& serverCandidates = it.second;
         std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
-        int j=0;
-        ServerObj serverObj(*serverCandidates[j]);
-        for(int i=0;i<vmObjVec.size();i++){
-            if(serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)){
-                //serverObj.deployVM(NODEAB,vmObjVec[i]);
-                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], NODEAB);
-            }else{
-                double ful=CalculateFullness(&serverObj);
-                if(ful>1.2){
-                    j=0;
-                    cloudOperator.deployNewServerObj(&serverObj);
-                    //globalCloud->deployServerObj(serverObj);
-                    serverObj=ServerObj(*serverCandidates[j]);
-                }
-                else{
-                    for(j=j+1;j<serverCandidates.size();j++){
-                        ServerObj newServerObj(*serverCandidates[j]);
-                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
-                            serverObj=newServerObj;
-                            break;
-                        }
-                    }
-                    if(j==serverCandidates.size()){
-                        j=0;
-                        cloudOperator.deployNewServerObj(&serverObj);
-                        serverObj=ServerObj(*serverCandidates[j]);
-                    }
-                }
-                i--;
-            }
-        }
+        std::vector<ServerObj*> tmpServerObjList;
+        int num=vmObjVec.size();
+        std::vector<ServerObj> finalServerObj(num);
+        int startIndex=0;
 
-        if(serverObj.vmObjMap.size()>0){
-            cloudOperator.deployNewServerObj(&serverObj);
+        for(int i=0;i<vmObjVec.size();i++){
+            double minCost=1<<30;
+            int minIndex=-1;
+            // find on Obj
+            for(int j=0;j<tmpServerObjList.size();j++){
+                ServerObj* serverObj=tmpServerObjList[j];
+                if(serverObj->canDeployOnDoubleNode(vmObjVec[i]->info)){
+                    double tmpCost=2*serverObj->nodes[0].remainingResource.cpuNum+serverObj->nodes[0].remainingResource.memorySize;
+                    //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
+                    if(tmpCost<minCost){
+                        minCost=tmpCost;
+                        minIndex=j;
+                    }
+                }
+            }
+            if(minIndex!=-1){
+                cloudOperator.deployVMObjInNewServerObj(tmpServerObjList[minIndex], vmObjVec[i], NODEAB);
+                continue;
+            }
+            // find on Info
+            for(int j=0;j<serverCandidates.size();j++){
+                ServerObj serverObj(*serverCandidates[j]);
+                if(serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)){
+                    double tmpCost=CalCostWithVM(serverCandidates[j],vmObjVec[i]->info);
+                    //double tmpCost=serverObj.nodes[0].remainingResource.cpuNum;
+                    if(tmpCost<minCost){
+                        minCost=tmpCost;
+                        minIndex=j;
+                    }
+                }
+            }
+            ServerObj serverObj(*serverCandidates[minIndex]);
+            finalServerObj[startIndex]=serverObj;
+            cloudOperator.deployVMObjInNewServerObj(&finalServerObj[startIndex], vmObjVec[i], NODEAB);
+            tmpServerObjList.push_back(&finalServerObj[startIndex]);
+            startIndex++;
+        }
+        for(int i=0;i<tmpServerObjList.size();i++){
+            cloudOperator.deployNewServerObj(tmpServerObjList[i]);
         }
     }
-
-
     return 0;
 }
 
@@ -173,7 +184,7 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
     std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
     classify(singleNodeVMObj, classifiedVMObjMap);
     auto Cmp=[](const VMObj* s1,const VMObj* s2){
-        return 2*s1->info.cpuNum+s1->info.memorySize>2*s2->info.cpuNum+s2->info.memorySize;
+        return 2*s1->info.cpuNum+s1->info.memorySize > 2*s2->info.cpuNum+s2->info.memorySize;
     };
     for(auto &it:classifiedVMObjMap){
         std::sort(it.second.begin(),it.second.end(),Cmp);
@@ -182,49 +193,69 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
     for(auto& it:Clusters){
         std::vector<ServerInfo*>& serverCandidates = it.second;
         std::vector<VMObj*>& vmObjVec=classifiedVMObjMap[it.first];
-        int j=0;
-        ServerObj serverObj(*serverCandidates[j]);
-        int nodeIndex=0;
+        std::vector<ServerObj*> tmpServerObjList;
+        int num=vmObjVec.size();
+        std::vector<ServerObj> finalServerObj(num);
+        int startIndex=0;
 
         for(int i=0;i<vmObjVec.size();i++){
-            if(serverObj.canDeployOnSingleNode(nodeIndex,vmObjVec[i]->info)){
-                //serverObj.deployVM(nodeIndex,vmObjVec[i]);
-                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], nodeIndex);
-                nodeIndex=(nodeIndex+1)%2;
-            }else if(serverObj.canDeployOnSingleNode((nodeIndex+1)%2,vmObjVec[i]->info)){
-                //serverObj.deployVM(nodeIndex,vmObjVec[i]);
-                cloudOperator.deployVMObjInNewServerObj(&serverObj, vmObjVec[i], (nodeIndex+1)%2);
-            }
-            else{
-                double ful=CalculateFullness(&serverObj);
-                if(ful>1.5){
-                    j=0;
-                    cloudOperator.deployNewServerObj(&serverObj);
-                    serverObj=ServerObj(*serverCandidates[j]);
-                }
-                else{
-                    for(j=j+1;j<serverCandidates.size();j++){
-                        ServerObj newServerObj(*serverCandidates[j]);
-                        if(movVMObjToNewServerObj(&serverObj,&newServerObj)==0){
-                            serverObj=newServerObj;
-                            break;
-                        }
-                    }
-                    if(j>=serverCandidates.size()){
-                        j=0;
-                        cloudOperator.deployNewServerObj(&serverObj);
-                        serverObj=ServerObj(*serverCandidates[j]);
+            double minCost=1<<30;
+            int minIndex=-1;
+            int nodeIndex=-1;
+            int fuck=vmObjVec[i]->id;
+            // find on Obj
+            for(int j=0;j<tmpServerObjList.size();j++){
+                ServerObj* serverObj=tmpServerObjList[j];
+                /*
+                srand((unsigned)time(NULL));
+                int node1=rand()%2;
+                int node2=(node1==0?1:0);
+                */
+                if(serverObj->canDeployOnSingleNode(0,vmObjVec[i]->info)){
+                    double tmpCost=2*serverObj->nodes[0].remainingResource.cpuNum+serverObj->nodes[0].remainingResource.memorySize;
+                    //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
+                    if(tmpCost<minCost){
+                        minCost=tmpCost;
+                        minIndex=j;
+                        nodeIndex=0;
                     }
                 }
-                i--;
+                else if(serverObj->canDeployOnSingleNode(1,vmObjVec[i]->info)){
+                    double tmpCost=2*serverObj->nodes[1].remainingResource.cpuNum+serverObj->nodes[1].remainingResource.memorySize;
+                    //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
+                    if(tmpCost<minCost){
+                        minCost=tmpCost;
+                        minIndex=j;
+                        nodeIndex=1;
+                    }
+                }
             }
+            if(minIndex!=-1){
+                cloudOperator.deployVMObjInNewServerObj(tmpServerObjList[minIndex], vmObjVec[i], nodeIndex);
+                continue;
+            }
+            // find on Info
+            for(int j=0;j<serverCandidates.size();j++){
+                ServerObj serverObj(*serverCandidates[j]);
+                // for a new server, only check node 0
+                if(serverObj.canDeployOnSingleNode(0,vmObjVec[i]->info)){
+                    double tmpCost=CalCostWithVM(serverCandidates[j],vmObjVec[i]->info);
+                    if(tmpCost<minCost){
+                        minCost=tmpCost;
+                        minIndex=j;
+                        nodeIndex=0;
+                    }
+                }
+            }
+            ServerObj serverObj(*serverCandidates[minIndex]);
+            finalServerObj[startIndex]=serverObj;
+            cloudOperator.deployVMObjInNewServerObj(&finalServerObj[startIndex], vmObjVec[i], 0);
+            tmpServerObjList.push_back(&finalServerObj[startIndex]);
+            startIndex++;
         }
-
-
-        if(serverObj.vmObjMap.size()>0){
-            cloudOperator.deployNewServerObj(&serverObj);
+        for(int i=0;i<tmpServerObjList.size();i++){
+            cloudOperator.deployNewServerObj(tmpServerObjList[i]);
         }
-
     }
     return 0;
 }
