@@ -14,8 +14,8 @@
 #include "newserverbuyer.h"
 #include <array>
 
-extern std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
-extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
+extern std::map<std::string,std::vector<std::string>> serversSortByFitness; //[VMmodel]range
+extern std::map<std::string,std::map<std::string,int>> fitnessRangeMap; //[VMmodel][serverModel]fitnessRange
 
 
 class UsageState{

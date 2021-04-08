@@ -135,7 +135,7 @@ int VMDeployer::deployByFitness(std::vector<VMObj *> &unhandledVMObj, int start,
         bool haveDeploy = false;
 
         for (int i = start; i < end; i++) {
-            std::string serverModel = fitnessRangeMap[vmInfo.model][i];
+            std::string serverModel = serversSortByFitness[vmInfo.model][i];
             for (auto &it:globalCloud->modelServerMap[serverModel]) {
                 int deployNode;
                 ServerObj tmpObj;

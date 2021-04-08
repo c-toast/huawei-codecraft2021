@@ -14,7 +14,17 @@ class NewServerBuyer{
 public:
     std::map<double,std::vector<ServerInfo*>> Clusters; //[radio][servercluster]
 
+    std::vector<ServerInfo*> allServerInfos;
+
     int buyAndDeploy(std::vector<VMObj*> &unhandledVMObj);
+
+    ServerObj *createASuitableServer(std::vector<ServerInfo *> &candidateServers,
+                                     std::vector<VMObj *> &unhandledVMObj);
+
+    int DeployVMInServer(ServerObj* newServerObj,std::vector<VMObj*> &unhandledVMObj);
+
+    int normalize(std::vector<double>& vec);
+
 
     int learnModelInfo();
 

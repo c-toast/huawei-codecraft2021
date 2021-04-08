@@ -60,8 +60,8 @@ int initFitness() {
         std::sort(fitVec.begin(), fitVec.end(), reqSetCmp);
         int i = 0;
         for (auto &recordIt:fitVec) {
-            fitnessRangeMap[vmInfoMapIt.first].push_back(recordIt.serverModel);
-            fitnessMap[vmInfoMapIt.first][recordIt.serverModel] = i;
+            serversSortByFitness[vmInfoMapIt.first].push_back(recordIt.serverModel);
+            fitnessRangeMap[vmInfoMapIt.first][recordIt.serverModel] = i;
             i++;
         }
 //        for(int j=69;j<80;j++){

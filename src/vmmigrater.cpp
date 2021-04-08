@@ -63,7 +63,7 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
 
         for (auto vmMapIt:vmObjList) {
             std::string vmModel = vmMapIt->info.model;
-            int range = fitnessMap[vmModel][simulatedServerObj->info.model];
+            int range = fitnessRangeMap[vmModel][simulatedServerObj->info.model];
             if (range > ACCEPT_RANGE) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
                 unhandledVMObj.push_back(vmMapIt);

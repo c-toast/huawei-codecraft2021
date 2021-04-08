@@ -4,8 +4,8 @@
 
 #include "strategytools.h"
 
-std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
-std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
+std::map<std::string,std::vector<std::string>> serversSortByFitness; //[VMmodel]range
+std::map<std::string,std::map<std::string,int>> fitnessRangeMap; //[VMmodel][serverModel]fitnessRange
 
 
 //double calDeviation(MultiDimension d){

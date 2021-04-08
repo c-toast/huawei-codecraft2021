@@ -11,7 +11,7 @@ int Dispatcher::run() {
     readableDayNum=reader.ReadReadableDayNum();//second round
 
     strategy->serverBuyer->learnModelInfo();//need to modify
-    totalDay=requestsBatch.size();//need to modify
+    totalDay=totalDayNum;//need to modify
 
     int remainingDayNum=totalDayNum;
     while(remainingDayNum != 0){
