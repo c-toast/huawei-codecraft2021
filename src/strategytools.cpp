@@ -193,14 +193,14 @@ double CalCostWithVM(ServerInfo *serverInfo, VMInfo &vmInfo){
 
     int vmCpuNum=vmInfo.cpuNum;
     int vmMemSize=vmInfo.memorySize;
-    int day=600;
+    int day=400;
     double cost=(double(vmMemSize)/serverMemSize+2*double(vmCpuNum)/serverCpuNum)*(hardCost+day*energyCost);
+    return cost;
     //double cost=(hardCost+day*energyCost)/(2*serverCpuNum+serverMemSize);
     //double cost=(hardCost+day*energyCost)*(2*vmCpuNum+vmMemSize)/(2*serverCpuNum+serverMemSize);
     //double cost1=(hardCost+day*energyCost)/(2*serverCpuNum+serverMemSize);
     //double cost2=(hardCost+day*energyCost)*(2*vmCpuNum+vmMemSize)/(2*serverCpuNum+serverMemSize);
     //double cost=cost1+cost2;
 
-    return cost;
 }
 

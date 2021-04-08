@@ -41,7 +41,8 @@ int NewServerBuyer::learnModelInfo() {
         infoVec.push_back(unit);
     }
     //std::vector<double> ClusterType={0.05,0.3,0.7,1,2,4,7};
-    std::vector<double> ClusterType={0.05,0.5,1,3,7};
+    std::vector<double> ClusterType={1};
+    /*
     int itTime=30;
     for(int i=0;i<itTime;i++){
         std::vector<double> NewClusterType(ClusterType.size(),0);
@@ -65,7 +66,7 @@ int NewServerBuyer::learnModelInfo() {
             ClusterType[j]=NewClusterType[j]/MemberNum[j];
         }
     }
-
+    */
     for(int i=0;i<infoVec.size();i++){
         double radio=ClusterType[infoVec[i].type];
         Clusters[radio].push_back(infoVec[i].info);
@@ -141,7 +142,7 @@ int NewServerBuyer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj
             for(int j=0;j<tmpServerObjList.size();j++){
                 ServerObj* serverObj=tmpServerObjList[j];
                 if(serverObj->canDeployOnDoubleNode(vmObjVec[i]->info)){
-                    double tmpCost=serverObj->nodes[0].remainingResource.cpuNum;
+                    double tmpCost=2*serverObj->nodes[0].remainingResource.cpuNum+serverObj->nodes[0].remainingResource.memorySize;
                     //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
                     if(tmpCost<minCost){
                         minCost=tmpCost;
@@ -182,7 +183,7 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
     std::map<double,std::vector<VMObj*>> classifiedVMObjMap;
     classify(singleNodeVMObj, classifiedVMObjMap);
     auto Cmp=[](const VMObj* s1,const VMObj* s2){
-        return s1->info.cpuNum > s2->info.cpuNum;
+        return 2*s1->info.cpuNum+s1->info.memorySize > 2*s2->info.cpuNum+s2->info.memorySize;
     };
     for(auto &it:classifiedVMObjMap){
         std::sort(it.second.begin(),it.second.end(),Cmp);
@@ -210,7 +211,7 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
                 int node2=(node1==0?1:0);
                 */
                 if(serverObj->canDeployOnSingleNode(0,vmObjVec[i]->info)){
-                    double tmpCost=serverObj->nodes[0].remainingResource.cpuNum;
+                    double tmpCost=2*serverObj->nodes[0].remainingResource.cpuNum+serverObj->nodes[0].remainingResource.memorySize;
                     //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
                     if(tmpCost<minCost){
                         minCost=tmpCost;
@@ -219,7 +220,7 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
                     }
                 }
                 else if(serverObj->canDeployOnSingleNode(1,vmObjVec[i]->info)){
-                    double tmpCost=serverObj->nodes[1].remainingResource.cpuNum;
+                    double tmpCost=2*serverObj->nodes[1].remainingResource.cpuNum+serverObj->nodes[1].remainingResource.memorySize;
                     //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
                     if(tmpCost<minCost){
                         minCost=tmpCost;
