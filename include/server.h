@@ -26,6 +26,8 @@ public:
     int memorySize;
     int hardwareCost;
     int energyCost;
+
+    double unitCost=-1;
 };
 
 class ServerNode{

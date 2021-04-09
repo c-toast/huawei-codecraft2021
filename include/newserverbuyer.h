@@ -10,37 +10,44 @@
 #include "vm.h"
 #include "readwriter.h"
 
-class NewServerBuyer{
+class NewServerBuyer {
 public:
-    std::map<double,std::vector<ServerInfo*>> Clusters; //[radio][servercluster]
+    std::map<double, std::vector<ServerInfo *>> Clusters; //[radio][servercluster]
 
-    std::vector<ServerInfo*> allServerInfos;
+    std::vector<ServerInfo *> allServerInfos;
 
-    int buyAndDeploy(std::vector<VMObj*> &unhandledVMObj);
+    int buyAndDeploy(std::vector<VMObj *> &unhandledVMObj);
 
     ServerObj *createASuitableServer(std::vector<ServerInfo *> &candidateServers,
                                      std::vector<VMObj *> &unhandledVMObj);
 
-    int DeployVMInServer(ServerObj* newServerObj,std::vector<VMObj*> &unhandledVMObj);
+    int DeployVMInServer(ServerObj *newServerObj, std::vector<VMObj *> &unhandledVMObj);
 
-    int normalize(std::vector<double>& vec);
+    int normalize(std::vector<double> &vec);
+
+    int voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidateServers, std::vector<double> &voteRes);
+
+    std::map<VMObj*,std::vector<double>> voteResMap;
+
 
 
     int learnModelInfo();
 
     int learnPosteriorInfo(RequestsBatch &requestsBunch);
 
-    int buyAndDeployDoubleNode(std::vector<VMObj*> &unhandledVMObj);
+    int buyAndDeployDoubleNode(std::vector<VMObj *> &unhandledVMObj);
 
-    int buyAndDeploySingleNode(std::vector<VMObj*> &singleNodeVMObj);
+    int buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj);
 
-    int classify(std::vector<VMObj *> &vmObjVec,std::map<double,std::vector<VMObj*>>& receiver);
+    int classify(std::vector<VMObj *> &vmObjVec, std::map<double, std::vector<VMObj *>> &receiver);
 
     int movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj);
 
     int initWhenNewBatchCome();
 
-    int initWhenNewDayStart(){return 0;}
+    int initWhenNewDayStart() { return 0; }
+
+    int init();
 };
 
 

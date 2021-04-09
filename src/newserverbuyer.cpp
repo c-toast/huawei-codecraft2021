@@ -256,6 +256,7 @@ int NewServerBuyer::initWhenNewBatchCome() {
 
 
 int NewServerBuyer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
+    voteResMap.clear();
     for (int i = 0; i < unhandledVMObj.size();) {
         std::vector<VMObj *> unhandledBatch;
         int batchSize = 100;
@@ -283,54 +284,29 @@ int NewServerBuyer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
 
 ServerObj *NewServerBuyer::createASuitableServer(std::vector<ServerInfo *> &candidateServers,
                                                  std::vector<VMObj *> &unhandledVMObj) {
-    std::vector<double> totalFitnessVec;
-    std::vector<double> costVec;
-    for (auto infoIt:candidateServers) {
-        double totalFitnessRange = 0;
-        std::vector<VMObj *> candidateVMObj;
-        for (auto it:unhandledVMObj) {
-            if (infoIt->canDeployOnSingleNode(it->info) ||
-                infoIt->canDeployOnDoubleNode(it->info)){
-                candidateVMObj.push_back(it);
-            }
+    std::vector<double> allVoteRes(candidateServers.size(), 0);
+    for (auto it:unhandledVMObj) {
+        std::vector<double> voteRes;
+        if (voteResMap.find(it) != voteResMap.end()) {
+            voteRes = voteResMap[it];
+        } else {
+            voteForServer(it, candidateServers, voteRes);
         }
-        if(candidateVMObj.empty()){
-            totalFitnessVec.push_back(-1);
-            costVec.push_back(-1);
-            continue;;
-        }
-
-        for (auto it:unhandledVMObj) {
-            double range = fitnessRangeMap[it->info.model][infoIt->model];
-            totalFitnessRange += range;
-        }
-        totalFitnessVec.push_back(totalFitnessRange);
-
-        double cost = 1.0 * (infoIt->hardwareCost + (infoIt->energyCost * totalDay *0.75) / 1.0) /
-                      (infoIt->memorySize + 2 * infoIt->cpuNum);
-        costVec.push_back(cost);
-    }
-    normalize(totalFitnessVec);
-    normalize(costVec);
-
-    double minValue = 100000000;
-    int minIndex = -1;
-    for (int i = 0; i < totalFitnessVec.size(); i++) {
-        double value = totalFitnessVec[i]/15 + costVec[i];
-        if (value < minValue) {
-            if (unhandledVMObj.size() == 1 &&
-                !candidateServers[i]->canDeployOnSingleNode(unhandledVMObj[0]->info) &&
-                !candidateServers[i]->canDeployOnDoubleNode(unhandledVMObj[0]->info)) { ;
-            } else {
-                minValue = value;
-                minIndex = i;
-            }
-
+        for (int i = 0; i < candidateServers.size(); i++) {
+            allVoteRes[i] += voteRes[i];
         }
     }
-    int id = globalCloud->createServerObj(*candidateServers[minIndex]);
-
+    int maxIndex = -1;
+    double maxVote = -1;
+    for (int i = 0; i < candidateServers.size(); i++) {
+        if (allVoteRes[i] > maxVote) {
+            maxVote = allVoteRes[i];
+            maxIndex = i;
+        }
+    }
+    int id = globalCloud->createServerObj(*candidateServers[maxIndex]);
     return globalCloud->serverObjList[id];
+
 }
 
 int NewServerBuyer::DeployVMInServer(ServerObj *newServerObj, std::vector<VMObj *> &unhandledVMObj) {
@@ -358,20 +334,69 @@ int NewServerBuyer::DeployVMInServer(ServerObj *newServerObj, std::vector<VMObj 
 int NewServerBuyer::normalize(std::vector<double> &vec) {
     double sum = 0;
     for (auto it:vec) {
-        if(it==-1){
+        if (it == -1) {
             continue;
-        }else{
+        } else {
             sum += it;
         }
 
     }
     for (auto &it:vec) {
-        if(it==-1){
-            it=1000;
-        }else{
+        if (it == -1) {
+            it = 1000;
+        } else {
             it = it / sum;
         }
 
+    }
+    return 0;
+}
+
+int
+NewServerBuyer::voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidateServers, std::vector<double> &voteRes) {
+    voteRes = std::vector<double>(candidateServers.size(), 0);
+    std::vector<double> tickets({10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1});
+    struct unitCost {
+        double value = 1 << 20;
+        int index = -1;
+    };
+    std::vector<unitCost> unitCostVec;
+    for (int i = 0; i < voteRes.size(); i++) {
+        unitCost u;
+        if (candidateServers[i]->canDeployOnSingleNode(vmObj->info) ||
+            candidateServers[i]->canDeployOnDoubleNode(vmObj->info)) {
+            double fitness = fitnessMap[vmObj->info.model][candidateServers[i]->model];
+            double value = candidateServers[i]->unitCost * (1 + 5*fitness);
+            u.value = value;
+        } else {
+            u.value = 1 << 20;
+        }
+        u.index = i;
+        unitCostVec.push_back(u);
+    }
+    auto cmp = [](unitCost &u1, unitCost &u2) {
+        return u1.value < u2.value;
+    };
+
+    std::sort(unitCostVec.begin(), unitCostVec.end(), cmp);
+    Resource r;
+    vmObj->info.getRequiredResourceForOneNode(r);
+    double mag = Resource::CalResourceMagnitude(r);
+    for (int i = 0; i < tickets.size(); i++) {
+        double ticket = unitCostVec[i].value * mag;
+        voteRes[unitCostVec[i].index]=ticket;
+    }
+    voteResMap[vmObj]=voteRes;
+
+    return 0;
+}
+
+int NewServerBuyer::init() {
+    for (auto &it:globalCloud->serverInfoMap) {
+        ServerInfo &infoIt = it.second;
+        double unitCost = 1.0 * (infoIt.hardwareCost + (infoIt.energyCost * totalDay * 1) / 1.0) /
+                             (infoIt.memorySize + 2 * infoIt.cpuNum);
+        it.second.unitCost=unitCost;
     }
     return 0;
 }

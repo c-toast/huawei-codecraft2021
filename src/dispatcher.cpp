@@ -13,6 +13,8 @@ int Dispatcher::run() {
     strategy->serverBuyer->learnModelInfo();//need to modify
     totalDay=totalDayNum;//need to modify
 
+    strategy->serverBuyer->init();
+
     int remainingDayNum=totalDayNum;
     while(remainingDayNum != 0){
         int BatchDayNum= (remainingDayNum > readableDayNum) ? readableDayNum : remainingDayNum;//second round
