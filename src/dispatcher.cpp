@@ -13,7 +13,7 @@ int Dispatcher::run() {
     strategy->serverBuyer->learnModelInfo();//need to modify
     totalDay=totalDayNum;//need to modify
 
-    strategy->serverBuyer->init();
+    //strategy->serverBuyer->init();
 
     int remainingDayNum=totalDayNum;
     while(remainingDayNum != 0){

@@ -6,10 +6,10 @@
 #include "vmmigrater.h"
 #include "global.h"
 
-#define MIGRATER_USAGESTATE_r0 0.3
-#define MIGRATER_BALANCESTATE_r0 0.3
+#define MIGRATER_USAGESTATE_r0 0.2
+#define MIGRATER_BALANCESTATE_r0 0.2
 #define MIGRATER_USAGESTATE_R0 1
-#define MIGRATER_BALANCESTATE_R0 1
+#define MIGRATER_BALANCESTATE_R0 0.3
 #define ACCEPT_RANGE 20
 #define MIGRATE_ACCEPT_FITNESS 0.00001
 
@@ -26,6 +26,27 @@ int migrateServerCmp(ServerObj *s1, ServerObj *s2) {
 //    return s1->info.energyCost>s2->info.energyCost;
 }
 
+int VMMigrater::migrateByFulness(std::vector<VMObj *> &unhandledVMObj, ServerObj *simulatedServerObj) {
+    if (availableMigrateTime == 0) {
+        return 0;
+    }
+    double fullness= CalculateFullness(simulatedServerObj);
+    if(fullness<0.5){
+        std::vector<VMObj*> vmObjList;
+        sortServerVMObj(simulatedServerObj,vmObjList);
+        for (auto vmMapIt:vmObjList) {
+            cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
+            unhandledVMObj.push_back(vmMapIt);
+            availableMigrateTime--;
+            if (availableMigrateTime == 0) {
+                return 0;
+            }
+        }
+    }
+    return 0;
+}
+
+
 int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<ServerObj *> serverObjList = globalCloud->serverObjList;
     std::sort(serverObjList.begin(), serverObjList.end(), migrateServerCmp);
@@ -38,6 +59,10 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
             return 0;
         }
 
+        if(Resource::CalResourceMagnitude(globalCloud->usedRes)/Resource::CalResourceMagnitude(globalCloud->ownRes)<0.8){
+            migrateByFulness(unhandledVMObj,serverIt);
+        }
+
         //the serverState is the main target, so it is the condition of the while loop
         //migrate by node balance, then the server may be not in ad state again, which will increase
         //the migrate next time
@@ -45,7 +70,7 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
         while (!UsageState::isServerNodeInASD(serverIt, NODEAB, MIGRATER_USAGESTATE_R0, MIGRATER_USAGESTATE_r0)) {
             int preMigrateTime = availableMigrateTime;
             migrateByUsageState(unhandledVMObj, serverIt);
-            //migrateByNodeBalance(unhandledVMObj, &tmpserverIt);
+            migrateByNodeBalance(unhandledVMObj, serverIt);
             // migrateByVMNum(unhandledVMObj,&tmpserverIt);
             if (availableMigrateTime == 0 || preMigrateTime == availableMigrateTime) {
                 break;
@@ -125,8 +150,6 @@ int VMMigrater::migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, Serve
             VMObj *vmObj = vmMapIt.second;
             if (vmObj->info.doubleNode != 1 && vmObj->deployNodes[0] == nodeIndex) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt.second);
-                globalCloud->moveVMObjFromServerObj(vmMapIt.second->id);
-//                cloudOperator.delVMObjInFakeServerObj(simulatedServerObj, vmMapIt.second->id);
                 unhandledVMObj.push_back(vmMapIt.second);
                 availableMigrateTime--;
                 break;

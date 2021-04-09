@@ -64,6 +64,10 @@ int Cloud::delVMObjFromCloud(int vmID) {
     if(vmObj->deployServerID!=-1){
         moveVMObjFromServerObj(vmID);
     }
+
+    usedRes[0]-=vmObj->info.cpuNum;
+    usedRes[1]-=vmObj->info.memorySize;
+
     delete vmObj;
     vmObjMap.erase(vmID);
 
@@ -93,6 +97,9 @@ int Cloud::createServerObj(ServerInfo &serverInfo) {
     serverObjList.push_back(serverObj);
 
     modelServerMap[serverInfo.model].push_back(serverObj);
+
+    ownRes[0]+=serverInfo.cpuNum;
+    ownRes[1]+=serverInfo.memorySize;
 
     return id;
 }
@@ -126,6 +133,9 @@ VMObj * Cloud::createVMObj(int vmID, std::string model) {
     VMInfo info=vmInfoMap[model];
     auto vmObj=new VMObj(info,vmID);
     vmObjMap.insert({vmID,vmObj});
+
+    usedRes[0]+=info.cpuNum;
+    usedRes[1]+=info.memorySize;
 
     return vmObj;
 }

@@ -38,6 +38,8 @@ public:
 
     int init();
 
+    int migrateByFulness(std::vector<VMObj *> &unhandledVMObj, ServerObj *simulatedServerObj);
+
     migraterListener listener;
 };
 

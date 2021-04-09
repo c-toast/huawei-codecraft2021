@@ -45,7 +45,7 @@ public:
 
     int initWhenNewBatchCome();
 
-    int initWhenNewDayStart() { return 0; }
+    int initWhenNewDayStart();
 
     int init();
 };

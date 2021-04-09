@@ -60,6 +60,9 @@ public:
     int moveVMObjFromServerObj(int vmID);
 
     int registerBeforeListener(CloudListener* h){beforelistenerList.push_back(h);return 0;}
+
+    std::array<int,2> ownRes={0,0};
+    std::array<int,2> usedRes={0,0};
 };
 
 

@@ -49,6 +49,11 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
 
     initServerList();
 
+    if (Resource::CalResourceMagnitude(globalCloud->usedRes) / Resource::CalResourceMagnitude(globalCloud->ownRes) <
+        0.8) {
+        canDeployOnEmpty = false;
+    }
+
     deployByFitness(unhandledVMObj, 0, 10);
 //    deployByFitness(unhandledVMObj,10,20);
 //    deployByFitness(unhandledVMObj,20,30);
@@ -56,6 +61,14 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
 //    deployByAcceptableUsageState(unhandledVMObj, 0.8);
 //    deployByAcceptableUsageState(unhandledVMObj, 0.5);
     forceDeploy(unhandledVMObj);
+
+    if (!canDeployOnEmpty) {
+        canDeployOnEmpty = true;
+        deployByFitness(unhandledVMObj, 0, 10);
+        deployByAcceptableUsageState(unhandledVMObj, 1);
+        forceDeploy(unhandledVMObj);
+    }
+
 
     return 0;
 }
@@ -171,6 +184,11 @@ int VMDeployer::getFakeServerForVM(ServerObj *serverObj, VMObj *vmObj, ServerObj
 
 bool VMDeployer::getFakeServerAndJudgeDeployable(ServerObj *serverObj, ServerObj &fakeServerObj, VMObj *vmObj,
                                                  int &nodeIndex) {
+    if (!canDeployOnEmpty && serverObj->vmObjMap.empty()) {
+        return false;
+    }
+
+
     if (!serverObj->canDeploy(vmObj->info, nodeIndex)) {
         return false;
     }

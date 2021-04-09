@@ -257,26 +257,26 @@ int NewServerBuyer::initWhenNewBatchCome() {
 
 int NewServerBuyer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
     voteResMap.clear();
-    for (int i = 0; i < unhandledVMObj.size();) {
-        std::vector<VMObj *> unhandledBatch;
-        int batchSize = 100;
-        if (i + batchSize > unhandledVMObj.size()) {
-            unhandledBatch.insert(unhandledBatch.end(), unhandledVMObj.begin() + i, unhandledVMObj.end());
-            i += unhandledVMObj.size();
-        } else {
-            unhandledBatch.insert(unhandledBatch.end(), unhandledVMObj.begin() + i,
-                                  unhandledVMObj.begin() + i + batchSize);
-            i += batchSize;
-        }
-        while (!unhandledBatch.empty()) {
-//            if(globalDay==36){
-//                LOGE("size %d", unhandledBatch.size());
-//                int a;
-//            }
+//    for (int i = 0; i < unhandledVMObj.size();) {
+//        std::vector<VMObj *> unhandledBatch;
+//        int batchSize = 100;
+//        if (i + batchSize > unhandledVMObj.size()) {
+//            unhandledBatch.insert(unhandledBatch.end(), unhandledVMObj.begin() + i, unhandledVMObj.end());
+//            i += unhandledVMObj.size();
+//        } else {
+//            unhandledBatch.insert(unhandledBatch.end(), unhandledVMObj.begin() + i,
+//                                  unhandledVMObj.begin() + i + batchSize);
+//            i += batchSize;
+//        }
+//        while (!unhandledBatch.empty()) {
+//            ServerObj *newServer = createASuitableServer(allServerInfos, unhandledBatch);
+//            DeployVMInServer(newServer, unhandledBatch);
+//        }
+//    }
 
-            ServerObj *newServer = createASuitableServer(allServerInfos, unhandledBatch);
-            DeployVMInServer(newServer, unhandledBatch);
-        }
+    while (!unhandledVMObj.empty()) {
+        ServerObj *newServer = createASuitableServer(allServerInfos, unhandledVMObj);
+        DeployVMInServer(newServer, unhandledVMObj);
     }
 
     return 0;
@@ -331,31 +331,16 @@ int NewServerBuyer::DeployVMInServer(ServerObj *newServerObj, std::vector<VMObj 
     return 0;
 }
 
-int NewServerBuyer::normalize(std::vector<double> &vec) {
-    double sum = 0;
-    for (auto it:vec) {
-        if (it == -1) {
-            continue;
-        } else {
-            sum += it;
-        }
-
-    }
-    for (auto &it:vec) {
-        if (it == -1) {
-            it = 1000;
-        } else {
-            it = it / sum;
-        }
-
-    }
-    return 0;
-}
-
 int
 NewServerBuyer::voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidateServers, std::vector<double> &voteRes) {
     voteRes = std::vector<double>(candidateServers.size(), 0);
-    std::vector<double> tickets({10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1});
+    std::vector<double> tickets;
+    double ticketsValue=10;
+    for(int i=0;i<10;i++){
+        tickets.push_back(ticketsValue);
+        ticketsValue-=1;
+    }
+
     struct unitCost {
         double value = 1 << 20;
         int index = -1;
@@ -366,7 +351,7 @@ NewServerBuyer::voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidate
         if (candidateServers[i]->canDeployOnSingleNode(vmObj->info) ||
             candidateServers[i]->canDeployOnDoubleNode(vmObj->info)) {
             double fitness = fitnessMap[vmObj->info.model][candidateServers[i]->model];
-            double value = candidateServers[i]->unitCost * (1 + 5*fitness);
+            double value = candidateServers[i]->unitCost * (1 + 3.0*fitness);
             u.value = value;
         } else {
             u.value = 1 << 20;
@@ -381,9 +366,10 @@ NewServerBuyer::voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidate
     std::sort(unitCostVec.begin(), unitCostVec.end(), cmp);
     Resource r;
     vmObj->info.getRequiredResourceForOneNode(r);
-    double mag = Resource::CalResourceMagnitude(r);
+    double mag=Resource::CalResourceMagnitude(r);
+//    double mag =CalDistance({(double)vmObj->info.memorySize, 2 * (double)vmObj->info.cpuNum});
     for (int i = 0; i < tickets.size(); i++) {
-        double ticket = unitCostVec[i].value * mag;
+        double ticket = tickets[i] * mag;
         voteRes[unitCostVec[i].index]=ticket;
     }
     voteResMap[vmObj]=voteRes;
@@ -392,10 +378,14 @@ NewServerBuyer::voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidate
 }
 
 int NewServerBuyer::init() {
+    return 0;
+}
+
+int NewServerBuyer::initWhenNewDayStart() {
     for (auto &it:globalCloud->serverInfoMap) {
         ServerInfo &infoIt = it.second;
-        double unitCost = 1.0 * (infoIt.hardwareCost + (infoIt.energyCost * totalDay * 1) / 1.0) /
-                             (infoIt.memorySize + 2 * infoIt.cpuNum);
+        double unitCost = 1.0 * (infoIt.hardwareCost + (infoIt.energyCost * (totalDay-globalDay)*1.2 / 1.0) /
+                          (CalDistance({(double)infoIt.memorySize, 2 * (double)infoIt.cpuNum})));
         it.second.unitCost=unitCost;
     }
     return 0;

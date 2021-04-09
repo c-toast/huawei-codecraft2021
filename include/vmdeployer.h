@@ -39,6 +39,7 @@ public:
 
     int getStartIndexOfServerList(VMObj *vmObj, std::vector<ServerObj *> *&deployServerList);
 
+    bool canDeployOnEmpty=true;
 };
 
 #endif //HUAWEI_CODECRAFT_VMDEPLOYER_H

@@ -86,7 +86,7 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
     if(canDeployA&&canDeployB){
         Resource resA,resB;
         getNodeRemainingResource(NODEA,resA);
-        getNodeRemainingResource(NODEA,resB);
+        getNodeRemainingResource(NODEB,resB);
         //may have problem here
         if(Resource::CalResourceMagnitude(resA)>Resource::CalResourceMagnitude(resB)){
             deployNode=NODEA;

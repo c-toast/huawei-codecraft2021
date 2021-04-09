@@ -16,7 +16,6 @@ int main() {
     VMMigrater defaultVMMigrater;
     defaultVMMigrater.init();
 
-
     Monitor *m = new Monitor(fopen("/home/ctoast/huawei-codecraft/bin/log.txt", "w"));
     globalCloud->registerBeforeListener(m);
 
