@@ -55,6 +55,8 @@ int initFitness() {
             FitRecord r;
             r.serverModel = serverInfoListIt.second.model;
             r.fitness = CalFitness(serverInfoListIt.second, vmInfoMapIt.second);
+            FLOGI("serverRes (%d, %d),vmRes (%d, %d), fitness %f", serverInfoListIt.second.cpuNum,
+                  serverInfoListIt.second.memorySize, vmInfoMapIt.second.cpuNum, vmInfoMapIt.second.memorySize,r.fitness);
             fitVec.push_back(r);
         }
         std::sort(fitVec.begin(), fitVec.end(), reqSetCmp);
@@ -62,12 +64,9 @@ int initFitness() {
         for (auto &recordIt:fitVec) {
             serversSortByFitness[vmInfoMapIt.first].push_back(recordIt.serverModel);
             fitnessRangeMap[vmInfoMapIt.first][recordIt.serverModel] = i;
+            fitnessMap[vmInfoMapIt.first][recordIt.serverModel] = recordIt.fitness;
             i++;
         }
-//        for(int j=69;j<80;j++){
-//            printf("%f ",fitVec[j].fitness);
-//        }
-//        printf("\n");
     }
 
     return 0;

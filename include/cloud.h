@@ -23,7 +23,7 @@ public:
 
     virtual int delVMObjFromCloud(int vmID){return 0;}
 
-    virtual int delVMObjFromServerObj(int vmID){return 0;}
+    virtual int moveVMObjFromServerObj(int vmID){return 0;}
 
     virtual int createServerObj(ServerInfo &serverInfo){return 0;}
 };
@@ -57,7 +57,7 @@ public:
 
 //    int eraseVMObj(int vmID);
 
-    int MoveVMObjFromServerObj(int vmID);
+    int moveVMObjFromServerObj(int vmID);
 
     int registerBeforeListener(CloudListener* h){beforelistenerList.push_back(h);return 0;}
 };

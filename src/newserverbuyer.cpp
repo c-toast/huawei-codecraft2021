@@ -316,7 +316,7 @@ ServerObj *NewServerBuyer::createASuitableServer(std::vector<ServerInfo *> &cand
     double minValue = 100000000;
     int minIndex = -1;
     for (int i = 0; i < totalFitnessVec.size(); i++) {
-        double value = totalFitnessVec[i]/17 + costVec[i];
+        double value = totalFitnessVec[i]/15 + costVec[i];
         if (value < minValue) {
             if (unhandledVMObj.size() == 1 &&
                 !candidateServers[i]->canDeployOnSingleNode(unhandledVMObj[0]->info) &&
@@ -337,8 +337,8 @@ int NewServerBuyer::DeployVMInServer(ServerObj *newServerObj, std::vector<VMObj 
     std::vector<VMObj *> tmpUnhandledVMObj = unhandledVMObj;
     unhandledVMObj.clear();
     auto Cmp = [newServerObj](const VMObj *v1, const VMObj *v2) {
-        double fit1 = fitnessRangeMap[v1->info.model][newServerObj->info.model];
-        double fit2 = fitnessRangeMap[v2->info.model][newServerObj->info.model];
+        double fit1 = fitnessMap[v1->info.model][newServerObj->info.model];
+        double fit2 = fitnessMap[v2->info.model][newServerObj->info.model];
         return fit1 < fit2;
     };
     std::sort(tmpUnhandledVMObj.begin(), tmpUnhandledVMObj.end(), Cmp);

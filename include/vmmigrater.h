@@ -8,6 +8,16 @@
 #include "vm.h"
 #include "strategytools.h"
 
+class migraterListener : public CloudListener {
+public:
+    std::map<int,VMObj*> candidateVMMap;
+
+    int deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) override;
+
+    int moveVMObjFromServerObj(int vmID) override;
+
+};
+
 class VMMigrater {
 public:
     int availableMigrateTime=0;
@@ -15,6 +25,8 @@ public:
     int migrate(std::vector<VMObj *> &unhandledVMObj);
 
     int migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
+
+    int migrateByFitness(std::vector<VMObj *> &unhandledVMObj);
 
     int migrateByNodeBalance(std::vector<VMObj *> &unhandledVMObj, ServerObj* simulatedServerObj);
 
@@ -24,6 +36,9 @@ public:
 
     int initWhenNewDayStart(OneDayRequest &oneDayReq);
 
+    int init();
+
+    migraterListener listener;
 };
 
 

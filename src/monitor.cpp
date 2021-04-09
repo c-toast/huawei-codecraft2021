@@ -5,7 +5,7 @@
 #include "monitor.h"
 
 
-int Monitor::delVMObjFromServerObj(int vmID) {
+int Monitor::moveVMObjFromServerObj(int vmID) {
     if (counter < 0) {
         return 0;
     }

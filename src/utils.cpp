@@ -6,6 +6,9 @@
 #include "utils.h"
 #include "cmath"
 
+FILE* logFile=fopen("/home/ctoast/huawei-codecraft/bin/log2.txt","w");
+int cnt=1000;
+
 int Resource::allocResource(Resource &requiredResource) {
     this->cpuNum -= requiredResource.cpuNum;
     this->memorySize -= requiredResource.memorySize;

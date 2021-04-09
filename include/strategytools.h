@@ -16,6 +16,7 @@
 
 extern std::map<std::string,std::vector<std::string>> serversSortByFitness; //[VMmodel]range
 extern std::map<std::string,std::map<std::string,int>> fitnessRangeMap; //[VMmodel][serverModel]fitnessRange
+extern std::map<std::string,std::map<std::string,double>> fitnessMap; //[VMmodel][serverModel]fitness
 
 
 class UsageState{

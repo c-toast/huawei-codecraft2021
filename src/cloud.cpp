@@ -62,7 +62,7 @@ int Cloud::delVMObjFromCloud(int vmID) {
 
     auto vmObj=vmObjMap[vmID];
     if(vmObj->deployServerID!=-1){
-        MoveVMObjFromServerObj(vmID);
+        moveVMObjFromServerObj(vmID);
     }
     delete vmObj;
     vmObjMap.erase(vmID);
@@ -131,12 +131,12 @@ VMObj * Cloud::createVMObj(int vmID, std::string model) {
 }
 
 
-int Cloud::MoveVMObjFromServerObj(int vmID) {
+int Cloud::moveVMObjFromServerObj(int vmID) {
     for(auto h:beforelistenerList){
-        h->delVMObjFromServerObj(vmID);
+        h->moveVMObjFromServerObj(vmID);
     }
 //    if(vmID<0||vmID>serverObjList.size()){
-//        LOGE("Cloud::MoveVMObjFromServerObj: id is invalid");
+//        LOGE("Cloud::moveVMObjFromServerObj: id is invalid");
 //        exit(-1);
 //    }
 

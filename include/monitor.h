@@ -15,7 +15,7 @@ public:
 
     int deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) override;
 
-    int delVMObjFromServerObj(int vmID) override;
+    int moveVMObjFromServerObj(int vmID) override;
 
     int createServerObj(ServerInfo &serverInfo) override;
 
@@ -29,7 +29,7 @@ public:
 
     std::map<VMObj *, bool> migrateMap;
 
-    int counter = 50000;
+    int counter = 5000;
 
 };
 

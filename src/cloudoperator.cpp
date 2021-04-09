@@ -123,7 +123,7 @@ int CloudOperator::markMigratedVMObj(ServerObj *serverObj, VMObj *vmObj) {
     }
     serverMigrateVMMap[serverObj].push_back(vmObj);
 
-    globalCloud->MoveVMObjFromServerObj(vmObj->id);
+    globalCloud->moveVMObjFromServerObj(vmObj->id);
     return 0;
 }
 
@@ -196,7 +196,7 @@ int CloudOperator::deployNewServerObj(ServerObj *serverObj) {
 //        VMObj* vmObj=mapIt.second;
 //        auto it=migrationMap.find(vmObj);
 //        if(it!=migrationMap.end()){
-//            globalCloud->MoveVMObjFromServerObj(vmObj->id);
+//            globalCloud->moveVMObjFromServerObj(vmObj->id);
 //        }
 //    }
 
@@ -241,7 +241,7 @@ int CloudOperator::initWhenNewDayStart(OneDayRequest &oneDayReq) {
 
             serverDelVMMap[globalCloud->serverObjList[i.originServerID]].push_back(vmObj);
 
-            globalCloud->MoveVMObjFromServerObj(it.vmID);
+            globalCloud->moveVMObjFromServerObj(it.vmID);
         }
     }
     return 0;

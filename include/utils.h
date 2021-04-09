@@ -13,6 +13,10 @@
 #define LOGE(args...) fprintf(stdout,"E:");fprintf(stdout, ##args); putchar('\n')
 #define LOGW(args...) fprintf(stdout,"W:");fprintf(stdout, ##args); putchar('\n')
 
+extern FILE* logFile;
+extern int cnt;
+#define FLOGI(args...) if(cnt>0) {fprintf(logFile, ##args); fputc('\n',logFile);cnt--;}
+
 #define NODEA 0
 #define NODEB 1
 #define NODEAB 2

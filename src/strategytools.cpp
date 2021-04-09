@@ -6,17 +6,8 @@
 
 std::map<std::string,std::vector<std::string>> serversSortByFitness; //[VMmodel]range
 std::map<std::string,std::map<std::string,int>> fitnessRangeMap; //[VMmodel][serverModel]fitnessRange
+std::map<std::string,std::map<std::string,double>> fitnessMap;
 
-
-//double calDeviation(MultiDimension d){
-//    double ret;
-//    ret=d.Dimension1-d.Dimension2;
-//    if(ret<0){
-//        ret=-ret;
-//    }
-//    ret/=distance(d.Dimension1,d.Dimension2,0,0);
-//    return ret;
-//}
 
 
 
@@ -51,7 +42,7 @@ double CalFitness(std::array<int,2> serverRes,std::array<int,2>vmRes){
     double cpuNumRadio=((double)vmRes[0])/serverRes[0];
     double memSizeRadio=((double)vmRes[1])/serverRes[1];
     double average=(cpuNumRadio+memSizeRadio)/2;
-    return (pow(cpuNumRadio-average,2)+pow(memSizeRadio-average,2))/2;
+    return CalDistance({cpuNumRadio-average,memSizeRadio-average});
 }
 
 double CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo) {
