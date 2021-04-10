@@ -194,7 +194,7 @@ double finalScore(ServerInfo *serverInfo, Resource totalResource){
     int vmCpuNum=totalResource.cpuNum;
     int vmMemSize=totalResource.memorySize;
 
-    double cost=(double(vmMemSize)/serverMemSize+2*double(vmCpuNum)/serverCpuNum)*(hardCost+600*energyCost);
+    double cost=(double(vmMemSize)/serverMemSize+2*double(vmCpuNum)/serverCpuNum)*(400*energyCost);
 
     double cpuNumRadio=((double)vmCpuNum)/serverCpuNum;
     double memSizeRadio=((double)vmMemSize)/serverMemSize;
@@ -202,5 +202,5 @@ double finalScore(ServerInfo *serverInfo, Resource totalResource){
     double fitness=(pow(cpuNumRadio-average,2)+pow(memSizeRadio-average,2))/2;
 
     double score=log(cost)/log(1.0+2.0/(1+fitness));
-    return score;
+    return cost;
 }

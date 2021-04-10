@@ -3,8 +3,8 @@
 #include "global.h"
 
 int main() {
-    reader.file=fopen("./training-1.txt","r");
-    writer.file=fopen("./result.txt","w");
+    //reader.file=fopen("./training-1.txt","r");
+    //writer.file=fopen("./result.txt","w");
 
     initAll();
     VMDeployer defaultVMDeployer;
