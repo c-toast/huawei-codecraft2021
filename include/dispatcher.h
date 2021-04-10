@@ -19,8 +19,6 @@ public:
     };
 
     int run();
-
-
 };
 
 #endif //HUAWEI_CODECRAFT_DISPATCHER_H

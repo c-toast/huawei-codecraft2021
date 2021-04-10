@@ -12,44 +12,52 @@
 #include "vmdeployer.h"
 #include "cloudoperator.h"
 #include "newserverbuyer.h"
+#include <array>
 
 extern std::map<std::string,std::vector<std::string>> fitnessRangeMap; //[VMmodel]range
 extern std::map<std::string,std::map<std::string,int>> fitnessMap; //[VMmodel][serverModel]fitnessRange
-#define ACCEPT_RANGE 5
 
-#define USAGESTATERO 1
-#define USAGESTATErO 0.3
-#define NODEBANLANCESTATERO 1
 
-struct MultiDimension{
-    double Dimension1;
-    double Dimension2;
+class UsageState{
+public:
+    static bool isServerNodeInSD(ServerObj* serverObj,int nodeIndex,double R0);
+
+    static bool isServerNodeInAD(ServerObj* serverObj,int nodeIndex,double r0);
+
+    static bool isServerNodeInASD(ServerObj* serverObj,int nodeIndex,double R0,double r0);
+
+    static std::array<double,2> calSingleNodeUsageState(ServerObj* obj, int NodeIndex);
 };
 
-MultiDimension calSingleNodeUsageState(ServerObj* obj, int NodeIndex);
+class BalanceState{
+public:
+    static bool isServerBalanceInSD(ServerObj* serverObj,double R0);
 
-MultiDimension calNodeBalanceState(ServerObj* obj);
+    static bool isServerBalanceInAD(ServerObj* serverObj,double r0);
 
-inline double distance(double x1,double y1,double x2,double y2){
-    return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
-}
+    static bool isServerBalanceInASD(ServerObj* serverObj,double R0,double r0);
 
-double calDeviation(MultiDimension d);
+    static std::array<double,2> calNodeBalanceState(ServerObj* obj);
+};
 
-bool isInSD(MultiDimension us, double R0);
+//double calDeviation(MultiDimension d);
 
-bool isServerInSD(ServerObj* serverObj, double R0);
+bool isInSD(std::array<double,2> vec, double R0);
 
-bool isServerNodeBalance(ServerObj* serverObj,double R0);
+bool isInAD(std::array<double,2> vec, double r0);
 
 bool isDeployDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
 
-bool isMigrateDecisionBetter(ServerObj *oldServerObj, ServerObj *newServerObj);
-
 double CalculateFullness(ServerObj* serverObj);
 
-int CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo, double &fitnessReceiver);
+double CalFitness(std::array<int,2> serverRes,std::array<int,2>vmRes);
 
-double CalCost(ServerInfo *serverInfo);
+double CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo);
+
+double CalFitness(ServerObj *serverObj, int nodeIndex,VMInfo &vmInfo);
+
+int vmObjResMagnitudeCmp(const VMObj* vm1,const VMObj* vm2);
+
+double CalCostWithVM(ServerInfo *serverInfo, VMInfo &vmInfo);
 
 #endif //HUAWEI_CODECRAFT_STRATEGYTOOLS_H

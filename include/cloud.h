@@ -13,6 +13,22 @@
 #include "server.h"
 #include "vm.h"
 
+class CloudListener{
+public:
+    virtual int deployServerObj(ServerObj C){return 0;}
+
+    virtual VMObj* createVMObj(int vmID, std::string model){return NULL;}
+
+    virtual int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj){return 0;}
+
+    virtual int delVMObjFromCloud(int vmID){return 0;}
+
+    virtual int delVMObjFromServerObj(int vmID){return 0;}
+
+    virtual int createServerObj(ServerInfo &serverInfo){return 0;}
+};
+
+
 class Cloud{
 public:
     std::map<std::string,VMInfo> vmInfoMap; //[model]info
@@ -25,23 +41,27 @@ public:
 
     Cloud()=default;
 
+    std::map<std::string,std::vector<ServerObj*>> modelServerMap;
+
+    std::vector<CloudListener*> beforelistenerList;
+
     int createServerObj(ServerInfo &serverInfo);
 
     int deployServerObj(ServerObj C);
 
-    VMObj * createVMObj(int vmID, std::string model);
-
-    //nodeIndex can be NODEA NODEB or NODEAB
-    int deployVMObj(int serverObjID, int nodeIndex, int vmID);
+    VMObj* createVMObj(int vmID, std::string model);
 
     int deployVMObj(int serverObjID, int nodeIndex, VMObj* vmObj);
 
     int delVMObjFromCloud(int vmID);
 
-    int delVMObjFromServerObj(int vmID);
+//    int eraseVMObj(int vmID);
 
-    int renewServerID(int start);
+    int MoveVMObjFromServerObj(int vmID);
+
+    int registerBeforeListener(CloudListener* h){beforelistenerList.push_back(h);return 0;}
 };
+
 
 
 

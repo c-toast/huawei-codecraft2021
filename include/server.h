@@ -71,9 +71,11 @@ public:
 
     int delVM(int vmID);
 
-    int deployItselfInCloud(int serverID);
+    int delVM(int nodeIndex, VMObj* vmObj);
 
+    int allocResForDeploy(int nodeIndex, VMObj* vmObj);
 
+    int freeResForDel(int nodeIndex, VMObj* vmObj);
 };
 
 

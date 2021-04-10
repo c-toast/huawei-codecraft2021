@@ -14,10 +14,10 @@ bool ServerInfo::canDeployOnSingleNode(VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes(cpuNum/2,memorySize/2);
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
-        return false;
+    if(Resource::isResourceEnough(ownRes,requiredRes)){
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
@@ -29,52 +29,13 @@ bool ServerInfo::canDeployOnDoubleNode(VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes(cpuNum/2,memorySize/2);
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     return true;
 }
 
 
-int ServerObj::deployVM(int nodeIndex, VMObj* vmObj) {
-    VMInfo vmInfo=vmObj->info;
-    Resource requiredRes;
-    vmInfo.getRequiredResourceForOneNode(requiredRes);
-
-    if(nodeIndex==NODEAB){
-        nodes[NODEA].remainingResource.allocResource(requiredRes);
-        nodes[NODEB].remainingResource.allocResource(requiredRes);
-
-    }else {
-        nodes[nodeIndex].remainingResource.allocResource(requiredRes);
-    }
-    int vmID=vmObj->id;
-    if(vmObjMap.find(vmID)!=vmObjMap.end()||vmObjDeployNodeMap.find(vmID)!=vmObjDeployNodeMap.end()){
-        LOGE("ServerObj::deployVM: the vmObj have already been deploy in this serverObj");
-        return -1;
-    }
-    vmObjMap.insert({vmID, vmObj});
-    vmObjDeployNodeMap.insert({vmID,nodeIndex});
-
-    return 0;
-}
-
-int ServerObj::delVM(int vmID) {
-    Resource requiredRes;
-    VMObj* vmObj=vmObjMap[vmID];
-    if(vmObj==NULL){
-        LOGE("ServerObj::delVM: the vm does not exist in this obj");
-        return -1;
-    }
-    vmObj->info.getRequiredResourceForOneNode(requiredRes);
-    for(auto nodeIndex:vmObj->deployNodes){
-        nodes[nodeIndex].remainingResource.freeResource(requiredRes);
-    }
-    vmObjMap.erase(vmID);
-    vmObjDeployNodeMap.erase(vmID);
-
-    return 0;
-}
 
 int ServerObj::getNodeRemainingResource(int nodeIndex, Resource &receiver) {
     receiver = nodes[nodeIndex].remainingResource;
@@ -90,7 +51,7 @@ bool ServerObj::canDeployOnSingleNode(int nodeIndex, VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes=nodes[nodeIndex].remainingResource;
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     return true;
@@ -105,11 +66,11 @@ bool ServerObj::canDeployOnDoubleNode(VMInfo &vmInfo) {
     Resource requiredRes;
     vmInfo.getRequiredResourceForOneNode(requiredRes);
     Resource ownRes=nodes[0].remainingResource;
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     ownRes=nodes[1].remainingResource;
-    if(ownRes.memorySize<requiredRes.memorySize||ownRes.cpuNum<requiredRes.cpuNum){
+    if(!Resource::isResourceEnough(ownRes,requiredRes)){
         return false;
     }
     return true;
@@ -127,7 +88,7 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
         getNodeRemainingResource(NODEA,resA);
         getNodeRemainingResource(NODEA,resB);
         //may have problem here
-        if(resA.memorySize>resB.memorySize&&resA.cpuNum>resB.cpuNum){
+        if(Resource::CalResourceMagnitude(resA)>Resource::CalResourceMagnitude(resB)){
             deployNode=NODEA;
         }else{
             deployNode=NODEB;
@@ -144,13 +105,13 @@ bool ServerObj::canDeploy(VMInfo &vmInfo, int &deployNode) {
     return false;
 }
 
-int ServerObj::deployItselfInCloud(int serverID) {
-    id=serverID;
-    for(auto& it:vmObjMap){
-        it.second->deployServerID=id;
-    }
-    return 0;
-}
+//int ServerObj::deployItselfInCloud(int serverID) {
+//    id=serverID;
+//    for(auto& it:vmObjMap){
+//        it.second->deployServerID=id;
+//    }
+//    return 0;
+//}
 
 bool ServerObj::canDeployOnNode(int nodeIndex, VMInfo &vmInfo) {
     if(nodeIndex==NODEAB){
@@ -159,6 +120,69 @@ bool ServerObj::canDeployOnNode(int nodeIndex, VMInfo &vmInfo) {
         return canDeployOnSingleNode(nodeIndex,vmInfo);
     }
 }
+
+int ServerObj::deployVM(int nodeIndex, VMObj* vmObj) {
+    allocResForDeploy(nodeIndex,vmObj);
+
+    int vmID=vmObj->id;
+    if(vmObjMap.find(vmID)!=vmObjMap.end()||vmObjDeployNodeMap.find(vmID)!=vmObjDeployNodeMap.end()){
+        LOGE("ServerObj::deployVM: the vmObj have already been deploy in this serverObj");
+        exit(-1);
+    }
+    vmObjMap.insert({vmID, vmObj});
+    vmObjDeployNodeMap.insert({vmID,nodeIndex});
+
+    return 0;
+}
+
+int ServerObj::delVM(int vmID) {
+    VMObj* vmObj=vmObjMap[vmID];
+    if(vmObj==NULL){
+        LOGE("ServerObj::delVM: the vm does not exist in this obj");
+        return -1;
+    }
+    int nodeIndex=vmObj->info.doubleNode==1?NODEAB:vmObj->deployNodes[0];
+    delVM(nodeIndex,vmObj);
+
+    return 0;
+}
+
+int ServerObj::delVM(int nodeIndex, VMObj *vmObj) {
+    int vmID=vmObj->id;
+    freeResForDel(nodeIndex,vmObj);
+    vmObjMap.erase(vmID);
+    vmObjDeployNodeMap.erase(vmID);
+
+    return 0;
+}
+
+int ServerObj::allocResForDeploy(int nodeIndex, VMObj *vmObj) {
+    VMInfo vmInfo=vmObj->info;
+    Resource requiredRes;
+    vmInfo.getRequiredResourceForOneNode(requiredRes);
+
+    if(nodeIndex==NODEAB){
+        nodes[NODEA].remainingResource.allocResource(requiredRes);
+        nodes[NODEB].remainingResource.allocResource(requiredRes);
+    }else {
+        nodes[nodeIndex].remainingResource.allocResource(requiredRes);
+    }
+    return 0;
+}
+
+int ServerObj::freeResForDel(int nodeIndex, VMObj *vmObj) {
+    Resource requiredRes;
+    vmObj->info.getRequiredResourceForOneNode(requiredRes);
+    if(nodeIndex==NODEAB){
+        nodes[NODEA].remainingResource.freeResource(requiredRes);
+        nodes[NODEB].remainingResource.freeResource(requiredRes);
+    }else {
+        nodes[nodeIndex].remainingResource.freeResource(requiredRes);
+    }
+    return 0;
+}
+
+
 
 
 

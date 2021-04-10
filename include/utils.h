@@ -5,6 +5,8 @@
 #ifndef HUAWEI_CODECRAFT_UTILS_H
 #define HUAWEI_CODECRAFT_UTILS_H
 #include "iostream"
+#include "vector"
+#include "array"
 
 #define LOGD(args...) fprintf(stdout,"D:");fprintf(stdout, ##args); putchar('\n')
 #define LOGI(args...) fprintf(stdout,"I:");fprintf(stdout, ##args); putchar('\n')
@@ -18,28 +20,34 @@
 #define DOUBLEDEPLOY 1
 
 struct Resource{
+    int cpuNum;
+    int memorySize;
+
     Resource()=default;
 
     Resource(int cpuNum,int memorySize):cpuNum(cpuNum),memorySize(memorySize){};
 
-    int allocResource(Resource& requiredResource){
-        this->cpuNum-=requiredResource.cpuNum;
-        this->memorySize-=requiredResource.memorySize;
-        if(cpuNum<0||memorySize<0){
-            LOGE("allocation resource exceeds the limit");
-            exit(-1);
-        }
-    }
+    Resource(std::array<int,2> res):cpuNum(res[0]),memorySize(res[1]){};
 
-    int freeResource(Resource& requiredResource){
-        this->cpuNum+=requiredResource.cpuNum;
-        this->memorySize+=requiredResource.memorySize;
-    }
+    int allocResource(Resource& requiredResource);
 
-    int cpuNum;
-    int memorySize;
+    int freeResource(Resource& requiredResource);
+
+    std::array<int,2> getResourceArray();//return cpuNum memSize
+
+    static int isResourceEnough(Resource ownRes,Resource requiredRes);
+    static int isResourceEnough(std::array<int,2> ownRes,std::array<int,2> requiredRes);
+
+    static double CalResourceMagnitude(Resource r);
+
+    static double CalResourceMagnitude(int cpuNum,int memorySize);
+
+    static double CalResourceMagnitude(std::array<int,2> r);
 };
 
+double CalDistance(std::array<double,2> coordinate1,std::array<double,2> coordinate2);
+
+double CalDistance(std::array<double,2> coordinate1);
 
 
 

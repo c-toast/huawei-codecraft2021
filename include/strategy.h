@@ -18,9 +18,8 @@ public:
     Strategy(VMDeployer* vmDeployer, NewServerBuyer* serverBuyer,VMMigrater* vmMigrater):
     vmDeployer(vmDeployer), serverBuyer(serverBuyer), vmMigrater(vmMigrater){};
 
-    int dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &receiver);
+    int dispatch(RequestsBatch &batch, std::vector<OneDayResult> &receiver);
 
-    int HandleDel(Request &del, OneDayResult &receiver);
 public:
     VMDeployer* vmDeployer;
     NewServerBuyer* serverBuyer;

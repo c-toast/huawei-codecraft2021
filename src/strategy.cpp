@@ -7,22 +7,24 @@
 #include <cloudoperator.h>
 #include "global.h"
 
-int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &receiver) {
-    int dayNum=requestsBatch.size();
-
-    for(int i=0;i<dayNum;i++,globalDay++){
+int Strategy::dispatch(RequestsBatch &batch, std::vector<OneDayResult> &receiver) {
+    for(int i=0; i < batch.size(); i++,globalDay++){
         OneDayResult oneDayRes;
-        OneDayRequest& oneDayReq=requestsBatch[i];
+        OneDayRequest& oneDayReq=batch[i];
+
+        vmMigrater->initWhenNewDayStart(oneDayReq);
+        vmDeployer->initWhenNewDayStart();
+        serverBuyer->initWhenNewDayStart();
+        cloudOperator.initWhenNewDayStart(oneDayReq);
+
 
         std::vector<VMObj *> unhandledVMObj;
         std::vector<Request> unhandledDelReqSet;
         std::vector<Request> unhandledAddReqSet;
 
-        vmMigrater->deployVMNum=globalCloud->vmObjMap.size();
-
         for(auto it:oneDayReq){
             if(it.op==ADD){
-                auto vmObj=globalCloud->createVMObj(it.vMachineID,it.vMachineModel);
+                VMObj* vmObj=globalCloud->vmObjMap[it.vmID];
                 unhandledVMObj.push_back(vmObj);
                 unhandledAddReqSet.push_back(it);
             }else{
@@ -30,24 +32,20 @@ int Strategy::dispatch(RequestsBatch &requestsBatch, std::vector<OneDayResult> &
             }
         }
         vmMigrater->migrate(unhandledVMObj);
+        cloudOperator.depTree.init(cloudOperator.migrationVec);
         vmDeployer->deploy(unhandledVMObj);
         serverBuyer->buyAndDeploy(unhandledVMObj);
 
+        for(auto it:unhandledDelReqSet){
+            cloudOperator.delVMObjFromCloud(it.vmID);
+        }
+
         cloudOperator.genOneDayOpeRes(unhandledAddReqSet, oneDayRes);
         receiver.push_back(oneDayRes);
-
-        for(auto it:unhandledDelReqSet){
-            HandleDel(it,oneDayRes);
-        }
     }
     return 0;
 }
 
-int Strategy::HandleDel(Request &del, OneDayResult &receiver) {
-    int machineId=del.vMachineID;
-    globalCloud->delVMObjFromCloud(machineId);
-    return 0;
-}
 
 
 
