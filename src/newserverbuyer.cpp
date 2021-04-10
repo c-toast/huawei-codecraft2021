@@ -201,7 +201,6 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
             double minCost=1<<30;
             int minIndex=-1;
             int nodeIndex=-1;
-            int fuck=vmObjVec[i]->id;
             // find on Obj
             for(int j=0;j<tmpServerObjList.size();j++){
                 ServerObj* serverObj=tmpServerObjList[j];
