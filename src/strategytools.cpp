@@ -39,10 +39,23 @@ double CalculateFullness(ServerObj* serverObj){
 }
 
 double CalFitness(std::array<int,2> serverRes,std::array<int,2>vmRes){
-    double cpuNumRadio=((double)vmRes[0])/serverRes[0];
-    double memSizeRadio=((double)vmRes[1])/serverRes[1];
-    double average=(cpuNumRadio+memSizeRadio)/2;
-    return CalDistance({cpuNumRadio-average,memSizeRadio-average});
+//    double cpuNumRadio=((double)vmRes[0])/serverRes[0];
+//    double memSizeRadio=((double)vmRes[1])/serverRes[1];
+//    double average=(cpuNumRadio+memSizeRadio)/2;
+//    return CalDistance({cpuNumRadio-average,memSizeRadio-average});
+    double vmDis=CalDistance({(double)vmRes[0],(double)vmRes[1]});
+    double new_x=vmRes[1]*serverRes[0]/serverRes[1];
+    double new_y=vmRes[0]*serverRes[1]/serverRes[0];
+    double ret=-1;
+    double serverDis=-1;
+    if(new_x>=vmRes[0]){
+        serverDis=CalDistance({new_x,(double)vmRes[1]});
+    }else{
+        serverDis=CalDistance({(double)vmRes[0],new_y});
+    }
+    ret=serverDis/vmDis;
+    return ret;
+
 }
 
 double CalFitness(ServerInfo &serverInfo, VMInfo &vmInfo) {

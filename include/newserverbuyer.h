@@ -16,6 +16,8 @@ public:
 
     std::vector<ServerInfo *> allServerInfos;
 
+    std::vector<double> batchVoteRes;
+
     int buyAndDeploy(std::vector<VMObj *> &unhandledVMObj);
 
     ServerObj *createASuitableServer(std::vector<ServerInfo *> &candidateServers,
@@ -26,6 +28,9 @@ public:
     int normalize(std::vector<double> &vec);
 
     int voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidateServers, std::vector<double> &voteRes);
+
+    int voteForServer(VMInfo vmInfo, std::vector<ServerInfo *> &candidateServers, std::vector<double> &voteRes);
+
 
     std::map<VMObj*,std::vector<double>> voteResMap;
 
@@ -43,7 +48,7 @@ public:
 
     int movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj);
 
-    int initWhenNewBatchCome();
+    int initWhenNewBatchCome(RequestsBatch &batch);
 
     int initWhenNewDayStart();
 

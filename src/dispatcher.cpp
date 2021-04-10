@@ -6,7 +6,7 @@
 #include "global.h"
 
 int Dispatcher::run() {
-    int totalDayNum,readableDayNum;
+
     totalDayNum=reader.ReadTotalDayNum();
     readableDayNum=reader.ReadReadableDayNum();//second round
 
@@ -25,7 +25,7 @@ int Dispatcher::run() {
         requestsBatch.clear();
         reader.ReadSeveralDaysRequests(BatchDayNum, requestsBatch);
 
-        strategy->serverBuyer->initWhenNewBatchCome();
+        strategy->serverBuyer->initWhenNewBatchCome(requestsBatch);
         strategy->vmMigrater->initWhenNewBatchCome();
         strategy->vmDeployer->initWhenNewBatchCome();
         strategy->dispatch(requestsBatch, res);

@@ -6,11 +6,11 @@
 #include "vmmigrater.h"
 #include "global.h"
 
-#define MIGRATER_USAGESTATE_r0 0.2
-#define MIGRATER_BALANCESTATE_r0 0.2
+#define MIGRATER_USAGESTATE_r0 0.1
+#define MIGRATER_BALANCESTATE_r0 0.1
 #define MIGRATER_USAGESTATE_R0 1
-#define MIGRATER_BALANCESTATE_R0 0.3
-#define ACCEPT_RANGE 20
+#define MIGRATER_BALANCESTATE_R0 0.5
+#define ACCEPT_RANGE 10
 #define MIGRATE_ACCEPT_FITNESS 0.00001
 
 int VMMigrater::initWhenNewDayStart(OneDayRequest &oneDayReq) {
@@ -30,10 +30,10 @@ int VMMigrater::migrateByFulness(std::vector<VMObj *> &unhandledVMObj, ServerObj
     if (availableMigrateTime == 0) {
         return 0;
     }
-    double fullness= CalculateFullness(simulatedServerObj);
-    if(fullness<0.5){
-        std::vector<VMObj*> vmObjList;
-        sortServerVMObj(simulatedServerObj,vmObjList);
+    double fullness = CalculateFullness(simulatedServerObj);
+    if (fullness < 0.5) {
+        std::vector<VMObj *> vmObjList;
+        sortServerVMObj(simulatedServerObj, vmObjList);
         for (auto vmMapIt:vmObjList) {
             cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
             unhandledVMObj.push_back(vmMapIt);
@@ -51,7 +51,20 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<ServerObj *> serverObjList = globalCloud->serverObjList;
     std::sort(serverObjList.begin(), serverObjList.end(), migrateServerCmp);
 
-//    migrateByFitness(unhandledVMObj);
+//    if (Resource::CalResourceMagnitude(globalCloud->usedRes) / Resource::CalResourceMagnitude(globalCloud->ownRes) <
+//        0.8) {
+//        for (auto serverIt:serverObjList) {//the server used for migrate do not have the vm to be deleted
+//            if (availableMigrateTime == 0) {
+//                return 0;
+//            }
+//
+//
+//            migrateByFulness(unhandledVMObj, serverIt);
+//        }
+//    } else {
+//        migrateByFitness(unhandledVMObj);
+//    }
+
 
     //do not migrate the vm to be delete!!
     for (auto serverIt:serverObjList) {//the server used for migrate do not have the vm to be deleted
@@ -71,7 +84,6 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
             int preMigrateTime = availableMigrateTime;
             migrateByUsageState(unhandledVMObj, serverIt);
             migrateByNodeBalance(unhandledVMObj, serverIt);
-            // migrateByVMNum(unhandledVMObj,&tmpserverIt);
             if (availableMigrateTime == 0 || preMigrateTime == availableMigrateTime) {
                 break;
             }
@@ -92,7 +104,6 @@ int VMMigrater::migrateByUsageState(std::vector<VMObj *> &unhandledVMObj, Server
         for (auto vmMapIt:vmObjList) {
             std::string vmModel = vmMapIt->info.model;
             int range = fitnessRangeMap[vmModel][simulatedServerObj->info.model];
-            double rangeValue = fitnessMap[vmModel][simulatedServerObj->info.model];
             if (range > ACCEPT_RANGE) {
                 cloudOperator.markMigratedVMObj(simulatedServerObj, vmMapIt);
                 unhandledVMObj.push_back(vmMapIt);
@@ -177,7 +188,7 @@ int VMMigrater::sortServerVMObj(ServerObj *serverObj, std::vector<VMObj *> &rece
 }
 
 int VMMigrater::init() {
-    globalCloud->registerBeforeListener(&listener);
+    //globalCloud->registerBeforeListener(&listener);
     return 0;
 }
 
@@ -194,7 +205,7 @@ int VMMigrater::migrateByFitness(std::vector<VMObj *> &unhandledVMObj) {
         double fit2 = fitnessMap[v2->info.model][globalCloud->serverObjList[v2->deployServerID]->info.model];
         return fit1 > fit2;
     };
-    std::sort(candidateVMVec.begin(),candidateVMVec.end(),Cmp);
+    std::sort(candidateVMVec.begin(), candidateVMVec.end(), Cmp);
 
     for (auto it:candidateVMVec) {
         ServerObj *serverObj = globalCloud->serverObjList[it->deployServerID];
@@ -221,5 +232,7 @@ int migraterListener::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) 
     if (fitnessMap[vmObj->info.model][serverModel] < 0.25) {
         candidateVMMap.insert({vmObj->id, vmObj});
     }
+//    LOGE("migraterListener::deployVMObj");
+//    exit(-1);
     return 0;
 }

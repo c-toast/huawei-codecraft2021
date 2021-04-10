@@ -7,7 +7,7 @@
 #include "global.h"
 #include "algorithm"
 
-#define DEPLOYER_USAGESTATE_r0 0.3
+#define DEPLOYER_USAGESTATE_r0 0.1
 
 
 int DoubleServerMagCmp(ServerObj *s1, ServerObj *s2) {
@@ -52,6 +52,8 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
     if (Resource::CalResourceMagnitude(globalCloud->usedRes) / Resource::CalResourceMagnitude(globalCloud->ownRes) <
         0.8) {
         canDeployOnEmpty = false;
+    }else{
+        canDeployOnEmpty=true;
     }
 
     deployByFitness(unhandledVMObj, 0, 10);

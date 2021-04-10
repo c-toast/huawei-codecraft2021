@@ -250,10 +250,6 @@ int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj
     return 0;
 }
 
-int NewServerBuyer::initWhenNewBatchCome() {
-    return 0;
-}
-
 
 int NewServerBuyer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
     voteResMap.clear();
@@ -282,6 +278,27 @@ int NewServerBuyer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
     return 0;
 }
 
+int
+selectTopElement(std::vector<double> &target, std::vector<double> &receiver, std::vector<int> &indexRecord, int top) {
+    receiver = std::vector<double>(top, -1);
+    indexRecord = std::vector<int>(top, -1);
+    for (int i = 0; i < target.size(); i++) {
+        int min = receiver[0];
+        int minIndex = 0;
+        for (int j = 0; j < receiver.size(); j++) {
+            if (receiver[j] < min) {
+                min = receiver[j];
+                minIndex = j;
+            }
+        }
+        if (target[i] > min) {
+            receiver[minIndex] = target[i];
+            indexRecord[minIndex] = i;
+        }
+    }
+    return 0;
+}
+
 ServerObj *NewServerBuyer::createASuitableServer(std::vector<ServerInfo *> &candidateServers,
                                                  std::vector<VMObj *> &unhandledVMObj) {
     std::vector<double> allVoteRes(candidateServers.size(), 0);
@@ -296,67 +313,180 @@ ServerObj *NewServerBuyer::createASuitableServer(std::vector<ServerInfo *> &cand
             allVoteRes[i] += voteRes[i];
         }
     }
+    std::vector<double> topVoteRes;
+    std::vector<int> indexRecord;
+    selectTopElement(allVoteRes, topVoteRes, indexRecord, 10);
+
     int maxIndex = -1;
     double maxVote = -1;
-    for (int i = 0; i < candidateServers.size(); i++) {
-        if (allVoteRes[i] > maxVote) {
-            maxVote = allVoteRes[i];
-            maxIndex = i;
+    FLOGI("vote res");
+    for (int i = 0; i < topVoteRes.size(); i++) {
+        FLOGI("today i res %f, batch res %f", topVoteRes[i], batchVoteRes[indexRecord[i]]);
+        double voteRes = topVoteRes[i] + batchVoteRes[indexRecord[i]];
+        if (voteRes > maxVote) {
+            maxVote = voteRes;
+            maxIndex = indexRecord[i];
         }
     }
+//    batchVoteRes[maxIndex]-
     int id = globalCloud->createServerObj(*candidateServers[maxIndex]);
     return globalCloud->serverObjList[id];
 
 }
 
 int NewServerBuyer::DeployVMInServer(ServerObj *newServerObj, std::vector<VMObj *> &unhandledVMObj) {
-    std::vector<VMObj *> tmpUnhandledVMObj = unhandledVMObj;
-    unhandledVMObj.clear();
-    auto Cmp = [newServerObj](const VMObj *v1, const VMObj *v2) {
-        double fit1 = fitnessMap[v1->info.model][newServerObj->info.model];
-        double fit2 = fitnessMap[v2->info.model][newServerObj->info.model];
-        return fit1 < fit2;
-    };
-    std::sort(tmpUnhandledVMObj.begin(), tmpUnhandledVMObj.end(), Cmp);
+//    std::vector<VMObj *> tmpUnhandledVMObj = unhandledVMObj;
+//    unhandledVMObj.clear();
+//    auto Cmp = [newServerObj](const VMObj *v1, const VMObj *v2) {
+//        double fit1 = fitnessMap[v1->info.model][newServerObj->info.model];
+//        double fit2 = fitnessMap[v2->info.model][newServerObj->info.model];
+//        return fit1 < fit2;
+//    };
+//    std::sort(tmpUnhandledVMObj.begin(), tmpUnhandledVMObj.end(), Cmp);
 
-    for (auto vmIt:tmpUnhandledVMObj) {
-        int nodeIndex = 0;
-        if (newServerObj->canDeploy(vmIt->info, nodeIndex)) {
-            cloudOperator.deployVMObj(newServerObj->id, nodeIndex, vmIt);
-        } else {
-            unhandledVMObj.push_back(vmIt);
+//    for (auto vmIt:tmpUnhandledVMObj) {
+//        int nodeIndex = 0;
+//        if (newServerObj->canDeploy(vmIt->info, nodeIndex)) {
+//            cloudOperator.deployVMObj(newServerObj->id, nodeIndex, vmIt);
+//        } else {
+//            unhandledVMObj.push_back(vmIt);
+//        }
+//    }
+
+    while (true) {
+        int canDeployNum = 0;
+        std::vector<VMObj *> tmpUnhandledVMObj = unhandledVMObj;
+        unhandledVMObj.clear();
+        double minFitness = 10000;
+        VMObj *minVMObj = NULL;
+        int minNodeIndex = NODEAB;
+        for (auto vmIt:tmpUnhandledVMObj) {
+            int nodeIndex = 0;
+            if (!newServerObj->canDeploy(vmIt->info, nodeIndex)) {
+                unhandledVMObj.push_back(vmIt);
+                continue;
+            }
+            canDeployNum++;
+            double fitness = 1000;
+            if (vmIt->info.doubleNode == 1) {
+                fitness = CalFitness(newServerObj, NODEAB, vmIt->info);
+            } else {
+                if (newServerObj->canDeployOnSingleNode(NODEA, vmIt->info)) {
+                    double tmp = CalFitness(newServerObj, NODEA, vmIt->info);
+                    if (fitness > tmp) {
+                        fitness = tmp;
+                        nodeIndex = NODEA;
+                    }
+                }
+                if (newServerObj->canDeployOnSingleNode(NODEB, vmIt->info)) {
+                    double tmp = CalFitness(newServerObj, NODEB, vmIt->info);
+                    if (fitness > tmp) {
+                        fitness = tmp;
+                        nodeIndex = NODEB;
+                    }
+                }
+            }
+            if (minFitness > fitness) {
+                minFitness = fitness;
+                if (minVMObj != NULL) {
+                    unhandledVMObj.push_back(minVMObj);
+                }
+                minVMObj = vmIt;
+                minNodeIndex = nodeIndex;
+            } else {
+                unhandledVMObj.push_back(vmIt);
+            }
         }
+        if (canDeployNum == 0) {
+            break;
+        }
+        cloudOperator.deployVMObj(newServerObj->id, minNodeIndex, minVMObj);
     }
+
 
     return 0;
 }
 
 int
 NewServerBuyer::voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidateServers, std::vector<double> &voteRes) {
+    voteForServer(vmObj->info, candidateServers, voteRes);
+    voteResMap[vmObj] = voteRes;
+    return 0;
+}
+
+int NewServerBuyer::init() {
+    return 0;
+}
+
+
+int NewServerBuyer::initWhenNewDayStart() {
+    for (auto &it:globalCloud->serverInfoMap) {
+        ServerInfo &infoIt = it.second;
+        double unitCost = 1.0 * (infoIt.hardwareCost + (infoIt.energyCost * (totalDay - globalDay) *1.0 / 1.0)) /
+                          (CalDistance({(double) infoIt.memorySize, 2 * (double) infoIt.cpuNum}));
+        it.second.unitCost = unitCost;
+    }
+    return 0;
+}
+
+int NewServerBuyer::initWhenNewBatchCome(RequestsBatch &batch) {
+    initWhenNewDayStart();
+
+    batchVoteRes = std::vector<double>(allServerInfos.size(), 0);
+    std::vector<VMInfo> unhandledVMInfo;
+    for (auto &oneDayReq:batch) {
+        for (auto it:oneDayReq) {
+            if (it.op == ADD) {
+                VMInfo info = globalCloud->vmInfoMap[it.vMachineModel];
+                unhandledVMInfo.push_back(info);
+            }
+        }
+    }
+
+    for (auto it:unhandledVMInfo) {
+        std::vector<double> voteRes;
+        voteForServer(it, allServerInfos, voteRes);
+        for (int i = 0; i < allServerInfos.size(); i++) {
+            batchVoteRes[i] += voteRes[i];
+        }
+    }
+    for (int i = 0; i < allServerInfos.size(); i++) {
+        batchVoteRes[i] = batchVoteRes[i] / (7.0 * readableDayNum);
+//        batchVoteRes[i] = 0;
+    }
+
+    return 0;
+}
+
+int NewServerBuyer::voteForServer(VMInfo vmInfo, std::vector<ServerInfo *> &candidateServers,
+                                  std::vector<double> &voteRes) {
     voteRes = std::vector<double>(candidateServers.size(), 0);
     std::vector<double> tickets;
-    double ticketsValue=10;
-    for(int i=0;i<10;i++){
+    double ticketsValue = 50;
+
+    for (int i = 0; i < 10; i++) {
         tickets.push_back(ticketsValue);
-        ticketsValue-=1;
+        ticketsValue -= 0.2;
     }
 
     struct unitCost {
         double value = 1 << 20;
         int index = -1;
     };
+
     std::vector<unitCost> unitCostVec;
     for (int i = 0; i < voteRes.size(); i++) {
         unitCost u;
-        if (candidateServers[i]->canDeployOnSingleNode(vmObj->info) ||
-            candidateServers[i]->canDeployOnDoubleNode(vmObj->info)) {
-            double fitness = fitnessMap[vmObj->info.model][candidateServers[i]->model];
-            double value = candidateServers[i]->unitCost * (1 + 3.0*fitness);
+        if (candidateServers[i]->canDeployOnSingleNode(vmInfo) ||
+            candidateServers[i]->canDeployOnDoubleNode(vmInfo)) {
+            double fitness = fitnessMap[vmInfo.model][candidateServers[i]->model];
+            double value = candidateServers[i]->unitCost * ((fitness-1)*2+1);
             u.value = value;
+            u.index = i;
         } else {
             u.value = 1 << 20;
+            u.index = -1;
         }
-        u.index = i;
         unitCostVec.push_back(u);
     }
     auto cmp = [](unitCost &u1, unitCost &u2) {
@@ -365,29 +495,20 @@ NewServerBuyer::voteForServer(VMObj *vmObj, std::vector<ServerInfo *> &candidate
 
     std::sort(unitCostVec.begin(), unitCostVec.end(), cmp);
     Resource r;
-    vmObj->info.getRequiredResourceForOneNode(r);
-    double mag=Resource::CalResourceMagnitude(r);
-//    double mag =CalDistance({(double)vmObj->info.memorySize, 2 * (double)vmObj->info.cpuNum});
+    vmInfo.getRequiredResourceForOneNode(r);
+    double mag = Resource::CalResourceMagnitude(r);
+//        double mag =CalDistance({(double)vmInfo.memorySize, 2 * (double)vmInfo.cpuNum});
+    mag = sqrt(mag);
+
     for (int i = 0; i < tickets.size(); i++) {
+        if (unitCostVec[i].index == -1) {
+            break;
+        }
         double ticket = tickets[i] * mag;
-        voteRes[unitCostVec[i].index]=ticket;
+        voteRes[unitCostVec[i].index] = ticket;
     }
-    voteResMap[vmObj]=voteRes;
 
-    return 0;
-}
 
-int NewServerBuyer::init() {
-    return 0;
-}
-
-int NewServerBuyer::initWhenNewDayStart() {
-    for (auto &it:globalCloud->serverInfoMap) {
-        ServerInfo &infoIt = it.second;
-        double unitCost = 1.0 * (infoIt.hardwareCost + (infoIt.energyCost * (totalDay-globalDay)*1.2 / 1.0) /
-                          (CalDistance({(double)infoIt.memorySize, 2 * (double)infoIt.cpuNum})));
-        it.second.unitCost=unitCost;
-    }
     return 0;
 }
 
