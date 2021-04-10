@@ -16,7 +16,11 @@ public:
 
     std::vector<ServerInfo *> allServerInfos;
 
+    std::map<VMObj*,std::vector<double>> voteResMap;
+
     std::vector<double> batchVoteRes;
+
+    std::map<int,std::vector<double>> batchVoteResMap;//[id]res
 
     int buyAndDeploy(std::vector<VMObj *> &unhandledVMObj);
 
@@ -32,25 +36,15 @@ public:
     int voteForServer(VMInfo vmInfo, std::vector<ServerInfo *> &candidateServers, std::vector<double> &voteRes);
 
 
-    std::map<VMObj*,std::vector<double>> voteResMap;
-
-
 
     int learnModelInfo();
 
-    int learnPosteriorInfo(RequestsBatch &requestsBunch);
-
-    int buyAndDeployDoubleNode(std::vector<VMObj *> &unhandledVMObj);
-
-    int buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj);
 
     int classify(std::vector<VMObj *> &vmObjVec, std::map<double, std::vector<VMObj *>> &receiver);
 
-    int movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj);
+    int initWhenNewBatchCome(RequestsBatch &newBatch, RequestsBatch &oldBatch);
 
-    int initWhenNewBatchCome(RequestsBatch &batch);
-
-    int initWhenNewDayStart();
+    int initWhenNewDayStart(OneDayRequest &currentDayReq);
 
     int init();
 };

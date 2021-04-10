@@ -32,7 +32,7 @@ public:
 
     int sortServerVMObj(ServerObj* serverObj, std::vector<VMObj *> &receiver);
 
-    int initWhenNewBatchCome(){return 0;}
+    int initWhenNewBatchCome(RequestsBatch &newBatch);
 
     int initWhenNewDayStart(OneDayRequest &oneDayReq);
 
@@ -40,7 +40,13 @@ public:
 
     int migrateByFulness(std::vector<VMObj *> &unhandledVMObj, ServerObj *simulatedServerObj);
 
+    bool shouldMigrateByFulness();
+
     migraterListener listener;
+
+    std::deque<std::array<int,2>> futureUsedRes;
+
+
 };
 
 

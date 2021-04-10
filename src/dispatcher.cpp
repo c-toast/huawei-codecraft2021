@@ -8,29 +8,56 @@
 int Dispatcher::run() {
 
     totalDayNum=reader.ReadTotalDayNum();
-    readableDayNum=reader.ReadReadableDayNum();//second round
+    readableDaylimit=reader.ReadReadableDayNum();//second round
 
     strategy->serverBuyer->learnModelInfo();//need to modify
-    totalDay=totalDayNum;//need to modify
 
-    //strategy->serverBuyer->init();
-
+    int remainingBatchDayNum=totalDayNum;
     int remainingDayNum=totalDayNum;
+
+
+    reader.ReadSeveralDaysRequests(readableDaylimit, futureRequestsBatch);
+    remainingBatchDayNum-=readableDaylimit;
+    RequestsBatch uselessBatch;
+    OneDayRequest uselessReq;
+
+    strategy->serverBuyer->initWhenNewDayStart(uselessReq);//need to modify
+    strategy->serverBuyer->batchVoteRes=std::vector<double>(strategy->serverBuyer->allServerInfos.size(),0);
+    strategy->serverBuyer->initWhenNewBatchCome(futureRequestsBatch,uselessBatch);
+    strategy->vmMigrater->initWhenNewBatchCome(futureRequestsBatch);
+    strategy->vmDeployer->initWhenNewBatchCome();
+
     while(remainingDayNum != 0){
-        int BatchDayNum= (remainingDayNum > readableDayNum) ? readableDayNum : remainingDayNum;//second round
+        int BatchDayNum= 1;//if more than 2, should have some handle
 //        int BatchDayNum=totalDayNum;
+
+
+        //read current batch
         remainingDayNum-=BatchDayNum;
+        RequestsBatch currentRequestsBatch;
+        for(int i=0;i<BatchDayNum;i++){
+            currentRequestsBatch.push_back(futureRequestsBatch[0]);
+        }
 
-        ResultList res;
-        requestsBatch.clear();
-        reader.ReadSeveralDaysRequests(BatchDayNum, requestsBatch);
+        strategy->dispatch(currentRequestsBatch);
 
-        strategy->serverBuyer->initWhenNewBatchCome(requestsBatch);
-        strategy->vmMigrater->initWhenNewBatchCome();
-        strategy->vmDeployer->initWhenNewBatchCome();
-        strategy->dispatch(requestsBatch, res);
-        writer.write(res);
-        fflush(stdout);
+        //delete current batch
+        for(int i=0;i<BatchDayNum;i++){
+            futureRequestsBatch.pop_front();
+        }
+
+        //read future batch
+        if(remainingBatchDayNum>0){
+            remainingBatchDayNum-=BatchDayNum;
+            RequestsBatch newFutureBatch;
+            reader.ReadSeveralDaysRequests(BatchDayNum, newFutureBatch);
+            for(int i=0;i<BatchDayNum;i++){
+                futureRequestsBatch.push_back(newFutureBatch[0]);
+            }
+            strategy->serverBuyer->initWhenNewBatchCome(newFutureBatch,currentRequestsBatch);
+            strategy->vmMigrater->initWhenNewBatchCome(futureRequestsBatch);
+            strategy->vmDeployer->initWhenNewBatchCome();
+        }
     }
 
 

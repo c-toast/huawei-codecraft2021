@@ -15,10 +15,9 @@
 extern Cloud* globalCloud;
 extern CloudOperator cloudOperator;
 
-extern int totalDay;
 extern int globalDay;
-extern int totalDayNum,readableDayNum;
-extern RequestsBatch requestsBatch;
+extern int totalDayNum,readableDaylimit;
+extern RequestsBatch futureRequestsBatch;
 
 extern StdReader reader;
 extern StdWriter writer;

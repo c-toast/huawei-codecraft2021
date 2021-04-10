@@ -12,6 +12,7 @@
 #include "server.h"
 #include "vm.h"
 #include <iostream>
+#include <deque>
 
 #define ADD 1
 #define DEL 0
@@ -25,7 +26,7 @@ typedef struct{
 
 typedef std::vector<Request> OneDayRequest;
 
-typedef std::vector<OneDayRequest> RequestsBatch;
+typedef std::deque<OneDayRequest> RequestsBatch;
 
 typedef struct{
     std::string serverName;

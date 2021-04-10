@@ -7,14 +7,17 @@
 #include <cloudoperator.h>
 #include "global.h"
 
-int Strategy::dispatch(RequestsBatch &batch, std::vector<OneDayResult> &receiver) {
+int Strategy::dispatch(RequestsBatch &batch) {
+    std::vector<OneDayResult> res;
+
     for(int i=0; i < batch.size(); i++,globalDay++){
         OneDayResult oneDayRes;
         OneDayRequest& oneDayReq=batch[i];
 
+        //initialize Info!!!
         vmMigrater->initWhenNewDayStart(oneDayReq);
         vmDeployer->initWhenNewDayStart();
-        serverBuyer->initWhenNewDayStart();
+        serverBuyer->initWhenNewDayStart(oneDayReq);
         cloudOperator.initWhenNewDayStart(oneDayReq);
 
 
@@ -41,8 +44,11 @@ int Strategy::dispatch(RequestsBatch &batch, std::vector<OneDayResult> &receiver
         }
 
         cloudOperator.genOneDayOpeRes(unhandledAddReqSet, oneDayRes);
-        receiver.push_back(oneDayRes);
+        res.push_back(oneDayRes);
     }
+
+    writer.write(res);
+    fflush(stdout);
     return 0;
 }
 

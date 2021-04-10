@@ -8,10 +8,9 @@
 Cloud *globalCloud = new Cloud();
 CloudOperator cloudOperator;
 
-int totalDay = 0;
 int globalDay = 0;
-int totalDayNum, readableDayNum;
-RequestsBatch requestsBatch;
+int totalDayNum, readableDaylimit;
+RequestsBatch futureRequestsBatch;
 
 StdReader reader;
 StdWriter writer;

@@ -90,167 +90,6 @@ int NewServerBuyer::classify(std::vector<VMObj *> &vmObjVec, std::map<double, st
     return 0;
 }
 
-//incomplete
-int NewServerBuyer::movVMObjToNewServerObj(ServerObj *oldObj, ServerObj *newObj) {
-    for (auto it:oldObj->vmObjMap) {
-        VMObj *vmObj = it.second;
-        int deployNode = oldObj->vmObjDeployNodeMap[it.first];
-        if (newObj->canDeployOnNode(deployNode, vmObj->info)) {
-            cloudOperator.deployVMObjInNewServerObj(newObj, vmObj, deployNode);
-        } else {
-            return -1;
-        }
-    }
-    return 0;
-}
-
-int NewServerBuyer::buyAndDeployDoubleNode(std::vector<VMObj *> &doubleNodeVMObj) {
-    std::map<double, std::vector<VMObj *>> classifiedVMObjMap;
-    classify(doubleNodeVMObj, classifiedVMObjMap);
-
-//    auto Cmp=[](const VMObj* s1,const VMObj* s2){
-//
-//        return s1->info.cpuNum+s1->info.memorySize > s2->info.cpuNum+s2->info.memorySize;
-//    };
-    for (auto &it:classifiedVMObjMap) {
-        std::sort(it.second.begin(), it.second.end(), vmObjResMagnitudeCmp);
-    }
-
-    for (auto &it:Clusters) {
-        std::vector<ServerInfo *> &serverCandidates = it.second;
-        std::vector<VMObj *> &vmObjVec = classifiedVMObjMap[it.first];
-        std::vector<ServerObj *> tmpServerObjList;
-        int num = vmObjVec.size();
-        std::vector<ServerObj> finalServerObj(num);
-        int startIndex = 0;
-
-        for (int i = 0; i < vmObjVec.size(); i++) {
-            double minCost = 1 << 30;
-            int minIndex = -1;
-            // find on Obj
-            for (int j = 0; j < tmpServerObjList.size(); j++) {
-                ServerObj *serverObj = tmpServerObjList[j];
-                if (serverObj->canDeployOnDoubleNode(vmObjVec[i]->info)) {
-                    double tmpCost = 2 * serverObj->nodes[0].remainingResource.cpuNum +
-                                     serverObj->nodes[0].remainingResource.memorySize;
-                    //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
-                    if (tmpCost < minCost) {
-                        minCost = tmpCost;
-                        minIndex = j;
-                    }
-                }
-            }
-            if (minIndex != -1) {
-                cloudOperator.deployVMObjInNewServerObj(tmpServerObjList[minIndex], vmObjVec[i], NODEAB);
-                continue;
-            }
-            // find on Info
-            for (int j = 0; j < serverCandidates.size(); j++) {
-                ServerObj serverObj(*serverCandidates[j]);
-                if (serverObj.canDeployOnDoubleNode(vmObjVec[i]->info)) {
-                    double tmpCost = CalCostWithVM(serverCandidates[j], vmObjVec[i]->info);
-                    //double tmpCost=serverObj.nodes[0].remainingResource.cpuNum;
-                    if (tmpCost < minCost) {
-                        minCost = tmpCost;
-                        minIndex = j;
-                    }
-                }
-            }
-            ServerObj serverObj(*serverCandidates[minIndex]);
-            finalServerObj[startIndex] = serverObj;
-            cloudOperator.deployVMObjInNewServerObj(&finalServerObj[startIndex], vmObjVec[i], NODEAB);
-            tmpServerObjList.push_back(&finalServerObj[startIndex]);
-            startIndex++;
-        }
-        for (int i = 0; i < tmpServerObjList.size(); i++) {
-            cloudOperator.deployNewServerObj(tmpServerObjList[i]);
-        }
-    }
-    return 0;
-}
-
-int NewServerBuyer::buyAndDeploySingleNode(std::vector<VMObj *> &singleNodeVMObj) {
-    std::map<double, std::vector<VMObj *>> classifiedVMObjMap;
-    classify(singleNodeVMObj, classifiedVMObjMap);
-    auto Cmp = [](const VMObj *s1, const VMObj *s2) {
-        return 2 * s1->info.cpuNum + s1->info.memorySize > 2 * s2->info.cpuNum + s2->info.memorySize;
-    };
-    for (auto &it:classifiedVMObjMap) {
-        std::sort(it.second.begin(), it.second.end(), Cmp);
-    }
-
-    for (auto &it:Clusters) {
-        std::vector<ServerInfo *> &serverCandidates = it.second;
-        std::vector<VMObj *> &vmObjVec = classifiedVMObjMap[it.first];
-        std::vector<ServerObj *> tmpServerObjList;
-        int num = vmObjVec.size();
-        std::vector<ServerObj> finalServerObj(num);
-        int startIndex = 0;
-
-        for (int i = 0; i < vmObjVec.size(); i++) {
-            double minCost = 1 << 30;
-            int minIndex = -1;
-            int nodeIndex = -1;
-            int fuck = vmObjVec[i]->id;
-            // find on Obj
-            for (int j = 0; j < tmpServerObjList.size(); j++) {
-                ServerObj *serverObj = tmpServerObjList[j];
-                /*
-                srand((unsigned)time(NULL));
-                int node1=rand()%2;
-                int node2=(node1==0?1:0);
-                */
-                if (serverObj->canDeployOnSingleNode(0, vmObjVec[i]->info)) {
-                    double tmpCost = 2 * serverObj->nodes[0].remainingResource.cpuNum +
-                                     serverObj->nodes[0].remainingResource.memorySize;
-                    //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
-                    if (tmpCost < minCost) {
-                        minCost = tmpCost;
-                        minIndex = j;
-                        nodeIndex = 0;
-                    }
-                } else if (serverObj->canDeployOnSingleNode(1, vmObjVec[i]->info)) {
-                    double tmpCost = 2 * serverObj->nodes[1].remainingResource.cpuNum +
-                                     serverObj->nodes[1].remainingResource.memorySize;
-                    //double tmpCost=CalCostWithVM(&serverObj->info,vmObjVec[i]->info);
-                    if (tmpCost < minCost) {
-                        minCost = tmpCost;
-                        minIndex = j;
-                        nodeIndex = 1;
-                    }
-                }
-            }
-            if (minIndex != -1) {
-                cloudOperator.deployVMObjInNewServerObj(tmpServerObjList[minIndex], vmObjVec[i], nodeIndex);
-                continue;
-            }
-            // find on Info
-            for (int j = 0; j < serverCandidates.size(); j++) {
-                ServerObj serverObj(*serverCandidates[j]);
-                // for a new server, only check node 0
-                if (serverObj.canDeployOnSingleNode(0, vmObjVec[i]->info)) {
-                    double tmpCost = CalCostWithVM(serverCandidates[j], vmObjVec[i]->info);
-                    if (tmpCost < minCost) {
-                        minCost = tmpCost;
-                        minIndex = j;
-                        nodeIndex = 0;
-                    }
-                }
-            }
-            ServerObj serverObj(*serverCandidates[minIndex]);
-            finalServerObj[startIndex] = serverObj;
-            cloudOperator.deployVMObjInNewServerObj(&finalServerObj[startIndex], vmObjVec[i], 0);
-            tmpServerObjList.push_back(&finalServerObj[startIndex]);
-            startIndex++;
-        }
-        for (int i = 0; i < tmpServerObjList.size(); i++) {
-            cloudOperator.deployNewServerObj(tmpServerObjList[i]);
-        }
-    }
-    return 0;
-}
-
-
 int NewServerBuyer::buyAndDeploy(std::vector<VMObj *> &unhandledVMObj) {
     voteResMap.clear();
 //    for (int i = 0; i < unhandledVMObj.size();) {
@@ -322,7 +161,7 @@ ServerObj *NewServerBuyer::createASuitableServer(std::vector<ServerInfo *> &cand
     FLOGI("vote res");
     for (int i = 0; i < topVoteRes.size(); i++) {
         FLOGI("today i res %f, batch res %f", topVoteRes[i], batchVoteRes[indexRecord[i]]);
-        double voteRes = topVoteRes[i] + batchVoteRes[indexRecord[i]];
+        double voteRes = topVoteRes[i] + batchVoteRes[indexRecord[i]]/(7*readableDaylimit);
         if (voteRes > maxVote) {
             maxVote = voteRes;
             maxIndex = indexRecord[i];
@@ -419,40 +258,47 @@ int NewServerBuyer::init() {
 }
 
 
-int NewServerBuyer::initWhenNewDayStart() {
+int NewServerBuyer::initWhenNewDayStart(OneDayRequest &currentDayReq) {
     for (auto &it:globalCloud->serverInfoMap) {
         ServerInfo &infoIt = it.second;
-        double unitCost = 1.0 * (infoIt.hardwareCost + (infoIt.energyCost * (totalDay - globalDay) *1.0 / 1.0)) /
+        double unitCost = 1.0 * (infoIt.hardwareCost + (infoIt.energyCost * (totalDayNum - globalDay) *1.0 / 1.0)) /
                           (CalDistance({(double) infoIt.memorySize, 2 * (double) infoIt.cpuNum}));
         it.second.unitCost = unitCost;
     }
-    return 0;
-}
 
-int NewServerBuyer::initWhenNewBatchCome(RequestsBatch &batch) {
-    initWhenNewDayStart();
-
-    batchVoteRes = std::vector<double>(allServerInfos.size(), 0);
-    std::vector<VMInfo> unhandledVMInfo;
-    for (auto &oneDayReq:batch) {
-        for (auto it:oneDayReq) {
-            if (it.op == ADD) {
-                VMInfo info = globalCloud->vmInfoMap[it.vMachineModel];
-                unhandledVMInfo.push_back(info);
+    for (auto it:currentDayReq) {
+        if (it.op == ADD) {
+            auto voteRes=batchVoteResMap.find(it.vmID);
+            if(voteRes==batchVoteResMap.end()){
+                LOGE("NewServerBuyer::initWhenNewDayStart");
+                exit(-1);
+            }
+            for (int i = 0; i < allServerInfos.size(); i++) {
+                batchVoteRes[i] -= (voteRes->second)[i];
             }
         }
     }
 
-    for (auto it:unhandledVMInfo) {
-        std::vector<double> voteRes;
-        voteForServer(it, allServerInfos, voteRes);
-        for (int i = 0; i < allServerInfos.size(); i++) {
-            batchVoteRes[i] += voteRes[i];
+
+    return 0;
+}
+
+int NewServerBuyer::initWhenNewBatchCome(RequestsBatch &newBatch, RequestsBatch &oldBatch) {
+
+//    batchVoteRes = std::vector<double>(allServerInfos.size(), 0);
+    std::vector<VMInfo> unhandledVMInfo;
+    for (auto &oneDayReq:newBatch) {
+        for (auto it:oneDayReq) {
+            if (it.op == ADD) {
+                VMInfo info = globalCloud->vmInfoMap[it.vMachineModel];
+                std::vector<double> voteRes;
+                voteForServer(info, allServerInfos, voteRes);
+                batchVoteResMap[it.vmID]=voteRes;
+                for (int i = 0; i < allServerInfos.size(); i++) {
+                    batchVoteRes[i] += voteRes[i];
+                }
+            }
         }
-    }
-    for (int i = 0; i < allServerInfos.size(); i++) {
-        batchVoteRes[i] = batchVoteRes[i] / (7.0 * readableDayNum);
-//        batchVoteRes[i] = 0;
     }
 
     return 0;

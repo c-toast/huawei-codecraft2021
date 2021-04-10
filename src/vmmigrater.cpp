@@ -15,6 +15,9 @@
 
 int VMMigrater::initWhenNewDayStart(OneDayRequest &oneDayReq) {
     availableMigrateTime = (globalCloud->vmObjMap.size() * 3) / 100;
+    if (!futureUsedRes.empty()) {
+        futureUsedRes.pop_front();
+    }
 
     return 0;
 }
@@ -72,8 +75,8 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
             return 0;
         }
 
-        if(Resource::CalResourceMagnitude(globalCloud->usedRes)/Resource::CalResourceMagnitude(globalCloud->ownRes)<0.8){
-            migrateByFulness(unhandledVMObj,serverIt);
+        if (shouldMigrateByFulness()) {
+            migrateByFulness(unhandledVMObj, serverIt);
         }
 
         //the serverState is the main target, so it is the condition of the while loop
@@ -217,6 +220,46 @@ int VMMigrater::migrateByFitness(std::vector<VMObj *> &unhandledVMObj) {
         }
     }
     return 0;
+}
+
+int VMMigrater::initWhenNewBatchCome(RequestsBatch &newBatch) {
+
+    for (auto &oneDayReq:newBatch) {
+        int lastIndex = futureUsedRes.size() - 1;
+        std::array<int, 2> usedRes({0, 0});
+        if (lastIndex >= 0) {
+            usedRes[0] = futureUsedRes[lastIndex][0];
+            usedRes[1] = futureUsedRes[lastIndex][1];
+        }
+
+        for (auto it:oneDayReq) {
+            if (it.op == ADD) {
+                VMInfo info = globalCloud->vmInfoMap[it.vMachineModel];
+                usedRes[0] += info.cpuNum;
+                usedRes[1] += info.memorySize;
+            } else {
+                VMInfo info = globalCloud->vmInfoMap[it.vMachineModel];
+                usedRes[0] -= info.cpuNum;
+                usedRes[1] -= info.memorySize;
+            }
+        }
+        futureUsedRes.push_back(usedRes);
+    }
+
+    return 0;
+}
+
+bool VMMigrater::shouldMigrateByFulness() {
+    double ownResMag = Resource::CalResourceMagnitude(globalCloud->ownRes);
+    double usedResMag = Resource::CalResourceMagnitude(globalCloud->usedRes);
+    if (usedResMag / ownResMag > 0.85){
+        return false;
+    }
+    for (int i = 0; i < 5; i++) { //5 may not fit here. may have problem here!!
+        if (Resource::CalResourceMagnitude(futureUsedRes[i]) / ownResMag > 0.85)
+            return false;
+    }
+    return true;
 }
 
 int migraterListener::moveVMObjFromServerObj(int vmID) {
