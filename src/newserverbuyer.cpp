@@ -182,7 +182,7 @@ int NewServerBuyer::DeployVMInServer(ServerObj *newServerObj, std::vector<VMObj 
 //        return fit1 < fit2;
 //    };
 //    std::sort(tmpUnhandledVMObj.begin(), tmpUnhandledVMObj.end(), Cmp);
-
+//
 //    for (auto vmIt:tmpUnhandledVMObj) {
 //        int nodeIndex = 0;
 //        if (newServerObj->canDeploy(vmIt->info, nodeIndex)) {
@@ -308,9 +308,9 @@ int NewServerBuyer::voteForServer(VMInfo vmInfo, std::vector<ServerInfo *> &cand
                                   std::vector<double> &voteRes) {
     voteRes = std::vector<double>(candidateServers.size(), 0);
     std::vector<double> tickets;
-    double ticketsValue = 50;
+    double ticketsValue = 10;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 50; i++) {
         tickets.push_back(ticketsValue);
         ticketsValue -= 0.2;
     }

@@ -49,19 +49,18 @@ int VMDeployer::deploy(std::vector<VMObj *> &unhandledVMObj) {
 
     initServerList();
 
-    if (Resource::CalResourceMagnitude(globalCloud->usedRes) / Resource::CalResourceMagnitude(globalCloud->ownRes) <
-        0.8) {
+    if (shouldByFulness) {
         canDeployOnEmpty = false;
     }else{
         canDeployOnEmpty=true;
     }
 
     deployByFitness(unhandledVMObj, 0, 10);
-//    deployByFitness(unhandledVMObj,10,20);
-//    deployByFitness(unhandledVMObj,20,30);
+    deployByFitness(unhandledVMObj,10,20);
+    deployByFitness(unhandledVMObj,20,30);
     deployByAcceptableUsageState(unhandledVMObj, 1);
-//    deployByAcceptableUsageState(unhandledVMObj, 0.8);
-//    deployByAcceptableUsageState(unhandledVMObj, 0.5);
+    deployByAcceptableUsageState(unhandledVMObj, 0.8);
+    deployByAcceptableUsageState(unhandledVMObj, 0.5);
     forceDeploy(unhandledVMObj);
 
     if (!canDeployOnEmpty) {

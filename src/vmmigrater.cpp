@@ -11,7 +11,9 @@
 #define MIGRATER_USAGESTATE_R0 1
 #define MIGRATER_BALANCESTATE_R0 0.5
 #define ACCEPT_RANGE 10
-#define MIGRATE_ACCEPT_FITNESS 0.00001
+
+bool shouldByFulness=false;
+
 
 int VMMigrater::initWhenNewDayStart(OneDayRequest &oneDayReq) {
     availableMigrateTime = (globalCloud->vmObjMap.size() * 3) / 100;
@@ -54,14 +56,11 @@ int VMMigrater::migrate(std::vector<VMObj *> &unhandledVMObj) {
     std::vector<ServerObj *> serverObjList = globalCloud->serverObjList;
     std::sort(serverObjList.begin(), serverObjList.end(), migrateServerCmp);
 
-//    if (Resource::CalResourceMagnitude(globalCloud->usedRes) / Resource::CalResourceMagnitude(globalCloud->ownRes) <
-//        0.8) {
+//    if (shouldMigrateByFulness()) {
 //        for (auto serverIt:serverObjList) {//the server used for migrate do not have the vm to be deleted
 //            if (availableMigrateTime == 0) {
 //                return 0;
 //            }
-//
-//
 //            migrateByFulness(unhandledVMObj, serverIt);
 //        }
 //    } else {
@@ -191,7 +190,7 @@ int VMMigrater::sortServerVMObj(ServerObj *serverObj, std::vector<VMObj *> &rece
 }
 
 int VMMigrater::init() {
-    //globalCloud->registerBeforeListener(&listener);
+//    globalCloud->registerBeforeListener(&listener);
     return 0;
 }
 
@@ -252,13 +251,17 @@ int VMMigrater::initWhenNewBatchCome(RequestsBatch &newBatch) {
 bool VMMigrater::shouldMigrateByFulness() {
     double ownResMag = Resource::CalResourceMagnitude(globalCloud->ownRes);
     double usedResMag = Resource::CalResourceMagnitude(globalCloud->usedRes);
-    if (usedResMag / ownResMag > 0.85){
+    if (usedResMag / ownResMag > 0.90){
+        shouldByFulness=false;
         return false;
     }
-    for (int i = 0; i < 5; i++) { //5 may not fit here. may have problem here!!
-        if (Resource::CalResourceMagnitude(futureUsedRes[i]) / ownResMag > 0.85)
-            return false;
-    }
+//    for (int i = 0; i < 5; i++) { //5 may not fit here. may have problem here!!
+//        if (Resource::CalResourceMagnitude(futureUsedRes[i]) / ownResMag > 0.90) {
+//            shouldByFulness = false;
+//            return false;
+//        }
+//    }
+    shouldByFulness=true;
     return true;
 }
 
@@ -272,7 +275,7 @@ int migraterListener::moveVMObjFromServerObj(int vmID) {
 
 int migraterListener::deployVMObj(int serverObjID, int nodeIndex, VMObj *vmObj) {
     std::string serverModel = globalCloud->serverObjList[serverObjID]->info.model;
-    if (fitnessMap[vmObj->info.model][serverModel] < 0.25) {
+    if (fitnessRangeMap[vmObj->info.model][serverModel] < 40) {
         candidateVMMap.insert({vmObj->id, vmObj});
     }
 //    LOGE("migraterListener::deployVMObj");

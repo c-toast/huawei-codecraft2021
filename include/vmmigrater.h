@@ -49,5 +49,6 @@ public:
 
 };
 
+extern bool shouldByFulness;
 
 #endif //HUAWEI_CODECRAFT_VMMIGRATER_H
